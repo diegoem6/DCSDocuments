@@ -17,12 +17,12 @@ router.get('/',
     systemController.getSystems) ;
 
 
-// router.put('/:id',
-//     auth,
-//     systemController.actualizarTarea) ;
+router.put('/:id',
+    auth,
+    systemController.updateSystem) ;
 
-// router.delete('/:id',
-//     auth,
-//     systemController.eliminarTarea) ;
+router.delete('/:id',
+    auth,
+    systemController.deleteSystems) ;
     
 module.exports = router

@@ -6,7 +6,7 @@ const SystemSchema = mongoose.Schema({
         require:true,
         trim:true
     },
-    estado:{
+    active:{
         type:Boolean,
         default:false
     },
