@@ -33,7 +33,7 @@ export default (state, action) =>{
             return ({
                 ...state,
                 systems: state.systems.filter((
-                    system => system._id === action.payload._id))
+                    system => system._id !== action.payload._id))
             })
         default:
             return state;

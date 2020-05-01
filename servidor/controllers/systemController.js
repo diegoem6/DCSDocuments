@@ -93,7 +93,6 @@ exports.getSystems = async (req,res)=>{
         }
 
         const systems = await System.find({asset:asset_updated._id}).sort({creado:-1})
-        
         res.json({systems})
 
 

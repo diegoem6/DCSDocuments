@@ -37,7 +37,6 @@ const SystemState = (props) => {
     const getSystems = async (asset) =>{
         try {
             const res = await axiosClient.get('/api/systems', {params:{asset}})
-            console.log(res)
             dispatch({
                 type:GET_SYSTEMS,
                 payload: res.data.systems
@@ -56,6 +55,9 @@ const SystemState = (props) => {
             dispatch({
                 type:UPDATE_SYSTEM
             })
+
+            getSystems(system.asset)
+
         } catch (error) {
             console.log(error)
 

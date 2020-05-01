@@ -6,7 +6,7 @@ import assetContext from '../../context/asset/assetContext'
 const SystemForm = () => {
 
     const sContext = useContext(systemContext)
-    const {getSystems, systemSelected, addSystem, updateSystem} = sContext
+    const {systemSelected, addSystem, updateSystem} = sContext
 
     const aContext = useContext(assetContext)
     const {asset} = aContext
@@ -45,8 +45,7 @@ const SystemForm = () => {
         }else{
             addSystem(system);
         }
-        getSystems(assetActual._id)
-        console.log("saliendo del getSystem")
+        
         setSystem({name:''});
         
     }
