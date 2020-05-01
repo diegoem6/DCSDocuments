@@ -4,7 +4,7 @@ import authContext from '../context/auth/authContext'
 
 const Header = () => {
     const auContext = useContext(authContext)
-    const {user,getUser,logoff} = auContext;
+    const {user,getUser,logOff} = auContext;
 
     useEffect(() => {
         getUser()
@@ -17,7 +17,7 @@ const Header = () => {
             <nav className="nav-principal">
                 <button 
                     className = "btn btn-blank cerrar-sesion"
-                    onClick={()=> logoff()}
+                    onClick={logOff}
                 >Cerrar Sesión</button>
             </nav>
         </header>

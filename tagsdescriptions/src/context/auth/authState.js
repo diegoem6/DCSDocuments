@@ -68,6 +68,7 @@ const AuthState = (props) => {
     }
 
     const logOff = () =>{
+        console.log("en logoff")
         dispatch({
             type:LOG_OFF
         })

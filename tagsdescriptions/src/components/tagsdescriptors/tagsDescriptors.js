@@ -10,7 +10,7 @@ import SearchTagDescriptor from './searchTagDescriptor';
 const Tagsdescriptors = () => {
 
     const auContext = useContext(authContext)
-    const {user,getUser,logoff} = auContext;
+    const {user,getUser} = auContext;
 
     useEffect(() => {
         getUser()

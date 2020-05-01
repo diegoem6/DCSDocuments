@@ -392,6 +392,16 @@ aside  {
   opacity: .7;
 }
 
+.link-menu {
+  margin-top: 2rem;
+  display: block;
+  opacity: .7;
+}
+
+.link-menu-div {
+  margin-top: 100%;
+}
+
 .alerta {
   position: fixed;
   top: 0;

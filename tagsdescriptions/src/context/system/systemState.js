@@ -28,7 +28,7 @@ const SystemState = (props) => {
                 type:ADD_SYSTEM,
                 payload: res.data
             })
-
+            getSystems(system.asset)
         } catch (error) {
             
         }

@@ -12,6 +12,7 @@ import Menu from './layout/menu';
 import TagDescriptorState from './context/tagdescriptor/tagDescriptorState';
 
 import Assets from './components/assets/assets'
+import PrivateRoute from './components/routes/privateRoute'
 
 import authToken from '../src/config/token'
 
@@ -31,6 +32,7 @@ function App() {
                   <Route exact path="/" component={Login}/>
                   <Route exact path="/newuser" component={Newuser}/>
                   <Route exact path="/tagsdescriptors" component={Tagsdescriptors}/>
+                  <PrivateRoute exact path="/assets" component={Assets}/>
                   <Route exact path="/assets" component={Assets}/>
                   <Route exact path="/menu" component={Menu}/>
                 </Switch>
