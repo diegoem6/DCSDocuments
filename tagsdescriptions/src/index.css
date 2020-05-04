@@ -432,3 +432,35 @@ aside  {
   background-color: rgb(230, 78, 78);
   color: var(--blanco);
 }
+
+.rstm-tree-item{
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  color: #333;
+  background: none;
+  border-bottom: 1px solid #ccc;
+  box-shadow: none;
+  z-index: unset;
+  position: relative;
+}
+
+.rstm-toggle-icon{
+  display:inline-block
+}
+
+.rstm-toggle-icon-symbol{
+  width: 2rem;
+  height: 2rem;
+  text-align: center;
+  line-height: 2rem;
+}
+
+.rstm-tree-item-group{
+  list-style-type: none;
+  padding-left: 0;
+  text-align: left;
+  width: 100%;
+}
+
+
+

@@ -3,7 +3,9 @@ import authContext from '../../context/auth/authContext'
 import Header from '../../layout/header'
 import Sidebar from '../../layout/sidebar'
 import NewTagDescriptor from './newTagDescriptor';
+import TagDescriptorList from'./tagDescriptorList'
 import SearchTagDescriptor from './searchTagDescriptor';
+import SidebarDescriptors from '../../layout/sidebarDescriptors';
 
 
 
@@ -17,20 +19,22 @@ const Tagsdescriptors = () => {
     }, [])
     
     return ( 
-       
-            <div className="seccion-principal">
-                {/*<Header/>*/}
-                <main>
-                  {/* <FormTarea/> */}
-                    <SearchTagDescriptor/>
-                    
-                    <div className="contenedor-tareas">
-                        <NewTagDescriptor/>
-                      {/*  <ListadoTareas/> */}
-                    </div>
-                </main>
-            </div>
-     );
+          <div className="contenedor-app">
+              <SidebarDescriptors/>
+              
+              <div className="seccion-principal">
+                  <Header/>
+                  
+                  <main>
+                      <SearchTagDescriptor/>
+                      
+                      <div className="contenedor-tareas">
+                            <TagDescriptorList/>
+                      </div>
+                  </main>
+              </div>
+          </div>
+    );
 }
  
 export default Tagsdescriptors;

@@ -25,8 +25,17 @@ exports.createTagDescriptor = async (req, res)=>{
 //obteniendo todos los tagsdescriptors
 exports.getTagsDescriptors = async (req,res)=>{
     try {
-        const tagsdescriptors = await TagDescriptor.find()
-        res.json({tagsdescriptors});
+        const {system} = req.query;
+        //existe el asset?
+        const system_updated = await System.findById(system)
+        if (!system_updated){
+            console.log("No existe el sistema");
+            return res.status(404).send("No existe el sistema")
+        }
+
+        const tagsdescriptors = await TagDescriptor.find({system:system_updated._id}).sort({creado:-1})
+        res.json({tagsdescriptors})
+
     } catch (error) {
         console.log(error);
         res.status(500).send("Error en obtener tagsdescriptors")

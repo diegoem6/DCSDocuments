@@ -20,6 +20,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/assets', require('./routes/assets'));
 app.use('/api/tagsdescriptors', require('./routes/tagsdescriptors'));
 app.use('/api/systems', require('./routes/systems'));
+app.use('/api/tree', require('./routes/tree'));
 
 
 app.listen (PORT, ()=>{

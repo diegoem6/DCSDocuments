@@ -30,7 +30,7 @@ const SystemList = () => {
     
     return ( 
         <Fragment>
-            <h2>Sistemas asignados al asset: {asset.nombre}</h2>
+            <h2>Sistemas asignados al asset: {asset.name}</h2>
             <ul>
                 {(systems.length===0)?
                     (<li className="tarea"><p>No hay sistemas asignados al asset</p></li>)

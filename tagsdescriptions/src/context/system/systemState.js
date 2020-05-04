@@ -7,7 +7,8 @@ import {
     GET_SYSTEMS,
     UPDATE_SYSTEM,
     SELECT_SYSTEM,
-    DELETE_SYSTEM
+    DELETE_SYSTEM,
+    DESELECT_SYSTEM
 } from '../../types/index'
 import axiosClient from '../../config/axios';
 
@@ -87,6 +88,12 @@ const SystemState = (props) => {
         })
     }
 
+    const deselectSystem = () =>{
+        dispatch({
+            type:DESELECT_SYSTEM
+        })
+    }
+
     return ( 
         <systemContext.Provider
             value ={{
@@ -97,7 +104,8 @@ const SystemState = (props) => {
                 updateSystem,
                 addSystem,
                 selectSystem,
-                deleteSystem
+                deleteSystem,
+                deselectSystem
             }}
         >
             {props.children}

@@ -34,9 +34,10 @@ const TagDescriptorState = props=>{
         })
     }
 
-    const getTagDescriptors = async ()=>{
+    const getTagDescriptors = async (system)=>{
         try {
-            const res = await axiosClient.get('/api/tagdescriptors');
+            
+            const res = await axiosClient.get('/api/tagdescriptors', {params:{system}});
             dispatch({
                 type: GET_TAGDESCRIPTOR,
                 payload: res.data.tagdescriptors

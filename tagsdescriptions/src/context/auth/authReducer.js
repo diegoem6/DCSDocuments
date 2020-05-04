@@ -11,7 +11,6 @@ export default (state,action)=>{
         case LOGIN_SUCCESS:
         case CREATE_USER_SUCCESS:
             localStorage.setItem('token',action.payload.token)
-            console.log("seteando token");
             return({
                 ...state,
                 authenticated:true,

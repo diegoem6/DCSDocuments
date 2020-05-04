@@ -76,7 +76,7 @@ const AuthState = (props) => {
 
     const loginUser = async (user)=>{
         try {
-            console.log(user)
+            
             const res = await axiosClient.post('/api/auth', user)
             dispatch({
                 type:LOGIN_SUCCESS,

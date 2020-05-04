@@ -5,7 +5,8 @@ import {
     SHOW_ERROR_ASSET,
     VALIDATE_ASSET,  
     SELECT_ASSET,    
-    DELETE_ASSET } from '../../types/index'
+    DELETE_ASSET, 
+    GET_ASSETS_TREE } from '../../types/index'
 
 export default (state,action)=>{
     switch(action.type){
@@ -19,6 +20,11 @@ export default (state,action)=>{
             return ({
                 ...state,
                 assets:action.payload
+            })
+        case GET_ASSETS_TREE:
+            return ({
+                ...state,
+                assetsTree:action.payload
             })
         case ADD_ASSET:
             return ({

@@ -8,8 +8,10 @@ import {
     SHOW_ERROR_ASSET,
     VALIDATE_ASSET,  
     SELECT_ASSET,    
-    DELETE_ASSET   } from '../../types/index'
+    DELETE_ASSET,
+    GET_ASSETS_TREE   } from '../../types/index'
 import axiosClient from '../../config/axios'
+import systemContext from '../system/systemContext';
 
 
 const AssetState = props=>{
@@ -20,7 +22,8 @@ const AssetState = props=>{
         form:false,
         error: false, 
         asset: null,
-        message:null
+        message:null, 
+        assetsTree: [{}]
     }
 
     //Dispatch para ejecutar las acciones
@@ -112,6 +115,43 @@ const AssetState = props=>{
        
     }
 
+    const getAssetTree = async ()=>{
+        try {
+            const res = await axiosClient.get('api/tree')
+            
+            let assetsTree_temp = res.data.assets
+            let j = 0
+            let i = 0
+            assetsTree_temp.forEach(i_asset => {
+                assetsTree_temp[j].key = i_asset._id
+                assetsTree_temp[j].label = i_asset.name
+                assetsTree_temp[j].nodes = i_asset.nodes
+                i=0;
+                assetsTree_temp[j].nodes.forEach(i_system => {
+                    assetsTree_temp[j].nodes[i].key = i_system._id
+                    assetsTree_temp[j].nodes[i].label = i_system.name
+                    i = i+1;
+                })
+                j= j+1;
+            });
+            dispatch({
+                type: GET_ASSETS_TREE,
+                payload: assetsTree_temp
+            })
+
+
+        } catch (error) {
+            const alert = {
+                msg:"hubo un error buscando los assets",
+                category:"alerta-error"
+            }
+            dispatch({
+                type:SHOW_ERROR_ASSET,
+                payload: alert
+            })
+        }
+    }
+
     return (
         <assetContext.Provider
             value={{
@@ -120,12 +160,14 @@ const AssetState = props=>{
                 error: state.error,
                 asset: state.asset,
                 message: state.message,
+                assetsTree: state.assetsTree,
                 showForm, 
                 getAssets,
                 addAsset,
                 showError, 
                 selectAsset,
-                deleteAsset
+                deleteAsset,
+                getAssetTree
             }}
         >
             {props.children}

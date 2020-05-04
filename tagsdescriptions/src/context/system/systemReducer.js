@@ -3,7 +3,8 @@ import {
     GET_SYSTEMS,
     UPDATE_SYSTEM,
     SELECT_SYSTEM,
-    DELETE_SYSTEM
+    DELETE_SYSTEM,
+    DESELECT_SYSTEM
 } from '../../types/index'
 
 export default (state, action) =>{
@@ -28,6 +29,11 @@ export default (state, action) =>{
             return ({
                 ...state, 
                 systemSelected:action.payload
+            })
+        case DESELECT_SYSTEM:
+            return ({
+                ...state, 
+                systemSelected:null
             })
         case DELETE_SYSTEM:
             return ({

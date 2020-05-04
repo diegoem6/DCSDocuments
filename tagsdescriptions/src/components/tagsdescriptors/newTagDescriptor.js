@@ -62,24 +62,7 @@ const NewTagDescriptor = () => {
                             value ={tagname}
                             onChange = {onChangeTagDescriptor}
                         />
-                        {/* <Editor
-                            initialValue="<p></p>"
-                            init={{
-                            height: 500,
-                            menubar: false,
-                            plugins: [
-                                'advlist autolink lists link image charmap print preview anchor',
-                                'searchreplace visualblocks code fullscreen',
-                                'insertdatetime media table paste code help wordcount'
-                            ],
-                            toolbar:
-                                'undo redo | formatselect | bold italic backcolor | \
-                                alignleft aligncenter alignright alignjustify | \
-                                bullist numlist outdent indent | removeformat | help'
-                            }}
-                            //onEditorChange={this.handleEditorChange}
-                        /> */}
-
+                        
                         <SunEditor 
                             placeholder="descripción del tag"
                             name="description"
@@ -88,15 +71,6 @@ const NewTagDescriptor = () => {
                             value ={description}
                             onChange = {onChangeRichText}
                         />
-
-                        {/* <textarea 
-                            rows="100"
-                            className="input-text"
-                            placeholder="descripción del tag"
-                            name="description"
-                            value ={description}
-                            onChange = {onChangeTagDescriptor}
-                        > </textarea> */}
 
                         <input 
                             type="submit"

@@ -26,6 +26,7 @@ export const  SHOW_ERROR_SYSTEM     =   "SHOW_ERROR_SYSTEM"
 export const  UPDATE_SYSTEM         =   "UPDATE_SYSTEM"
 export const  SELECT_SYSTEM         =   "SELECT_SYSTEM"    
 export const  DELETE_SYSTEM         =   "DELETE_SYSTEM"
+export const  DESELECT_SYSTEM       =   "DESELECT_SYSTEM"
 
 
 export const    FORM_ASSETS         =   "FORM_ASSETS"      
@@ -35,3 +36,4 @@ export const    SHOW_ERROR_ASSET    =   "SHOW_ERROR_ASSET"
 export const    VALIDATE_ASSET      =   "VALIDATE_ASSET"
 export const    SELECT_ASSET        =   "SELECT_ASSET"
 export const    DELETE_ASSET        =   "DELETE_ASSET"
+export const    GET_ASSETS_TREE     =   "GET_ASSETS_TREE"
