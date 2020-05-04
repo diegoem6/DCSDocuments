@@ -6,7 +6,7 @@ import systemContext from '../../context/system/systemContext';
 const SearchTagDescriptor = () => {
     
     const tdContext = useContext(tagDescriptorContext)
-    const {showForm} = tdContext
+    const {showForm, searchTagsDescriptors} = tdContext
 
     const sContext = useContext(systemContext)
     const {systemSelected} = sContext
@@ -25,8 +25,9 @@ const SearchTagDescriptor = () => {
     const onClickNewSearch = ()=>{
     }
 
-    const onChange = ()=>{
-
+    const onChange = (e)=>{
+        setSearch(e.target.value)
+        searchTagsDescriptors(e.target.value)
     }
     return (  
         <div className="formulario">

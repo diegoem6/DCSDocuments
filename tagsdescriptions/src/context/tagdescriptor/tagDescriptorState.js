@@ -6,9 +6,12 @@ import {
     GET_TAGDESCRIPTOR,
     CREATE_TAGDESCRIPTOR,
     SHOW_ERROR_TAGDESCRIPTOR,
+    UPDATE_TAGDESCRIPTOR,
     SELECT_TAGDESCRIPTOR,
+    DESELECT_TAGDESCRIPTOR,
     GET_TAGSDESCRIPTORS,
-    DELETE_TAGDESCRIPTOR} from '../../types/index'
+    DELETE_TAGDESCRIPTOR,
+    SEARCH_TAGSDESCRIPTORS} from '../../types/index'
 
 import axiosClient from '../../config/axios'
 
@@ -18,6 +21,7 @@ const TagDescriptorState = props=>{
     
     const initialState={
         tagdescriptors : [],
+        searchtagdescriptors: [],
         form:false,
         error: false, 
         tagdescriptor: null,
@@ -39,10 +43,30 @@ const TagDescriptorState = props=>{
         try {
             
             const res = await axiosClient.get('/api/tagsdescriptors', {params:{system}});
-            console.log(res)
             dispatch({
                 type: GET_TAGSDESCRIPTORS,
                 payload: res.data.tagsdescriptors
+            })
+        } catch (error) {
+            const alert = {
+                msg:"hubo un error buscando los tagdescriptors",
+                category:"alerta-error"
+            }
+            dispatch({
+                type:SHOW_ERROR_TAGDESCRIPTOR,
+                payload: alert
+            })
+        }
+        
+    }
+
+    const searchTagsDescriptors = async (search)=>{
+        try {
+            console.log(search)
+            
+            dispatch({
+                type: SEARCH_TAGSDESCRIPTORS,
+                payload: search
             })
         } catch (error) {
             const alert = {
@@ -68,7 +92,7 @@ const TagDescriptorState = props=>{
             })
         } catch (error) {
             const alert = {
-                msg:"hubo un error buscando los tagdescriptors",
+                msg:"No existe el tag descriptor",
                 category:"alerta-error"
             }
             dispatch({
@@ -83,7 +107,6 @@ const TagDescriptorState = props=>{
 
         try {
             const res = await axiosClient.post('/api/tagsdescriptors',ptagdescriptor);
-            console.log(res.data)
             dispatch({
                 type: CREATE_TAGDESCRIPTOR,
                 payload: res.data
@@ -108,16 +131,22 @@ const TagDescriptorState = props=>{
         })
     }
 
-    const selectTagDescriptor = (idTagDescriptor) =>{
+    const selectTagDescriptor = (id_tagdescriptor) =>{
         dispatch({
             type: SELECT_TAGDESCRIPTOR,
-            payload:idTagDescriptor
+            payload:id_tagdescriptor
+        })
+    }
+
+    const deselectTagDescriptor = (id_tagdescriptor) =>{
+        dispatch({
+            type: DESELECT_TAGDESCRIPTOR
         })
     }
 
     const deleteTagDescriptor = async (idTagDescriptor) =>{
         try {
-            await axiosClient.delete(`/api/proyectos/${idTagDescriptor}`);
+            await axiosClient.delete(`/api/tagsdescriptors/${idTagDescriptor}`);
             dispatch({
                 type:DELETE_TAGDESCRIPTOR,
                 payload:idTagDescriptor
@@ -136,6 +165,23 @@ const TagDescriptorState = props=>{
        
     }
 
+    const updateTagDescriptor = async (tagdescriptor) =>{
+        try {
+            const id = tagdescriptor._id
+            const res = await axiosClient.put(`/api/tagsdescriptors/${id}`,tagdescriptor)
+            
+            dispatch({
+                type:UPDATE_TAGDESCRIPTOR,
+                payload:res.data.tag_descriptor_modified
+            })
+            
+
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
+
     return (
         <tagDescriptorContext.Provider
             value={{
@@ -144,13 +190,17 @@ const TagDescriptorState = props=>{
                 error: state.error,
                 tagdescriptor: state.tagdescriptor,
                 message: state.message,
+                searchtagdescriptors: state.searchtagdescriptors,
                 showForm, 
                 getTagsDescriptors,
                 createTagDescriptor,
                 showError, 
                 selectTagDescriptor,
                 deleteTagDescriptor,
-                getTagDescriptor
+                getTagDescriptor,
+                deselectTagDescriptor,
+                updateTagDescriptor,
+                searchTagsDescriptors
             }}
         >
 

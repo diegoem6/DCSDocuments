@@ -1,15 +1,20 @@
 import React, {useContext} from 'react';
+import { Link } from 'react-router-dom'
 import tagDescriptorContext from "../../context/tagdescriptor/tagDescriptorContext";
 
 const TagDescriptor = ({tagdescriptor}) => {
 
     const tContext = useContext(tagDescriptorContext)
-    const {deleteTagDescription} = tContext
-    const selectTagDescriptor = (tagdescriptor)=>{
-
+    const {deleteTagDescriptor, selectTagDescriptor, showForm} = tContext
+    const editTagDescriptor = (tagdescriptor)=>{
+        selectTagDescriptor(tagdescriptor._id);
+        showForm();
     }
     const showTagDescriptor = (tagdescriptor)=>{
+    }
 
+    const deleteTagDescriptorOnCick = (tagdescriptor) =>{
+        deleteTagDescriptor(tagdescriptor._id)
     }
 
     return ( 
@@ -17,22 +22,24 @@ const TagDescriptor = ({tagdescriptor}) => {
             <p>{tagdescriptor.tagname} </p>
 
             <div className="acciones">
+                
+               
+                <Link 
+                    target='_blank'
+                    to={`/showTagDescriptor/${tagdescriptor.tagname}`}
+                    className="btn btn-primario">
+                    Ver
+                </Link>
                 <button 
                     type="button"
                     className="btn btn-primario"
-                    onClick = {()=>{showTagDescriptor(tagdescriptor)}}
-                >Mostrar</button>
-
-                <button 
-                    type="button"
-                    className="btn btn-primario"
-                    onClick = {()=>{selectTagDescriptor(tagdescriptor)}}
+                    onClick = {()=>{editTagDescriptor(tagdescriptor)}}
                 >Editar </button>
 
                 <button
                     type="button"
                     className="btn btn-secundario"
-                    onClick={deleteTagDescription}
+                    onClick={()=> {deleteTagDescriptorOnCick(tagdescriptor)}}
                 >Eliminar</button>
             </div>
         </li> 

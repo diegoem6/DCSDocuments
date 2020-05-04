@@ -8,10 +8,10 @@ import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorConte
 const TagDescriptorList = () => {
 
     const sContext = useContext(systemContext)
-    const {systemSelected, getSystems} = sContext
+    const {systemSelected} = sContext
     
     const tContext = useContext(tagDescriptorContext)
-    const {tagdescriptors, getTagsDescriptors} = tContext
+    const {searchtagdescriptors, getTagsDescriptors} = tContext
 
     const onSubmit = ()=>{
 
@@ -27,21 +27,25 @@ const TagDescriptorList = () => {
             }
         }
         listTagsDescriptors()
-    }, [systemSelected, tagdescriptors])
+    }, [systemSelected])
 
     if(!systemSelected) {
         return <h2>Seleccione un sistema</h2>
     }
-        
+    
+    if (!searchtagdescriptors){
+        return <p>No hay documentos para el sistema seleccionado</p>
+    }
+
     return ( 
         <Fragment>
             <h2>Tags descriptors del sistema: {systemSelected.name}</h2>
             <ul>
-                {(tagdescriptors.length===0)?
+                {(searchtagdescriptors.length===0)?
                     (<li className="tarea"><p>No hay documentos para el sistema seleccionado</p></li>)
                 :
 
-                    tagdescriptors.map(tgd =>(
+                    searchtagdescriptors.map(tgd =>(
                         <TagDescriptor
                             tagdescriptor={tgd}
                         />

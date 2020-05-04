@@ -14,12 +14,12 @@ const SidebarDescriptors = () => {
     const {assetsTree, getAssetTree} = aContext
 
     const tContext = useContext(tagDescriptorContext)
-    const {selectTagDescriptor} = tContext
+    const {deselectTagDescriptor} = tContext
 
     const sContext = useContext(systemContext)
     const {selectSystem, deselectSystem} = sContext
 
-
+    
     useEffect(() => {
         const initAssetTree = () =>{
             getAssetTree();
@@ -30,7 +30,12 @@ const SidebarDescriptors = () => {
         
     }, [])
 
-    
+    const selectSystemOnClick = (system)=>{
+        selectSystem(system);
+        deselectTagDescriptor();
+
+    }
+
     return ( 
         <aside>
             <h1>Descriptores<span>DCS</span></h1>
@@ -49,7 +54,7 @@ const SidebarDescriptors = () => {
                             system._id = _id
                             system.name = label
                             system.active = true
-                            selectSystem(system)
+                            selectSystemOnClick(system)
                         }else{
                             deselectSystem()
                         }

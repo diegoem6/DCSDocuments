@@ -31,10 +31,9 @@ function App() {
                 <Switch>
                   <Route exact path="/" component={Login}/>
                   <Route exact path="/newuser" component={Newuser}/>
-                  <Route exact path="/tagsdescriptors" component={Tagsdescriptors}/>
+                  <PrivateRoute exact path="/tagsdescriptors" component={Tagsdescriptors}/>
                   <PrivateRoute exact path="/assets" component={Assets}/>
-                  <Route exact path="/assets" component={Assets}/>
-                  <Route exact path="/menu" component={Menu}/>
+                  <PrivateRoute exact path="/menu" component={Menu}/>
                   <Route exact path="/showTagDescriptor/:tagname" component={ShowTagDescriptor}/>
                 </Switch>
               </Router>

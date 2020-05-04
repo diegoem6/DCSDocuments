@@ -1,36 +1,44 @@
-import React,{Fragment, useState, useContext} from 'react';
+import React,{Fragment, useState, useContext, useEffect} from 'react';
 import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext' 
 import systemContext from '../../context/system/systemContext' 
-import { Editor } from '@tinymce/tinymce-react';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
+import { UPDATE_TAGDESCRIPTOR } from '../../types';
 
 const NewTagDescriptor = () => {
     
     const tdContext = useContext(tagDescriptorContext)
-    const {error, createTagDescriptor, showError} = tdContext
+    const {error, createTagDescriptor, showError, tagdescriptor, updateTagDescriptor} = tdContext
 
     const sContext = useContext(systemContext)
     const {systemSelected} = sContext
 
-    const [tagDescriptor, settagDescriptor] = useState({
-        tagname:'',
-        description:''
-    })
-    const {tagname,description} = tagDescriptor
+    const [tagname, setTagname] = useState('')
+    const [description, setDescription] = useState('')
+    
+        
+        
+ 
+    useEffect(() => {
+        if (tagdescriptor !== null && tagdescriptor.length>0){
+            const [currentTagDescriptor] = tagdescriptor
+            setTagname(currentTagDescriptor.tagname)
+            setDescription(currentTagDescriptor.description)
+            
+        }else{
+            setTagname('')
+            setDescription('')
+        }
+    }, [])
 
+    if (!systemSelected) return null
 
     const onChangeTagDescriptor = (e)=>{
-        settagDescriptor({
-            ...tagDescriptor, 
-            [e.target.name]: e.target.value
-        })
+        setTagname(e.target.value)
     }
 
     const onChangeRichText = (value)=>{
-        settagDescriptor({
-            ...tagDescriptor,
-            description:value})
+        setDescription(value)
     }
 
     const onSubmitTagDescriptor = (e)=>{
@@ -45,11 +53,22 @@ const NewTagDescriptor = () => {
         }
 
         // llamo a agregar proyecto
-        tagDescriptor.system = systemSelected._id
+        let newTagDescriptor = {}
+        newTagDescriptor.tagname = tagname
+        newTagDescriptor.description = description
+        newTagDescriptor.system = systemSelected._id
         
-        createTagDescriptor(tagDescriptor)
-        settagDescriptor("")
+
+        if (tagdescriptor !== null && tagdescriptor.length>0){
+            const [currentTagDescriptor] = tagdescriptor
+            newTagDescriptor._id = currentTagDescriptor._id
+            updateTagDescriptor(newTagDescriptor)    
+        }else{
+            createTagDescriptor(newTagDescriptor)
+        }
         
+        setDescription("")
+        setTagname("")
     }
     return ( 
         <Fragment>
@@ -72,7 +91,7 @@ const NewTagDescriptor = () => {
                             name="description"
                             setOptions={{
                                 height: 300}}
-                            value ={description}
+                            setContents ={description}
                             onChange = {onChangeRichText}
                         /> 
                         {/* <textarea 
@@ -82,12 +101,21 @@ const NewTagDescriptor = () => {
                         > 
 
                         </textarea>*/}
-
-                        <input 
-                            type="submit"
-                            className="btn btn-primario btn-block"
-                            value = "Agregar Tag"
-                        />    
+                        {(tagdescriptor !== null && tagdescriptor.length>0) ?
+                    
+                            (<input 
+                                type="submit"
+                                className="btn btn-primario btn-block"
+                                value = "Guardar Tag"
+                            /> )
+                            :
+                            (<input 
+                                type="submit"
+                                className="btn btn-primario btn-block"
+                                value = "Agregar Tag"
+                            /> )
+                        }
+                          
                     </form>
                 {error? <p className="mensaje error">El nombre del formulario no puede estar vacío</p> : null}
         </Fragment>

@@ -18,9 +18,6 @@ router.get('/',
 
 router.put('/:id',
     auth,
-    [
-        check('descriptor','La descripción del tag no puede estar vacía').not().isEmpty()
-    ],
     tagDescriptorController.updateTagDescriptor)
 
 router.delete('/:id',
