@@ -29,7 +29,6 @@ const SearchTagDescriptor = () => {
 
     }
     return (  
-
         <div className="formulario">
             <div 
                 className="contenedor-input">

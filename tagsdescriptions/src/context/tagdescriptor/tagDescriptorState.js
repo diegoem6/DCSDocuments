@@ -7,6 +7,7 @@ import {
     CREATE_TAGDESCRIPTOR,
     SHOW_ERROR_TAGDESCRIPTOR,
     SELECT_TAGDESCRIPTOR,
+    GET_TAGSDESCRIPTORS,
     DELETE_TAGDESCRIPTOR} from '../../types/index'
 
 import axiosClient from '../../config/axios'
@@ -34,13 +35,36 @@ const TagDescriptorState = props=>{
         })
     }
 
-    const getTagDescriptors = async (system)=>{
+    const getTagsDescriptors = async (system)=>{
         try {
             
-            const res = await axiosClient.get('/api/tagdescriptors', {params:{system}});
+            const res = await axiosClient.get('/api/tagsdescriptors', {params:{system}});
+            console.log(res)
+            dispatch({
+                type: GET_TAGSDESCRIPTORS,
+                payload: res.data.tagsdescriptors
+            })
+        } catch (error) {
+            const alert = {
+                msg:"hubo un error buscando los tagdescriptors",
+                category:"alerta-error"
+            }
+            dispatch({
+                type:SHOW_ERROR_TAGDESCRIPTOR,
+                payload: alert
+            })
+        }
+        
+    }
+
+    const getTagDescriptor = async (id)=>{
+        try {
+            
+            const res = await axiosClient.get(`/api/showtag/${id}`);
+            console.log(res)
             dispatch({
                 type: GET_TAGDESCRIPTOR,
-                payload: res.data.tagdescriptors
+                payload: res.data.tagdescriptor
             })
         } catch (error) {
             const alert = {
@@ -58,8 +82,8 @@ const TagDescriptorState = props=>{
     const createTagDescriptor = async ptagdescriptor =>{
 
         try {
-            console.log(ptagdescriptor)
             const res = await axiosClient.post('/api/tagsdescriptors',ptagdescriptor);
+            console.log(res.data)
             dispatch({
                 type: CREATE_TAGDESCRIPTOR,
                 payload: res.data
@@ -121,11 +145,12 @@ const TagDescriptorState = props=>{
                 tagdescriptor: state.tagdescriptor,
                 message: state.message,
                 showForm, 
-                getTagDescriptors,
+                getTagsDescriptors,
                 createTagDescriptor,
                 showError, 
                 selectTagDescriptor,
-                deleteTagDescriptor
+                deleteTagDescriptor,
+                getTagDescriptor
             }}
         >
 

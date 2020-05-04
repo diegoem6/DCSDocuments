@@ -6,6 +6,7 @@ import NewTagDescriptor from './newTagDescriptor';
 import TagDescriptorList from'./tagDescriptorList'
 import SearchTagDescriptor from './searchTagDescriptor';
 import SidebarDescriptors from '../../layout/sidebarDescriptors';
+import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext';
 
 
 
@@ -13,6 +14,9 @@ const Tagsdescriptors = () => {
 
     const auContext = useContext(authContext)
     const {user,getUser} = auContext;
+
+    const tContext = useContext(tagDescriptorContext)
+    const {form} = tContext
 
     useEffect(() => {
         getUser()
@@ -29,7 +33,13 @@ const Tagsdescriptors = () => {
                       <SearchTagDescriptor/>
                       
                       <div className="contenedor-tareas">
-                            <TagDescriptorList/>
+                          
+                            {form ?
+                                (<NewTagDescriptor/>)
+                                :
+                                (<TagDescriptorList/>)
+                            }
+
                       </div>
                   </main>
               </div>

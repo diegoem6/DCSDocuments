@@ -19,7 +19,6 @@ const SidebarDescriptors = () => {
     const sContext = useContext(systemContext)
     const {selectSystem, deselectSystem} = sContext
 
-    let tree_assets = [{}]
 
     useEffect(() => {
         const initAssetTree = () =>{
@@ -31,14 +30,10 @@ const SidebarDescriptors = () => {
         
     }, [])
 
-    console.log(assetsTree);
-
-    const onClickAssets =({key}, {level})=>{
-        console.log(level)
-    }
+    
     return ( 
         <aside>
-            <h1>Estructura<span>MdP</span></h1>
+            <h1>Descriptores<span>DCS</span></h1>
            
             <div className="proyectos">
                 
@@ -48,11 +43,10 @@ const SidebarDescriptors = () => {
                     debounceTime={125}
                     disableKeyboard={false}
                     hasSearch={false}
-                    onClickItem={({key,level, label})=>{
+                    onClickItem={({_id,level, label})=>{
                         if (level===1){
-                            console.log(key)
                             let system = {}
-                            system._id = key
+                            system._id = _id
                             system.name = label
                             system.active = true
                             selectSystem(system)

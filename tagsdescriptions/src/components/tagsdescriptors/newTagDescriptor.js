@@ -1,5 +1,6 @@
 import React,{Fragment, useState, useContext} from 'react';
 import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext' 
+import systemContext from '../../context/system/systemContext' 
 import { Editor } from '@tinymce/tinymce-react';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
@@ -7,7 +8,10 @@ import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 const NewTagDescriptor = () => {
     
     const tdContext = useContext(tagDescriptorContext)
-    const {form, error, createTagDescriptor, showError} = tdContext
+    const {error, createTagDescriptor, showError} = tdContext
+
+    const sContext = useContext(systemContext)
+    const {systemSelected} = sContext
 
     const [tagDescriptor, settagDescriptor] = useState({
         tagname:'',
@@ -17,7 +21,6 @@ const NewTagDescriptor = () => {
 
 
     const onChangeTagDescriptor = (e)=>{
-        console.log(e.target);
         settagDescriptor({
             ...tagDescriptor, 
             [e.target.name]: e.target.value
@@ -25,7 +28,8 @@ const NewTagDescriptor = () => {
     }
 
     const onChangeRichText = (value)=>{
-        settagDescriptor({...tagDescriptor,
+        settagDescriptor({
+            ...tagDescriptor,
             description:value})
     }
 
@@ -41,6 +45,7 @@ const NewTagDescriptor = () => {
         }
 
         // llamo a agregar proyecto
+        tagDescriptor.system = systemSelected._id
         
         createTagDescriptor(tagDescriptor)
         settagDescriptor("")
@@ -48,8 +53,7 @@ const NewTagDescriptor = () => {
     }
     return ( 
         <Fragment>
-            {form ?
-                (
+                <h2>Nuevo tags descriptor en el sistema: {systemSelected.name}</h2>
                     <form   
                         className="formulario-nuevo-proyecto"
                         onSubmit = {onSubmitTagDescriptor}
@@ -70,7 +74,14 @@ const NewTagDescriptor = () => {
                                 height: 300}}
                             value ={description}
                             onChange = {onChangeRichText}
-                        />
+                        /> 
+                        {/* <textarea 
+                            name="description"
+                            value ={description}
+                            onChange = {onChangeTagDescriptor}
+                        > 
+
+                        </textarea>*/}
 
                         <input 
                             type="submit"
@@ -78,9 +89,6 @@ const NewTagDescriptor = () => {
                             value = "Agregar Tag"
                         />    
                     </form>
-                ):
-                (null)
-                }
                 {error? <p className="mensaje error">El nombre del formulario no puede estar vacío</p> : null}
         </Fragment>
      );

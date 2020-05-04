@@ -61,6 +61,7 @@ const AssetState = props=>{
 
         try {
             const res = await axiosClient.post('/api/assets',asset);
+            console.log(res.data)
             dispatch({
                 type: ADD_ASSET,
                 payload: res.data

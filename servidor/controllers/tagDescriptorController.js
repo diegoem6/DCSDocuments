@@ -1,4 +1,5 @@
 const TagDescriptor = require('../models/TagDescriptor')
+const System = require('../models/System')
 const {validationResult} = require('express-validator');
 
 
@@ -25,6 +26,7 @@ exports.createTagDescriptor = async (req, res)=>{
 //obteniendo todos los tagsdescriptors
 exports.getTagsDescriptors = async (req,res)=>{
     try {
+        
         const {system} = req.query;
         //existe el asset?
         const system_updated = await System.findById(system)
@@ -35,6 +37,22 @@ exports.getTagsDescriptors = async (req,res)=>{
 
         const tagsdescriptors = await TagDescriptor.find({system:system_updated._id}).sort({creado:-1})
         res.json({tagsdescriptors})
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Error en obtener tagsdescriptors")
+        
+    }
+}
+
+//obteniendo un tagdescriptor
+exports.getTagDescriptor = async (req,res)=>{
+    try {
+        console.log("ESTOY EN EL SOLO")
+        const tagname = req.params.id
+
+        const tagdescriptor = await TagDescriptor.find({tagname:tagname}).sort({creado:-1})
+        res.json({tagdescriptor})
 
     } catch (error) {
         console.log(error);

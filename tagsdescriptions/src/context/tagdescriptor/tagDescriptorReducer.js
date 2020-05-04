@@ -1,6 +1,7 @@
 import {
     FORM_TAGDESCRIPTOR, 
     GET_TAGDESCRIPTOR,
+    GET_TAGSDESCRIPTORS,
     CREATE_TAGDESCRIPTOR,
     SHOW_ERROR_TAGDESCRIPTOR,
     VALIDATE_TAGDESCRIPTOR,
@@ -19,6 +20,11 @@ export default (state,action)=>{
             return ({
                 ...state,
                 tagdescriptor:action.payload
+            })
+        case GET_TAGSDESCRIPTORS:
+            return ({
+                ...state,
+                tagdescriptors:action.payload
             })
         case CREATE_TAGDESCRIPTOR:
             return ({

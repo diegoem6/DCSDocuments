@@ -11,6 +11,10 @@ const TagDescriptorSchema = mongoose.Schema({
         required: true,
         trim: true
     },
+    system:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'System'
+    },
     createddate: {
         type: Date,
         default: Date.now()

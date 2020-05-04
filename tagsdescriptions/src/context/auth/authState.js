@@ -24,7 +24,6 @@ const AuthState = (props) => {
 
     const createUser = async (user) =>{
         try {
-            console.log(user);
             const res = await axiosClient.post('api/users', user)
             dispatch({
                 type:CREATE_USER_SUCCESS,
@@ -68,7 +67,6 @@ const AuthState = (props) => {
     }
 
     const logOff = () =>{
-        console.log("en logoff")
         dispatch({
             type:LOG_OFF
         })
