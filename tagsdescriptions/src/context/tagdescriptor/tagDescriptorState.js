@@ -112,6 +112,7 @@ const TagDescriptorState = props=>{
                 payload: res.data
             })
         } catch (error) {
+            
             const alert = {
                 msg:"hubo un error creando el tag descriptor",
                 categoria:"alerta-error"

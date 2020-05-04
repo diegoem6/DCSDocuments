@@ -73,10 +73,12 @@ const NewTagDescriptor = () => {
     return ( 
         <Fragment>
                 <h2>Nuevo tags descriptor en el sistema: {systemSelected.name}</h2>
+                    
                     <form   
                         className="formulario-nuevo-proyecto"
                         onSubmit = {onSubmitTagDescriptor}
                         >
+                        {error? <p className="mensaje error">{error.msg}</p> : null}
                         <input  
                             type="text"
                             className="input-text"
@@ -117,7 +119,7 @@ const NewTagDescriptor = () => {
                         }
                           
                     </form>
-                {error? <p className="mensaje error">El nombre del formulario no puede estar vacío</p> : null}
+                
         </Fragment>
      );
 }

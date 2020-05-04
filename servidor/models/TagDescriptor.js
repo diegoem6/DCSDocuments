@@ -4,6 +4,7 @@ const TagDescriptorSchema = mongoose.Schema({
     tagname: {
         type: String,
         required: true,
+        unique: true,
         trim: true
     },
     description: {
