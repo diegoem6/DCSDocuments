@@ -16,7 +16,7 @@ exports.createTagDescriptor = async (req, res)=>{
 
         const tagdescriptor_validation = await TagDescriptor.find({tagname:tagdescriptor.tagname}).sort({creado:-1})
         if (tagdescriptor_validation.length > 0){
-            res.status(500).send("Ya existe un descriptor con ese tagname")
+            res.status(500).send({msg:"Ya existe un descriptor con ese tagname"})
         }else{
             res.json({tagdescriptor})
         }

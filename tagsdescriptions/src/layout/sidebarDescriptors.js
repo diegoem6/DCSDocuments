@@ -45,8 +45,9 @@ const SidebarDescriptors = () => {
                 <h2>Assets</h2>  
                 <TreeMenu 
                     data={assetsTree} 
+                    selected={false}
                     debounceTime={125}
-                    disableKeyboard={false}
+                    disableKeyboard={true}
                     hasSearch={false}
                     onClickItem={({_id,level, label})=>{
                         if (level===1){

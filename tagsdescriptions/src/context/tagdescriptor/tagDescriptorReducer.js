@@ -22,31 +22,36 @@ export default (state,action)=>{
         case GET_TAGDESCRIPTOR:
             return ({
                 ...state,
-                tagdescriptor:action.payload
+                tagdescriptor:action.payload,
+                error:false
             })
         case GET_TAGSDESCRIPTORS:
             return ({
                 ...state,
                 searchtagdescriptors: action.payload,
-                tagdescriptors:action.payload
+                tagdescriptors:action.payload,
+                error:false
+
             })
         case CREATE_TAGDESCRIPTOR:
             return ({
                 ...state,
                 tagdescriptors:[...state.tagdescriptors, action.payload],
                 form:false,
+                error:false,
                 error:false
             })
         case VALIDATE_TAGDESCRIPTOR:
             return ({
                 ...state,
-                error:true
+                error:!state.error
             })
         case SELECT_TAGDESCRIPTOR:
             return ({
                 ...state,
                 tagdescriptor: state.tagdescriptors.filter(
-                    tagdescriptor => tagdescriptor._id === action.payload)
+                    tagdescriptor => tagdescriptor._id === action.payload),
+                error:false
             })
         case DELETE_TAGDESCRIPTOR:
             return ({
@@ -54,25 +59,28 @@ export default (state,action)=>{
                 tagdescriptors: state.tagdescriptors.filter(
                     tagdescriptor=>tagdescriptor._id !== action.payload
                 ),
-                tagdescriptor: null
+                tagdescriptor: null,
+                error:false
             })
         case SHOW_ERROR_TAGDESCRIPTOR:
             return ({
                 ...state,
-                message:action.payload.msg,
+                message:action.payload,
                 error:true
             })
         case DESELECT_TAGDESCRIPTOR:
             return ({
                 ...state,
                 form:false,
-                tagdescriptor:null
+                tagdescriptor:null,
+                error:false
             })
         case UPDATE_TAGDESCRIPTOR:
             return ({
                 ...state,
                 form:false,
-                tagdescriptor:null
+                tagdescriptor:null,
+                error:false
             })
         case SEARCH_TAGSDESCRIPTORS:
             return ({
@@ -81,7 +89,8 @@ export default (state,action)=>{
                     tagdescriptor=> tagdescriptor.tagname.indexOf(action.payload) > -1
                 ),
                 tagdescriptor: null,
-                form:false
+                form:false,
+                error:false
             })
 
         default:

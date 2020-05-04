@@ -305,13 +305,31 @@ aside  {
   background-color: rgba(255, 178, 178, .4);
   color: var(--gris3);
 }
+
+.message {
+  font-weight: 900;
+  font-family: var(--textFont);
+  font-size: 1rem;
+  padding: .5rem;
+  border-radius: .5rem;
+  cursor: pointer;
+  border: none;
+}
+.message {
+  text-align: center;
+  font-size: 1.6rem;
+  border-radius: 0;
+}
+.message:hover {
+  cursor: default;
+}
+
 .error {
   max-width: 600px;
   margin: 2rem auto 0 auto;
   background-color: rgb(170, 0, 0);
   color: var(--blanco);
 }
-
 
 
 .tarea-enter,

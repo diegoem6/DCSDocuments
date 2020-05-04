@@ -4,22 +4,33 @@ import systemContext from '../../context/system/systemContext'
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import { UPDATE_TAGDESCRIPTOR } from '../../types';
+import alertContext from '../../context/alerts/alertContext';
 
 const NewTagDescriptor = () => {
     
     const tdContext = useContext(tagDescriptorContext)
-    const {error, createTagDescriptor, showError, tagdescriptor, updateTagDescriptor} = tdContext
+    const {error, message, createTagDescriptor, showError, tagdescriptor, updateTagDescriptor, validateTagDescription} = tdContext
 
     const sContext = useContext(systemContext)
     const {systemSelected} = sContext
+
+    const aContext = useContext(alertContext)
+    const {alert,showAlert} = aContext
+
 
     const [tagname, setTagname] = useState('')
     const [description, setDescription] = useState('')
     
         
-        
+    useEffect(() => {
+        if (error){
+            showAlert(message.msg,message.category)
+            validateTagDescription();
+        }
+    }, [error])
  
     useEffect(() => {
+        
         if (tagdescriptor !== null && tagdescriptor.length>0){
             const [currentTagDescriptor] = tagdescriptor
             setTagname(currentTagDescriptor.tagname)
@@ -48,7 +59,7 @@ const NewTagDescriptor = () => {
         if (tagname.trim() === '' || description.trim()===''){
             //alert(description.trim())
             //alert(tagname.trim())
-            showError()
+            showAlert('Debe completar tagname y descripción','alerta-error')
             return;
         }
 
@@ -66,19 +77,19 @@ const NewTagDescriptor = () => {
         }else{
             createTagDescriptor(newTagDescriptor)
         }
-        
         setDescription("")
         setTagname("")
     }
     return ( 
         <Fragment>
+                {alert? (<div className={`alerta ${alert.category}`}>{alert.msg} </div>)
+                    :null}
                 <h2>Nuevo tags descriptor en el sistema: {systemSelected.name}</h2>
                     
                     <form   
                         className="formulario-nuevo-proyecto"
                         onSubmit = {onSubmitTagDescriptor}
                         >
-                        {error? <p className="mensaje error">{error.msg}</p> : null}
                         <input  
                             type="text"
                             className="input-text"

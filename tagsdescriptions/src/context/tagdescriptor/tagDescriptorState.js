@@ -11,7 +11,8 @@ import {
     DESELECT_TAGDESCRIPTOR,
     GET_TAGSDESCRIPTORS,
     DELETE_TAGDESCRIPTOR,
-    SEARCH_TAGSDESCRIPTORS} from '../../types/index'
+    SEARCH_TAGSDESCRIPTORS,
+    VALIDATE_TAGDESCRIPTOR} from '../../types/index'
 
 import axiosClient from '../../config/axios'
 
@@ -103,6 +104,11 @@ const TagDescriptorState = props=>{
         
     }
 
+    const validateTagDescription = ()=>{
+        dispatch({
+            type:VALIDATE_TAGDESCRIPTOR
+        })
+    }
     const createTagDescriptor = async ptagdescriptor =>{
 
         try {
@@ -111,11 +117,11 @@ const TagDescriptorState = props=>{
                 type: CREATE_TAGDESCRIPTOR,
                 payload: res.data
             })
-        } catch (error) {
             
+        } catch (error) {
             const alert = {
-                msg:"hubo un error creando el tag descriptor",
-                categoria:"alerta-error"
+                msg:error.response.data.msg,
+                category:"alerta-error"
             }
             dispatch({
                 type:SHOW_ERROR_TAGDESCRIPTOR,
@@ -201,7 +207,8 @@ const TagDescriptorState = props=>{
                 getTagDescriptor,
                 deselectTagDescriptor,
                 updateTagDescriptor,
-                searchTagsDescriptors
+                searchTagsDescriptors,
+                validateTagDescription
             }}
         >
 
