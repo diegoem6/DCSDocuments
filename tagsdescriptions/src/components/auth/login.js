@@ -20,17 +20,23 @@ const Login = (props) => {
    const aContext = useContext(alertContext)
    const {alert, showAlert} = aContext
    const auContext = useContext(authContext);
-   const {loginUser, authenticated, message} = auContext
+   const {loginUser, authenticated, message, resetMessage} = auContext
+
+
+   useEffect(()=>{
+      if (message){
+        showAlert(message.msg,message.category)
+        resetMessage()
+      }
+      // eslint-disable-next-line
+   },[message])
 
    useEffect(()=>{
        if(authenticated){
          props.history.push('/menu')
        }
-       if (message){
-         showAlert(message.msg,message.category)
-       }
        // eslint-disable-next-line
-   },[authenticated, message, props.history])
+   },[authenticated, props.history])
 
    const onSubmit = (e) => {
      e.preventDefault()
@@ -47,7 +53,7 @@ const Login = (props) => {
   return (
     <div className="form-usuario">
      
-     {alert? (<div className={`alerta ${alert.categoria}`}>{alert.msg} </div>)
+     {alert? (<div className={`alerta ${alert.category}`}>{alert.msg} </div>)
                     :null}
            
       <div className="contenedor-form sombra-dark">

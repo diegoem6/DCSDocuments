@@ -23,7 +23,7 @@ exports.getTree = async (req, res)=>{
         res.json({assets});
     } catch (error) {
         console.log(error);
-        res.status(500).send("Error en obtener assets")
+        res.status(500).send({msg:"Error en obtener el tree assets"})
         
     }
 }

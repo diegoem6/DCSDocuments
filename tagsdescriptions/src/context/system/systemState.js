@@ -8,7 +8,9 @@ import {
     UPDATE_SYSTEM,
     SELECT_SYSTEM,
     DELETE_SYSTEM,
-    DESELECT_SYSTEM
+    DESELECT_SYSTEM,
+    SHOW_ERROR,
+    RESET_MESSAGE
 } from '../../types/index'
 import axiosClient from '../../config/axios';
 
@@ -17,6 +19,7 @@ const SystemState = (props) => {
     const initialState = {
         systems:[],
         systemSelected:null,
+        message:null,
         active:false
     }
 
@@ -31,7 +34,14 @@ const SystemState = (props) => {
             })
             getSystems(system.asset)
         } catch (error) {
-            
+            const alert = {
+                msg: error.response.data.msg,
+                category: 'alerta-error'
+            }
+            dispatch({
+                type:SHOW_ERROR,
+                payload:alert
+            })
         }
 
     }
@@ -44,7 +54,14 @@ const SystemState = (props) => {
             })
 
         } catch (error) {
-            
+            const alert = {
+                msg: error.response.data.msg,
+                category: 'alerta-error'
+            }
+            dispatch({
+                type:SHOW_ERROR,
+                payload:alert
+            })
         }
     }
 
@@ -60,7 +77,14 @@ const SystemState = (props) => {
             getSystems(system.asset)
 
         } catch (error) {
-            console.log(error)
+            const alert = {
+                msg: error.response.data.msg,
+                category: 'alerta-error'
+            }
+            dispatch({
+                type:SHOW_ERROR,
+                payload:alert
+            })
 
         }
     }
@@ -76,11 +100,22 @@ const SystemState = (props) => {
                 payload:system
             })
         } catch (error) {
-            console.log(error)
+            const alert = {
+                msg: error.response.data.msg,
+                category: 'alerta-error'
+            }
+            dispatch({
+                type:SHOW_ERROR,
+                payload:alert
+            })
 
         }
     }
-
+    const resetMessage = () =>{
+        dispatch({
+            type:RESET_MESSAGE
+        })
+    }
     const selectSystem = (system) =>{
         dispatch({
             type:SELECT_SYSTEM,
@@ -100,12 +135,14 @@ const SystemState = (props) => {
                 systems:state.systems,
                 systemSelected: state.systemSelected,
                 active:state.active,
+                message:state.message,
                 getSystems,
                 updateSystem,
                 addSystem,
                 selectSystem,
                 deleteSystem,
-                deselectSystem
+                deselectSystem,
+                resetMessage
             }}
         >
             {props.children}

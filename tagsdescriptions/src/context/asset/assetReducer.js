@@ -6,7 +6,8 @@ import {
     VALIDATE_ASSET,  
     SELECT_ASSET,    
     DELETE_ASSET, 
-    GET_ASSETS_TREE } from '../../types/index'
+    GET_ASSETS_TREE,
+    RESET_MESSAGE } from '../../types/index'
 
 export default (state,action)=>{
     switch(action.type){
@@ -14,35 +15,46 @@ export default (state,action)=>{
             return ({
                 ...state,
                 form:true,
-                error:false
+                error:false,
+                message:null
             })
         case GET_ASSETS:
             return ({
                 ...state,
-                assets:action.payload
+                assets:action.payload,
+                message:null
             })
         case GET_ASSETS_TREE:
             return ({
                 ...state,
-                assetsTree:action.payload
+                assetsTree:action.payload,
+                message:null
             })
         case ADD_ASSET:
             return ({
                 ...state,
                 assets:[...state.assets, action.payload],
                 form:false,
-                error:false
+                error:false,
+                message:null
+            })
+        case RESET_MESSAGE:
+            return ({
+                ...state,
+                message:null
             })
         case VALIDATE_ASSET:
             return ({
                 ...state,
-                error:true
+                error:true,
+                message:null
             })
         case SELECT_ASSET:
             return ({
                 ...state,
                 asset: state.assets.filter(
-                    asset => asset._id === action.payload._id)
+                    asset => asset._id === action.payload._id),
+                message:null
             })
         case DELETE_ASSET:
             return ({
@@ -50,7 +62,8 @@ export default (state,action)=>{
                 assets: state.assets.filter(
                     asset=>asset._id !== action.payload
                 ),
-                asset: null
+                asset: null,
+                message:null
             })
         case SHOW_ERROR_ASSET:
             return ({

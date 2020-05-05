@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import systemContext from '../../context/system/systemContext'
+import { confirmAlert } from 'react-confirm-alert';
 
 const System = ({system}) => {
 
@@ -13,6 +14,24 @@ const System = ({system}) => {
     const deleteSystemOnClick = ()=>{
         deleteSystem(system)
     }
+
+    const showDialogConfirm = ()=>{
+        confirmAlert({
+            title: 'Eliminar sistema',
+            message: 'Se eliminaran todos los descriptores asociados al sistema',
+            buttons: [
+              {
+                label: 'Yes',
+                onClick: () => deleteSystemOnClick()
+              },
+              {
+                label: 'No',
+                onClick: () => console.log("no")
+              }
+            ]
+          });
+    }
+
     return ( 
         <li className="tarea sombra">
         <p>{system.name} </p>
@@ -48,7 +67,7 @@ const System = ({system}) => {
             <button
                 type="button"
                 className="btn btn-secundario"
-                onClick={deleteSystemOnClick}
+                onClick={showDialogConfirm}
             >Eliminar</button>
         </div>
     </li> 

@@ -4,7 +4,8 @@ import {
     GET_USER, 
     LOGIN_SUCCESS,
     LOGIN_ERROR,
-    LOG_OFF} from '../../types/index'
+    LOG_OFF, 
+    RESET_MESSAGE} from '../../types/index'
 
 export default (state,action)=>{
     switch(action.type){
@@ -36,7 +37,11 @@ export default (state,action)=>{
                 message:action.payload,
                 loading:false
             })
-            
+        case RESET_MESSAGE:
+            return ({
+                ...state, 
+                message:null
+            })
         default: 
             return state;
     }

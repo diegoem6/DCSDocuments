@@ -2,6 +2,7 @@ import React, {useEffect, useContext, Fragment} from 'react';
 import systemContext from '../../context/system/systemContext'
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import System from './system';
+import { confirmAlert } from 'react-confirm-alert';
 import assetContext from '../../context/asset/assetContext';
 
 
@@ -12,12 +13,6 @@ const SystemList = () => {
     const aContext = useContext(assetContext)
     const {asset,deleteAsset} = aContext
 
-    const onSubmit = ()=>{
-
-    }
-    const onChange = ()=>{
-
-    }
 
     if(!asset) {
         return <h2>Seleccione un asset</h2>
@@ -26,6 +21,23 @@ const SystemList = () => {
 
     const deleteAssetOnClick = ()=>{
         deleteAsset(assetSelected)
+    }
+
+    const showDialogConfirm = ()=>{
+        confirmAlert({
+            title: 'Eliminar asset',
+            message: 'Se eliminaran todos los sistemas y descriptores asociados al asset',
+            buttons: [
+              {
+                label: 'Yes',
+                onClick: () => deleteAssetOnClick()
+              },
+              {
+                label: 'No',
+                onClick: () => console.log("no")
+              }
+            ]
+          });
     }
     
     return ( 
@@ -53,7 +65,7 @@ const SystemList = () => {
             <button     
                 type="button"
                 className="btn btn-eliminar"
-                onClick={deleteAssetOnClick}
+                onClick={showDialogConfirm}
             >Eliminar Asset &times;</button>
         </Fragment>
      );

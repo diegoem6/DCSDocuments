@@ -12,7 +12,9 @@ import {
     GET_TAGSDESCRIPTORS,
     DELETE_TAGDESCRIPTOR,
     SEARCH_TAGSDESCRIPTORS,
-    VALIDATE_TAGDESCRIPTOR} from '../../types/index'
+    RESET_MESSAGE,
+    VALIDATE_TAGDESCRIPTOR,
+    INVALIDATE_TAGDESCRIPTOR} from '../../types/index'
 
 import axiosClient from '../../config/axios'
 
@@ -24,7 +26,7 @@ const TagDescriptorState = props=>{
         tagdescriptors : [],
         searchtagdescriptors: [],
         form:false,
-        error: false, 
+        tagname_ok: true, 
         tagdescriptor: null,
         message:null
     }
@@ -104,19 +106,21 @@ const TagDescriptorState = props=>{
         
     }
 
-    const validateTagDescription = ()=>{
+    const resetMessage = ()=>{
         dispatch({
-            type:VALIDATE_TAGDESCRIPTOR
+            type:RESET_MESSAGE
         })
     }
     const createTagDescriptor = async ptagdescriptor =>{
 
         try {
+            
             const res = await axiosClient.post('/api/tagsdescriptors',ptagdescriptor);
             dispatch({
                 type: CREATE_TAGDESCRIPTOR,
                 payload: res.data
             })
+            
             
         } catch (error) {
             const alert = {
@@ -172,6 +176,24 @@ const TagDescriptorState = props=>{
        
     }
 
+    const validateTagname = async (id) =>{
+        try {
+            const res = await axiosClient.get(`/api/showtag/${id}`);
+            const alert = {
+                msg:"El tag descriptor para ese tagname ya existe",
+                category:"alerta-error"
+            }
+            dispatch({
+                type: INVALIDATE_TAGDESCRIPTOR,
+                payload: alert
+            })
+        } catch (error) {
+            dispatch({
+                type:VALIDATE_TAGDESCRIPTOR
+            })
+        }
+    }
+
     const updateTagDescriptor = async (tagdescriptor) =>{
         try {
             const id = tagdescriptor._id
@@ -198,6 +220,7 @@ const TagDescriptorState = props=>{
                 tagdescriptor: state.tagdescriptor,
                 message: state.message,
                 searchtagdescriptors: state.searchtagdescriptors,
+                tagname_ok:state.tagname_ok,
                 showForm, 
                 getTagsDescriptors,
                 createTagDescriptor,
@@ -208,7 +231,8 @@ const TagDescriptorState = props=>{
                 deselectTagDescriptor,
                 updateTagDescriptor,
                 searchTagsDescriptors,
-                validateTagDescription
+                resetMessage,
+                validateTagname
             }}
         >
 

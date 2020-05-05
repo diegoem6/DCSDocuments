@@ -4,12 +4,14 @@ import {
     GET_TAGSDESCRIPTORS,
     CREATE_TAGDESCRIPTOR,
     SHOW_ERROR_TAGDESCRIPTOR,
-    VALIDATE_TAGDESCRIPTOR,
     SELECT_TAGDESCRIPTOR,
     DESELECT_TAGDESCRIPTOR,
     DELETE_TAGDESCRIPTOR,
     UPDATE_TAGDESCRIPTOR,
-    SEARCH_TAGSDESCRIPTORS} from '../../types/index'
+    SEARCH_TAGSDESCRIPTORS,
+    RESET_MESSAGE,
+    VALIDATE_TAGDESCRIPTOR,
+    INVALIDATE_TAGDESCRIPTOR} from '../../types/index'
 
 export default (state,action)=>{
     switch(action.type){
@@ -41,10 +43,10 @@ export default (state,action)=>{
                 error:false,
                 error:false
             })
-        case VALIDATE_TAGDESCRIPTOR:
+        case RESET_MESSAGE:
             return ({
                 ...state,
-                error:!state.error
+                message:null
             })
         case SELECT_TAGDESCRIPTOR:
             return ({
@@ -53,12 +55,25 @@ export default (state,action)=>{
                     tagdescriptor => tagdescriptor._id === action.payload),
                 error:false
             })
+        case VALIDATE_TAGDESCRIPTOR:
+            return ({
+                ...state,
+                tagname_ok:true
+            })
+        case INVALIDATE_TAGDESCRIPTOR:
+            return ({
+                ...state,
+                message: action.payload,
+                tagname_ok:false
+            })
         case DELETE_TAGDESCRIPTOR:
             return ({
                 ...state,
                 tagdescriptors: state.tagdescriptors.filter(
                     tagdescriptor=>tagdescriptor._id !== action.payload
                 ),
+                searchtagdescriptors: state.searchtagdescriptors.filter(
+                    tagdescriptor=>tagdescriptor._id !== action.payload),
                 tagdescriptor: null,
                 error:false
             })

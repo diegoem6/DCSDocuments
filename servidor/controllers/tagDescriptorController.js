@@ -61,14 +61,13 @@ exports.getTagDescriptor = async (req,res)=>{
 
         const tagdescriptor = await TagDescriptor.find({tagname:tagname}).sort({creado:-1})
         if (tagdescriptor.length === 0){
-            
-            res.status(500).send("No existe el tag descriptor")
+            res.status(404).send({msg:"No existe el tag descriptor"})
         }else{
             res.json({tagdescriptor})
         }
     } catch (error) {
         console.log(error);
-        res.status(500).send("Error en obtener tagsdescriptors")
+        res.status(500).send({msg:"Error en obtener tagsdescriptors"})
         
     }
 }

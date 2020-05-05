@@ -4,7 +4,9 @@ import {
     UPDATE_SYSTEM,
     SELECT_SYSTEM,
     DELETE_SYSTEM,
-    DESELECT_SYSTEM
+    DESELECT_SYSTEM,
+    SHOW_ERROR,
+    RESET_MESSAGE
 } from '../../types/index'
 
 export default (state, action) =>{
@@ -12,34 +14,51 @@ export default (state, action) =>{
         case ADD_SYSTEM:
             return ({
                 ...state, 
-                systems: [...state.systems, action.payload]
+                systems: [...state.systems, action.payload],
+                message:null
             })
         case GET_SYSTEMS:
             return ({
                 ...state, 
                 systems: action.payload,
-                systemSelected:null
+                systemSelected:null,
+                message:null
             })
         case UPDATE_SYSTEM:
             return ({
                 ...state, 
-                systemSelected:null
+                systemSelected:null,
+                message:null
             })
         case SELECT_SYSTEM:
             return ({
                 ...state, 
-                systemSelected:action.payload
+                systemSelected:action.payload,
+                message:null
             })
         case DESELECT_SYSTEM:
             return ({
                 ...state, 
-                systemSelected:null
+                systemSelected:null,
+                message:null
             })
         case DELETE_SYSTEM:
             return ({
                 ...state,
                 systems: state.systems.filter((
-                    system => system._id !== action.payload._id))
+                    system => system._id !== action.payload._id)),
+                message:null,
+                systemSelected:null
+            })
+        case SHOW_ERROR:
+            return ({
+                ...state,
+                message:action.payload
+            })
+        case RESET_MESSAGE:
+            return ({
+                ...state,
+                message:null
             })
         default:
             return state;

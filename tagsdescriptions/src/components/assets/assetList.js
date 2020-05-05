@@ -9,8 +9,6 @@ const AssetList = () => {
     const asContext = useContext(assetContext)
     const {assets, getAssets} = asContext
 
-    const aContext = useContext(alertContext)
-    const {alert} = aContext
     
     useEffect(() => {
         getAssets()
@@ -21,8 +19,6 @@ const AssetList = () => {
     return ( 
         <ul className ="list-assets">
             
-            {alert? (<div className={`alerta ${alert.category}`}>{alert.msg} </div>)
-                    :null}
             <TransitionGroup>
                 {assets.map(asset => (
                     <CSSTransition

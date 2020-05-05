@@ -1,18 +1,21 @@
-import React, {useContext, useState, Fragment} from 'react';
+import React, {useContext, useState, Fragment, useEffect} from 'react';
 import assetContext from '../../context/asset/assetContext.js'
+import alertContext from '../../context/alerts/alertContext.js'
 
 const AssetForm = () => {
     
     const aContext = useContext(assetContext)
     
-    const {form, showForm, error, addAsset, showError} = aContext
+    const {form, showForm, message, addAsset, resetMessage} = aContext
+
+    const alContext = useContext(alertContext)
+    const {showAlert} = alContext
 
     const [asset, setAsset] = useState({
         name:''
     })
     const {name} = asset
-
-
+    
     const onChangeAsset = (e)=>{
         setAsset({
             ...asset, 
@@ -25,7 +28,7 @@ const AssetForm = () => {
 
         //hacer validaciones y reseteo de form
         if (!name){
-            showError()
+            showAlert("El nombre del asset no debe estar vacío", "alerta-error")
             return;
         }
 
@@ -69,7 +72,7 @@ const AssetForm = () => {
                 ):
                 (null)
                 }
-                {error? <p className="mensaje error">El nombre del asset no puede estar vacío</p> : null}
+                
         </Fragment>
      );
 }

@@ -16,7 +16,7 @@ const Newuser = (props) => {
       const {alert, showAlert} = aContext
 
       const auContext = useContext(authContext)
-      const {authenticated, message, createUser} = auContext
+      const {authenticated, message, createUser, resetMessage} = auContext
 
       const {name, email, password, rpassword} = user;
     
@@ -27,6 +27,7 @@ const Newuser = (props) => {
           }
           if (message){
             showAlert(message.msg,message.category)
+            resetMessage()
           }
           // eslint-disable-next-line
       },[authenticated, message, props.history])

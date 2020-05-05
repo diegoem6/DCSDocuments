@@ -10,7 +10,8 @@ import {
     GET_USER, 
     LOGIN_SUCCESS,
     LOGIN_ERROR,
-    LOG_OFF} from '../../types/index'
+    LOG_OFF,
+    RESET_MESSAGE} from '../../types/index'
 
 const AuthState = (props) => {
     const initialState ={
@@ -84,7 +85,6 @@ const AuthState = (props) => {
             getUser()
             
         } catch (error) {
-            console.log(error);
             const alert = {
                 msg: error.response.data.msg,
                 category: 'alerta-error'
@@ -95,6 +95,12 @@ const AuthState = (props) => {
             })
             
         }
+    }
+    const resetMessage = () =>{
+        dispatch({
+            type:RESET_MESSAGE
+        })
+        
     }
 
     return (
@@ -108,7 +114,8 @@ const AuthState = (props) => {
             createUser,
             loginUser,
             getUser,
-            logOff
+            logOff,
+            resetMessage
         }}>
             {props.children}
         </authContext.Provider>

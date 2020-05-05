@@ -9,7 +9,8 @@ import {
     VALIDATE_ASSET,  
     SELECT_ASSET,    
     DELETE_ASSET,
-    GET_ASSETS_TREE   } from '../../types/index'
+    GET_ASSETS_TREE,
+    RESET_MESSAGE   } from '../../types/index'
 import axiosClient from '../../config/axios'
 import systemContext from '../system/systemContext';
 
@@ -46,7 +47,7 @@ const AssetState = props=>{
             })
         } catch (error) {
             const alert = {
-                msg:"hubo un error buscando los assets",
+                msg:error.response.data.msg,
                 category:"alerta-error"
             }
             dispatch({
@@ -68,7 +69,7 @@ const AssetState = props=>{
             })
         } catch (error) {
             const alert = {
-                msg:"hubo un error creando el asset",
+                msg:error.response.data.msg,
                 category:"alerta-error"
             }
             dispatch({
@@ -92,6 +93,11 @@ const AssetState = props=>{
             payload:asset
         })
     }
+    const resetMessage = () =>{
+        dispatch({
+            type: RESET_MESSAGE
+        })
+    }
 
     const deleteAsset = async (asset) =>{
         try {
@@ -104,7 +110,7 @@ const AssetState = props=>{
             })
         } catch (error) {
             const alert = {
-                msg:"hubo un error eliminando el asset",
+                msg:error.response.data.msg,
                 category:"alerta-error"
             }
             dispatch({
@@ -143,7 +149,7 @@ const AssetState = props=>{
 
         } catch (error) {
             const alert = {
-                msg:"hubo un error buscando los assets",
+                msg:error.response.data.msg,
                 category:"alerta-error"
             }
             dispatch({
@@ -168,7 +174,8 @@ const AssetState = props=>{
                 showError, 
                 selectAsset,
                 deleteAsset,
-                getAssetTree
+                getAssetTree,
+                resetMessage
             }}
         >
             {props.children}

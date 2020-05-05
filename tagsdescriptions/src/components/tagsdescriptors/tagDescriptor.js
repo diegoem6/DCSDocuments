@@ -1,6 +1,8 @@
 import React, {useContext} from 'react';
 import { Link } from 'react-router-dom'
 import tagDescriptorContext from "../../context/tagdescriptor/tagDescriptorContext";
+import { confirmAlert } from 'react-confirm-alert';
+//import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const TagDescriptor = ({tagdescriptor}) => {
 
@@ -10,11 +12,27 @@ const TagDescriptor = ({tagdescriptor}) => {
         selectTagDescriptor(tagdescriptor._id);
         showForm();
     }
-    const showTagDescriptor = (tagdescriptor)=>{
-    }
+    
 
-    const deleteTagDescriptorOnCick = (tagdescriptor) =>{
+    const deleteTagDescriptorOnCick = () =>{
         deleteTagDescriptor(tagdescriptor._id)
+    }
+    
+    const showDialogConfirm = ()=>{
+        confirmAlert({
+            title: 'Confirmar',
+            message: '¿Estás seguro de eliminar el descriptor?',
+            buttons: [
+              {
+                label: 'Yes',
+                onClick: () => deleteTagDescriptorOnCick()
+              },
+              {
+                label: 'No',
+                onClick: () => console.log("no")
+              }
+            ]
+          });
     }
 
     return ( 
@@ -41,6 +59,12 @@ const TagDescriptor = ({tagdescriptor}) => {
                     className="btn btn-secundario"
                     onClick={()=> {deleteTagDescriptorOnCick(tagdescriptor)}}
                 >Eliminar</button>
+                <button
+                    type="button"
+                    className="btn btn-secundario"
+                    onClick={showDialogConfirm}
+                >Confirm</button>
+                
             </div>
         </li> 
     

@@ -5,29 +5,25 @@ import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import { UPDATE_TAGDESCRIPTOR } from '../../types';
 import alertContext from '../../context/alerts/alertContext';
+import SearchTagDescriptor from './searchTagDescriptor';
 
 const NewTagDescriptor = () => {
     
     const tdContext = useContext(tagDescriptorContext)
-    const {error, message, createTagDescriptor, showError, tagdescriptor, updateTagDescriptor, validateTagDescription} = tdContext
+    const {tagname_ok, message, createTagDescriptor, showError, tagdescriptor, updateTagDescriptor, validateTagname} = tdContext
 
     const sContext = useContext(systemContext)
     const {systemSelected} = sContext
 
     const aContext = useContext(alertContext)
-    const {alert,showAlert} = aContext
+    const {showAlert} = aContext
 
 
     const [tagname, setTagname] = useState('')
     const [description, setDescription] = useState('')
     
         
-    useEffect(() => {
-        if (error){
-            showAlert(message.msg,message.category)
-            validateTagDescription();
-        }
-    }, [error])
+
  
     useEffect(() => {
         
@@ -48,6 +44,12 @@ const NewTagDescriptor = () => {
         setTagname(e.target.value)
     }
 
+    const onBlurTagDescriptor = (e)=>{
+        if (!(tagdescriptor !== null && tagdescriptor.length>0)){
+            validateTagname (e.target.value);
+        }
+    }
+
     const onChangeRichText = (value)=>{
         setDescription(value)
     }
@@ -63,6 +65,8 @@ const NewTagDescriptor = () => {
             return;
         }
 
+        
+
         // llamo a agregar proyecto
         let newTagDescriptor = {}
         newTagDescriptor.tagname = tagname
@@ -73,17 +77,25 @@ const NewTagDescriptor = () => {
         if (tagdescriptor !== null && tagdescriptor.length>0){
             const [currentTagDescriptor] = tagdescriptor
             newTagDescriptor._id = currentTagDescriptor._id
-            updateTagDescriptor(newTagDescriptor)    
+            updateTagDescriptor(newTagDescriptor)  
         }else{
+            
+            if(tagname_ok === false){
+                
+                if (message){
+                    showAlert(message.msg,message.category)
+                }else{
+                    showAlert("El tag descriptor para ese tagname ya existe","alerta-error")
+                }
+                return;
+            }
             createTagDescriptor(newTagDescriptor)
+
         }
-        setDescription("")
-        setTagname("")
     }
     return ( 
         <Fragment>
-                {alert? (<div className={`alerta ${alert.category}`}>{alert.msg} </div>)
-                    :null}
+                
                 <h2>Nuevo tags descriptor en el sistema: {systemSelected.name}</h2>
                     
                     <form   
@@ -97,6 +109,8 @@ const NewTagDescriptor = () => {
                             name="tagname"
                             value ={tagname}
                             onChange = {onChangeTagDescriptor}
+                            readOnly = {(tagdescriptor !== null && tagdescriptor.length>0)}
+                            onBlur = {onBlurTagDescriptor}
                         />
                         
                         <SunEditor 

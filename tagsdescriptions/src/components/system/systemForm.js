@@ -1,15 +1,19 @@
 import React, {useContext, useState, useEffect} from 'react';
 import systemContext from '../../context/system/systemContext'
 import assetContext from '../../context/asset/assetContext'
+import alertContext from '../../context/alerts/alertContext.js'
 
 
 const SystemForm = () => {
 
     const sContext = useContext(systemContext)
-    const {systemSelected, addSystem, updateSystem} = sContext
+    const {systemSelected, message, addSystem, updateSystem, resetMessage} = sContext
 
     const aContext = useContext(assetContext)
     const {asset} = aContext
+
+    const alContext = useContext(alertContext)
+    const {showAlert} = alContext
 
     const [error, setError] = useState(false)
     const [system,setSystem] = useState({
@@ -17,13 +21,19 @@ const SystemForm = () => {
     })
 
     useEffect(() => {
+        if(message){
+            showAlert(message.msg, message.category)
+            resetMessage();
+        }
+    }, [message])
+    
+    useEffect(() => {
         if (systemSelected){
             setSystem(systemSelected)
         }else{
             setSystem('')
         }
     }, [systemSelected])
-    
 
     if (!asset) return null;
 
@@ -33,8 +43,8 @@ const SystemForm = () => {
 
     const onSubmit = (e)=>{
         e.preventDefault();
-        if(name.trim()===''){
-            setError(true)
+        if(!name){
+            showAlert("El nombre del sistema no puede estar vacío", "alerta-error")
             return;
         }
         setError(false);
