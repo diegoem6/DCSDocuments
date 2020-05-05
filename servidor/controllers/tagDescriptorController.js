@@ -16,18 +16,15 @@ exports.createTagDescriptor = async (req, res)=>{
 
         const tagdescriptor_validation = await TagDescriptor.find({tagname:tagdescriptor.tagname}).sort({creado:-1})
         if (tagdescriptor_validation.length > 0){
-            res.status(500).send({msg:"Ya existe un descriptor con ese tagname"})
-        }else{
-            res.json({tagdescriptor})
+            res.status(500).send({msg:'Ya existe un descriptor con ese tagname'})
         }
 
-
-        tagdescriptor.save();
-        res.send(tagdescriptor);
+        await tagdescriptor.save();
+        res.json({tagdescriptor});
 
     } catch (error) {
         console.log(error);
-        res.status(500).send('Hubo un error creando el proyecto')
+        res.status(500).send({msg:'Hubo un error creando el proyecto'})
     }
 
 }

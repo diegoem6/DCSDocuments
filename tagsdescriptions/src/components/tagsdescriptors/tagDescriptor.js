@@ -57,13 +57,13 @@ const TagDescriptor = ({tagdescriptor}) => {
                 <button
                     type="button"
                     className="btn btn-secundario"
-                    onClick={()=> {deleteTagDescriptorOnCick(tagdescriptor)}}
+                    onClick={showDialogConfirm}
                 >Eliminar</button>
-                <button
+                {/* <button
                     type="button"
                     className="btn btn-secundario"
                     onClick={showDialogConfirm}
-                >Confirm</button>
+                >Confirm</button> */}
                 
             </div>
         </li> 
