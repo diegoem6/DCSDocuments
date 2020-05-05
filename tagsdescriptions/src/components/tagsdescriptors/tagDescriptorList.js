@@ -1,8 +1,10 @@
-import React, {useEffect, useContext, Fragment} from 'react';
+import React, {useEffect, useContext, Fragment, useState} from 'react';
 import systemContext from '../../context/system/systemContext'
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import TagDescriptor from './tagDescriptor'
 import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext';
+import ReactPaginate from 'react-paginate';
+
 
 
 const TagDescriptorList = () => {
@@ -20,14 +22,35 @@ const TagDescriptorList = () => {
 
     }
 
+    const [pag, setPag] = useState(
+            {
+                offset:0,
+                perPage:10,
+                currentPage:0,
+                pageCount:0,
+                data:[]
+            })
+    
+
     useEffect(() => {
         const listTagsDescriptors = ()=>{
             if (systemSelected){
                 getTagsDescriptors(systemSelected._id)
+                
             }
         }
         listTagsDescriptors()
     }, [systemSelected])
+
+    useEffect(() => {
+        if (systemSelected){
+            setPag(
+                {...pag,
+                    pageCount: Math.ceil(searchtagdescriptors.length/pag.perPage),
+                    data:searchtagdescriptors
+                })
+        }
+    }, [searchtagdescriptors])
 
     if(!systemSelected) {
         return <h2>Seleccione un sistema</h2>
@@ -37,6 +60,17 @@ const TagDescriptorList = () => {
         return <p>No hay documentos para el sistema seleccionado</p>
     }
 
+    const handlePageClick = (e) => {
+        const selectedPage = e.selected;
+        const offset = selectedPage * pag.perPage;
+        setPag(
+            {...pag,
+                currentPage: selectedPage,
+                offset:offset
+            })
+
+    };
+
     return ( 
         <Fragment>
             <h2>Tags descriptors del sistema: {systemSelected.name}</h2>
@@ -44,28 +78,28 @@ const TagDescriptorList = () => {
                 {(searchtagdescriptors.length===0)?
                     (<li className="tarea"><p>No hay documentos para el sistema seleccionado</p></li>)
                 :
-
-                    searchtagdescriptors.map(tgd =>(
+                    pag.data.slice(pag.offset,pag.offset+pag.perPage).map(tgd =>(
                         <TagDescriptor
                             tagdescriptor={tgd}
                         />
                     ))
-                //  <TransitionGroup>
-                //  {tagdescriptors_temp.map(tagdescriptor => (
-                //      <CSSTransition
-                //          key={tagdescriptor._id}
-                //          timeout={200}
-                //          classNames="tarea"
-                //      >
-                //          {/* <TagDescriptor 
-                //              tagdescriptor={tagdescriptor}
-                //          /> */}
-                //      </CSSTransition>
-                //  ))}
-                //  </TransitionGroup>
-                   
+                
                 }
             </ul>
+            <div>
+                <ReactPaginate
+                    previousLabel={"<"}
+                    nextLabel={">"}
+                    breakLabel={"..."}
+                    breakClassName={"break-me"}
+                    pageCount={pag.pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={handlePageClick}
+                    containerClassName={"pagination"}
+                    subContainerClassName={"pages pagination"}
+                    activeClassName={"active"}/>
+            </div>
         </Fragment>
      );
 }
