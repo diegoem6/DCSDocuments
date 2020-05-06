@@ -1,4 +1,4 @@
-import React, {useContext, useState, Fragment, useEffect} from 'react';
+import React, {useContext, useState, Fragment} from 'react';
 import assetContext from '../../context/asset/assetContext.js'
 import alertContext from '../../context/alerts/alertContext.js'
 
@@ -6,7 +6,7 @@ const AssetForm = () => {
     
     const aContext = useContext(assetContext)
     
-    const {form, showForm, message, addAsset, resetMessage} = aContext
+    const {form, showForm, addAsset} = aContext
 
     const alContext = useContext(alertContext)
     const {showAlert} = alContext

@@ -23,11 +23,9 @@ const SidebarDescriptors = () => {
     useEffect(() => {
         const initAssetTree = () =>{
             getAssetTree();
-            
         }
         initAssetTree()
-        
-        
+        // eslint-disable-next-line
     }, [])
 
     const selectSystemOnClick = (system)=>{

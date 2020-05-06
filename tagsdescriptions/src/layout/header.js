@@ -8,6 +8,7 @@ const Header = () => {
 
     useEffect(() => {
         getUser()
+        // eslint-disable-next-line
     }, [])
     
     return (  

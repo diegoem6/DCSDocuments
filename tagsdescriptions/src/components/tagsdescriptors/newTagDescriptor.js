@@ -3,14 +3,13 @@ import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorConte
 import systemContext from '../../context/system/systemContext' 
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
-import { UPDATE_TAGDESCRIPTOR } from '../../types';
 import alertContext from '../../context/alerts/alertContext';
-import SearchTagDescriptor from './searchTagDescriptor';
+//import Files from 'react-files'
 
 const NewTagDescriptor = () => {
     
     const tdContext = useContext(tagDescriptorContext)
-    const {tagname_ok, message, createTagDescriptor, showError, tagdescriptor, updateTagDescriptor, validateTagname} = tdContext
+    const {tagname_ok, message, createTagDescriptor, tagdescriptor, resetMessage, updateTagDescriptor, validateTagname} = tdContext
 
     const sContext = useContext(systemContext)
     const {systemSelected} = sContext
@@ -21,13 +20,15 @@ const NewTagDescriptor = () => {
 
     const [tagname, setTagname] = useState('')
     const [description, setDescription] = useState('')
-    const [files, setFiles] = useState([])
+    // TODO: attachments
+    // const [attachments, setattachments] = useState({
+    //     files:[]
+    // })
     
-        
-
+    const [icon, seticon] = useState('')
+      
  
     useEffect(() => {
-        
         if (tagdescriptor !== null && tagdescriptor.length>0){
             const [currentTagDescriptor] = tagdescriptor
             setTagname(currentTagDescriptor.tagname)
@@ -37,7 +38,26 @@ const NewTagDescriptor = () => {
             setTagname('')
             setDescription('')
         }
+        // eslint-disable-next-line
     }, [])
+
+      
+    useEffect(() => {
+        if (message){
+            showAlert(message.msg,message.category)
+            console.log(message.category)
+            if(message.category==="alerta-error"){
+                seticon('-red')
+            }
+            else{
+                seticon('')
+            }
+            resetMessage();
+        }
+        // eslint-disable-next-line
+    }, [message])
+
+
 
     if (!systemSelected) return null
 
@@ -49,6 +69,7 @@ const NewTagDescriptor = () => {
         if (!(tagdescriptor !== null && tagdescriptor.length>0)){
             validateTagname (e.target.value);
         }
+        seticon('')
     }
 
     const onChangeRichText = (value)=>{
@@ -74,6 +95,9 @@ const NewTagDescriptor = () => {
         newTagDescriptor.description = description
         newTagDescriptor.system = systemSelected._id
         
+        
+        //TODO: attachmentss
+        //newTagDescriptor.attachments = attachments
 
         if (tagdescriptor !== null && tagdescriptor.length>0){
             const [currentTagDescriptor] = tagdescriptor
@@ -85,6 +109,7 @@ const NewTagDescriptor = () => {
                 
                 if (message){
                     showAlert(message.msg,message.category)
+                    resetMessage()
                 }else{
                     showAlert("El tag descriptor para ese tagname ya existe","alerta-error")
                 }
@@ -94,17 +119,19 @@ const NewTagDescriptor = () => {
 
         }
     }
-    const onChangeInputFile = (e) =>{
-        let iFiles = e.target.files;
-        console.log(iFiles);
-        var filesArr = Array.prototype.slice.call(iFiles);
-        console.log(filesArr);
-        setFiles(filesArr);
-          
-    }
-    const removeFile = (f) => {
-        setFiles({files: files.filter(x => x !== f)}); 
-    }
+
+    // TODO: attachments
+    // const onFilesChange = (files) => {
+    //     console.log(files)
+    //     console.log(files.type)
+    //     setattachments({...attachments,
+    //             files:files})
+    // }
+    
+    // const onFilesError = (error, file) => {
+    //     console.log('error code ' + error.code + ': ' + error.message)
+    // }
+    
     return ( 
         <Fragment>
                 
@@ -116,7 +143,7 @@ const NewTagDescriptor = () => {
                         >
                         <input  
                             type="text"
-                            className="input-text"
+                            className={`input-text${icon}`}
                             placeholder="Tag name"
                             name="tagname"
                             value ={tagname}
@@ -124,7 +151,8 @@ const NewTagDescriptor = () => {
                             readOnly = {(tagdescriptor !== null && tagdescriptor.length>0)}
                             onBlur = {onBlurTagDescriptor}
                         />
-                        
+                        {/* <i className={`flaticon-${icon}`}></i> 
+                         */}
                         <SunEditor 
                             placeholder="descripción del tag"
                             name="description"
@@ -133,18 +161,22 @@ const NewTagDescriptor = () => {
                             setContents ={description}
                             onChange = {onChangeRichText}
                         /> 
-                        {/* <label className="custom-file-upload">
-                            <input type="file" multiple onChange={onChangeInputFile} />
-                            <i className="fa fa-cloud-upload" /> Attach
-                        </label>
-                        {
-                            console.log(files.length)
-                            (files.map(x => 
-                                          <div className="file-preview" onClick={removeFile(x)}>{x.name}</div>
-                                          )
-                              )
-                        }  */}
-
+                        
+                        {/* TODO: attachments 
+                        <Files
+                            className='files-dropzone'
+                            onChange={onFilesChange}
+                            onError={onFilesError}
+                            accepts={['image/png', '.jpg', '.pdf', 'audio/*']}
+                            multiple
+                            maxFiles={3}
+                            maxFileSize={10000000}
+                            minFileSize={0}
+                            clickable
+                            >
+                            Drop files here or click to upload
+                        </Files>
+                        */}
                         {(tagdescriptor !== null && tagdescriptor.length>0) ?
                     
                             (<input 

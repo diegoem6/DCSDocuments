@@ -12,7 +12,6 @@ import {
     GET_ASSETS_TREE,
     RESET_MESSAGE   } from '../../types/index'
 import axiosClient from '../../config/axios'
-import systemContext from '../system/systemContext';
 
 
 const AssetState = props=>{

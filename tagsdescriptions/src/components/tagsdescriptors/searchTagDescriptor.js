@@ -12,7 +12,6 @@ const SearchTagDescriptor = () => {
     const {systemSelected} = sContext
 
     
-    const [error, setError ] = useState('')
     const [search, setSearch ] = useState('')
 
 
@@ -22,9 +21,7 @@ const SearchTagDescriptor = () => {
     const onClickNewTagDescription = ()=>{
         showForm()
     }
-    const onClickNewSearch = ()=>{
-    }
-
+    
     const onChange = (e)=>{
         setSearch(e.target.value)
         searchTagsDescriptors(e.target.value)
@@ -50,7 +47,6 @@ const SearchTagDescriptor = () => {
                         onClick = {onClickNewTagDescription}
                     >Nuevo tag descriptor</button>
             </div>
-            {error ? <p className="mensaje error">El nombre del sistema es obligatorio</p> : null}
        </div>
     );
 }

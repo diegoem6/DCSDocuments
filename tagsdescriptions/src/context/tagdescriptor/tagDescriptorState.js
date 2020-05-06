@@ -178,7 +178,7 @@ const TagDescriptorState = props=>{
 
     const validateTagname = async (id) =>{
         try {
-            const res = await axiosClient.get(`/api/showtag/${id}`);
+            await axiosClient.get(`/api/showtag/${id}`);
             const alert = {
                 msg:"El tag descriptor para ese tagname ya existe",
                 category:"alerta-error"

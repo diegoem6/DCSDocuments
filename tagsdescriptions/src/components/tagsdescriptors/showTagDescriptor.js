@@ -10,6 +10,7 @@ const ShowTagDescritor = () => {
 
     useEffect(() => {
         getTagDescriptor(tagname)
+        // eslint-disable-next-line
     }, [])
 
     if (!tagdescriptor) return <h2>{message}</h2>;

@@ -1,7 +1,6 @@
 import React, {useContext, useEffect} from 'react';
 import assetContext from '../../context/asset/assetContext';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import alertContext from '../../context/alerts/alertContext';
 import Asset from './asset'
 
 const AssetList = () => {
@@ -12,6 +11,7 @@ const AssetList = () => {
     
     useEffect(() => {
         getAssets()
+        // eslint-disable-next-line
     }, [])
 
     if (assets.length === 0) return <p>No hay assets creados, comienza creando uno</p>

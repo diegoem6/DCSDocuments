@@ -22,6 +22,7 @@ const Assets = () => {
 
     useEffect(() => {
         getUser()
+        // eslint-disable-next-line
     }, [])
     
     useEffect(() => {
@@ -29,6 +30,7 @@ const Assets = () => {
             showAlert(message.msg, message.category)
             resetMessage();
         }
+        // eslint-disable-next-line
     }, [message])
 
     return ( 

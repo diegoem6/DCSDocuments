@@ -1,4 +1,4 @@
-import React, {useEffect, useContext, Fragment} from 'react';
+import React, {useContext, Fragment} from 'react';
 import systemContext from '../../context/system/systemContext'
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import System from './system';
@@ -9,7 +9,7 @@ import assetContext from '../../context/asset/assetContext';
 const SystemList = () => {
 
     const sContext = useContext(systemContext)
-    const {systems, getSystems} = sContext
+    const {systems} = sContext
     const aContext = useContext(assetContext)
     const {asset,deleteAsset} = aContext
 

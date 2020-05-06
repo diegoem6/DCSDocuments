@@ -1,6 +1,5 @@
 import React, {useEffect, useContext, Fragment, useState} from 'react';
 import systemContext from '../../context/system/systemContext'
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import TagDescriptor from './tagDescriptor'
 import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext';
 import ReactPaginate from 'react-paginate';
@@ -14,13 +13,6 @@ const TagDescriptorList = () => {
     
     const tContext = useContext(tagDescriptorContext)
     const {searchtagdescriptors, getTagsDescriptors} = tContext
-
-    const onSubmit = ()=>{
-
-    }
-    const onChange = ()=>{
-
-    }
 
     const [pag, setPag] = useState(
             {
@@ -36,10 +28,10 @@ const TagDescriptorList = () => {
         const listTagsDescriptors = ()=>{
             if (systemSelected){
                 getTagsDescriptors(systemSelected._id)
-                
             }
         }
         listTagsDescriptors()
+        // eslint-disable-next-line
     }, [systemSelected])
 
     useEffect(() => {
@@ -47,9 +39,13 @@ const TagDescriptorList = () => {
             setPag(
                 {...pag,
                     pageCount: Math.ceil(searchtagdescriptors.length/pag.perPage),
-                    data:searchtagdescriptors
+                    data:searchtagdescriptors,
+                    offset:0,
+                    currentPage:0,
                 })
+            
         }
+        // eslint-disable-next-line
     }, [searchtagdescriptors])
 
     if(!systemSelected) {

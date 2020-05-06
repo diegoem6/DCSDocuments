@@ -40,7 +40,6 @@ export default (state,action)=>{
                 ...state,
                 tagdescriptors:[...state.tagdescriptors, action.payload],
                 form:false,
-                error:false,
                 error:false
             })
         case RESET_MESSAGE:

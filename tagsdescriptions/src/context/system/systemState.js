@@ -68,7 +68,7 @@ const SystemState = (props) => {
     const updateSystem = async (system) =>{
         try {
             const id = system._id
-            const res = await axiosClient.put(`/api/systems/${id}`,system)
+            await axiosClient.put(`/api/systems/${id}`,system)
             
             dispatch({
                 type:UPDATE_SYSTEM
@@ -93,7 +93,7 @@ const SystemState = (props) => {
         try {
             const id = system._id
             const idAsset = system.asset
-            const res = await axiosClient.delete(`/api/systems/${id}`, {params:{idAsset}})
+            await axiosClient.delete(`/api/systems/${id}`, {params:{idAsset}})
             
             dispatch({
                 type:DELETE_SYSTEM,
