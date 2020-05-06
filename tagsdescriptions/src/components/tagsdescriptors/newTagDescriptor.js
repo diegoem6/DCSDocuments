@@ -21,6 +21,7 @@ const NewTagDescriptor = () => {
 
     const [tagname, setTagname] = useState('')
     const [description, setDescription] = useState('')
+    const [files, setFiles] = useState([])
     
         
 
@@ -93,6 +94,17 @@ const NewTagDescriptor = () => {
 
         }
     }
+    const onChangeInputFile = (e) =>{
+        let iFiles = e.target.files;
+        console.log(iFiles);
+        var filesArr = Array.prototype.slice.call(iFiles);
+        console.log(filesArr);
+        setFiles(filesArr);
+          
+    }
+    const removeFile = (f) => {
+        setFiles({files: files.filter(x => x !== f)}); 
+    }
     return ( 
         <Fragment>
                 
@@ -121,13 +133,18 @@ const NewTagDescriptor = () => {
                             setContents ={description}
                             onChange = {onChangeRichText}
                         /> 
-                        {/* <textarea 
-                            name="description"
-                            value ={description}
-                            onChange = {onChangeTagDescriptor}
-                        > 
+                        {/* <label className="custom-file-upload">
+                            <input type="file" multiple onChange={onChangeInputFile} />
+                            <i className="fa fa-cloud-upload" /> Attach
+                        </label>
+                        {
+                            console.log(files.length)
+                            (files.map(x => 
+                                          <div className="file-preview" onClick={removeFile(x)}>{x.name}</div>
+                                          )
+                              )
+                        }  */}
 
-                        </textarea>*/}
                         {(tagdescriptor !== null && tagdescriptor.length>0) ?
                     
                             (<input 

@@ -83,7 +83,6 @@ const TagDescriptorList = () => {
                             tagdescriptor={tgd}
                         />
                     ))
-                
                 }
             </ul>
             <div>

@@ -79,7 +79,6 @@ exports.updateTagDescriptor = async (req, res)=>{
 
     // extraer la información del proyecto
     const {tagname, description} = req.body
-    console.log(req.body)
     const newTagDescriptor = {};
     if (tagname){
         newTagDescriptor.tagname=tagname;
@@ -87,12 +86,10 @@ exports.updateTagDescriptor = async (req, res)=>{
     if (description){
         newTagDescriptor.description=description;
     }
-    console.log(newTagDescriptor)
     try {
        
         //revisar el id
         const idTagDescriptor = req.params.id
-        console.log(idTagDescriptor)
         //existe el proyecto?
         let tag_descriptor_modified = await TagDescriptor.findById(idTagDescriptor)
         if (!tag_descriptor_modified){
