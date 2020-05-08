@@ -6,7 +6,7 @@ import SystemForm from '../system/systemForm'
 import SystemList from '../system/systemList'
 import assetContext from '../../context/asset/assetContext.js'
 import alertContext from '../../context/alerts/alertContext.js'
-
+import systemContext from '../../context/system/systemContext.js'
 
 
 const Assets = () => {
@@ -19,9 +19,12 @@ const Assets = () => {
     const aContext = useContext(alertContext)
     const {alert,showAlert} = aContext
     
+    const sContext = useContext(systemContext)
+    const {deselectSystem} = sContext
 
     useEffect(() => {
         getUser()
+        deselectSystem()
         // eslint-disable-next-line
     }, [])
     

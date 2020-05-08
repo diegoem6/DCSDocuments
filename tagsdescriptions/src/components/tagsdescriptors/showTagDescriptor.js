@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, Fragment} from 'react';
 import {useParams} from 'react-router-dom'
 import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext'
+import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
 
 const ShowTagDescritor = () => { 
     const { tagname } = useParams();
@@ -21,7 +22,7 @@ const ShowTagDescritor = () => {
         return ({__html: description})
     }
 
-
+    console.log(currenttagdescriptor.description)
     return ( 
         <Fragment>
             {
@@ -30,7 +31,11 @@ const ShowTagDescritor = () => {
                 (
                 <div>
                     <h1>{currenttagdescriptor.tagname}</h1>
-                    <div dangerouslySetInnerHTML={putHTML(currenttagdescriptor.description)} />;
+                    {/* <div className="showTagDesc" dangerouslySetInnerHTML={putHTML(currenttagdescriptor.description)} />;
+                    */}
+                    <div className="showTagDesc">{ReactHtmlParser(currenttagdescriptor.description)}</div>;
+                
+
                 </div>
                 )
                 

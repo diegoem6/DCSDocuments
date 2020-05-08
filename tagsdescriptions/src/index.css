@@ -24,6 +24,13 @@ body {
   font-family: var(--textFont);
 }
 
+.showTagDesc h1, h2 {
+  /* font-family: var(--headingFont);
+  font-weight: 900; */
+  text-align: none !important;
+  margin: 0 0 4rem 0;
+  color: var(--gris2);
+}
 
 h1, h2 {
   font-family: var(--headingFont);
@@ -32,6 +39,7 @@ h1, h2 {
   text-align: center;
   color: var(--gris2);
 }
+
 h1 span {
   font-weight: 400;
 }

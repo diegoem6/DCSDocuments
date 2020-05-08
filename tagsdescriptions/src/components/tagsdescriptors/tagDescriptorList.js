@@ -41,7 +41,7 @@ const TagDescriptorList = () => {
                     pageCount: Math.ceil(searchtagdescriptors.length/pag.perPage),
                     data:searchtagdescriptors,
                     offset:0,
-                    currentPage:0,
+                    currentPage:0
                 })
             
         }

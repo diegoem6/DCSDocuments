@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 import Login from './components/auth/login'
 import Newuser from './components/auth/newUser'
@@ -10,11 +11,16 @@ import AssetState from './context/asset/assetState';
 import SystemState from './context/system/systemState';
 import Menu from './layout/menu';
 import TagDescriptorState from './context/tagdescriptor/tagDescriptorState';
-import ShowTagDescriptor from './components/tagsdescriptors/showTagDescriptor'
+
+import ShowTagDescriptor from './components/tagsdescriptors/showTagDescriptor';
+
 import Assets from './components/assets/assets'
 import PrivateRoute from './components/routes/privateRoute'
 
 import authToken from '../src/config/token'
+
+
+
 
 const token = localStorage.getItem('token');
 authToken(token)
