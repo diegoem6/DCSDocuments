@@ -32,7 +32,7 @@ const SystemForm = () => {
         if (systemSelected){
             setSystem(systemSelected)
         }else{
-            setSystem('')
+            setSystem({name:''})
         }
     }, [systemSelected])
 

@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext' 
 import systemContext from '../../context/system/systemContext';
 
@@ -14,9 +14,14 @@ const SearchTagDescriptor = () => {
     
     const [search, setSearch ] = useState('')
 
+    useEffect(() => {
+        setSearch('')
+        // eslint-disable-next-line
+    }, [systemSelected])
 
     if (!systemSelected) return null
 
+   
 
     const onClickNewTagDescription = ()=>{
         showForm()

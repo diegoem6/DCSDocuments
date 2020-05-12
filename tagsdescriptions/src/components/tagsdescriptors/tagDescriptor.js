@@ -42,12 +42,12 @@ const TagDescriptor = ({tagdescriptor}) => {
             <div className="acciones">
                 
                
-                <Link 
+                <a 
                     target='_blank'
-                    to={`/showTagDescriptor/${tagdescriptor.tagname}`}
+                    href={`http://localhost:3001/showTagDescriptor/${tagdescriptor.tagname}`}
                     className="btn btn-primario">
                     Ver
-                </Link>
+                </a>
                 <button 
                     type="button"
                     className="btn btn-primario"

@@ -7,11 +7,12 @@ const Asset = ({asset}) => {
     const aContext = useContext(assetContext)
     const {selectAsset} = aContext
     const sContext = useContext(systemContext)
-    const {getSystems} = sContext
+    const {getSystems, deselectSystem} = sContext
 
     const selectAssetOnClick = () =>{
         selectAsset(asset)
         getSystems(asset._id)
+        deselectSystem()
     }
 
     return ( <li>

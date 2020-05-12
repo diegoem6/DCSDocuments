@@ -12,7 +12,6 @@ import SystemState from './context/system/systemState';
 import Menu from './layout/menu';
 import TagDescriptorState from './context/tagdescriptor/tagDescriptorState';
 
-import ShowTagDescriptor from './components/tagsdescriptors/showTagDescriptor';
 
 import Assets from './components/assets/assets'
 import PrivateRoute from './components/routes/privateRoute'
@@ -40,7 +39,6 @@ function App() {
                   <PrivateRoute exact path="/tagsdescriptors" component={Tagsdescriptors}/>
                   <PrivateRoute exact path="/assets" component={Assets}/>
                   <PrivateRoute exact path="/menu" component={Menu}/>
-                  <Route exact path="/showTagDescriptor/:tagname" component={ShowTagDescriptor}/>
                 </Switch>
               </Router>
             </AlertState>

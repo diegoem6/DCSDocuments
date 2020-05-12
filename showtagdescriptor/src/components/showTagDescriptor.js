@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, Fragment} from 'react';
 import {useParams} from 'react-router-dom'
-import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext'
+import tagDescriptorContext from '../context/tagdescriptor/tagDescriptorContext'
 import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
 
 const ShowTagDescritor = () => { 
