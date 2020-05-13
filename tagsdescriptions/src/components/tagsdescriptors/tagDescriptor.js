@@ -34,7 +34,6 @@ const TagDescriptor = ({tagdescriptor}) => {
             ]
           });
     }
-
     return ( 
         <li className="tarea sombra">
             <p>{tagdescriptor.tagname} </p>
@@ -44,7 +43,7 @@ const TagDescriptor = ({tagdescriptor}) => {
                
                 <a 
                     target='_blank'
-                    href={`http://localhost:3001/showTagDescriptor/${tagdescriptor.tagname}`}
+                    href={`${process.env.REACT_APP_SHOWTAG_URL}/showTagDescriptor/${tagdescriptor.tagname}`}
                     className="btn btn-primario">
                     Ver
                 </a>

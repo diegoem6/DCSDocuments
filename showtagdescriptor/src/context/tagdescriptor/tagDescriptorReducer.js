@@ -79,7 +79,8 @@ export default (state,action)=>{
         case SHOW_ERROR_TAGDESCRIPTOR:
             return ({
                 ...state,
-                message:action.payload,
+                tagdescriptor:null,
+                message: action.payload,
                 error:true
             })
         case DESELECT_TAGDESCRIPTOR:

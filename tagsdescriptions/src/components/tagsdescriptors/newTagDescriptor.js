@@ -167,17 +167,17 @@ const NewTagDescriptor = () => {
                             initialValue={description}
                             init={{
                             height: 500,
-                            menubar: false,
+                            menubar: 'file edit view insert format tools table help',
                             plugins: [
                                 'advlist autolink lists link image charmap print preview anchor',
                                 'searchreplace visualblocks code fullscreen',
                                 'insertdatetime media table paste code help wordcount'
                             ],
-                            toolbar:
-                                'undo redo | formatselect | bold italic backcolor | \
-                                alignleft aligncenter alignright alignjustify | \
-                                bullist numlist outdent indent | removeformat | help'
-                            }}
+                            toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+                            toolbar_sticky: true,
+                            paste_retain_style_properties: "all"
+                            }
+                            }
                             onEditorChange={onChangeRichText}
                         />
 

@@ -13,8 +13,9 @@ const ShowTagDescritor = () => {
         getTagDescriptor(tagname)
         // eslint-disable-next-line
     }, [])
-
-    if (!tagdescriptor) return <h2>{message}</h2>;
+    console.log(message)
+    
+    if (!tagdescriptor) return <h2> No existe el tag descriptor</h2>//<h2>{message.msg}</h2>;
 
     const [currenttagdescriptor] = tagdescriptor
 

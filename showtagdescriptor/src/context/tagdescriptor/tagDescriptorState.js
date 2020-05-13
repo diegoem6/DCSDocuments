@@ -88,11 +88,11 @@ const TagDescriptorState = props=>{
         try {
             
             const res = await axiosClient.get(`/api/showtag/${id}`);
-            console.log(res)
+            
             dispatch({
-                type: GET_TAGDESCRIPTOR,
-                payload: res.data.tagdescriptor
-            })
+                 type: GET_TAGDESCRIPTOR,
+                 payload: res.data.tagdescriptor
+             })
         } catch (error) {
             const alert = {
                 msg:"No existe el tag descriptor",

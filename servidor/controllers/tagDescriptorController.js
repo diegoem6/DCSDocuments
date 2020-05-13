@@ -55,7 +55,6 @@ exports.getTagsDescriptors = async (req,res)=>{
 exports.getTagDescriptor = async (req,res)=>{
     try {
         const tagname = req.params.id
-
         const tagdescriptor = await TagDescriptor.find({tagname:tagname}).sort({creado:-1})
         if (tagdescriptor.length === 0){
             res.status(404).send({msg:"No existe el tag descriptor"})
