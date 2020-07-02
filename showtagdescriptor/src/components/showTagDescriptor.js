@@ -34,7 +34,7 @@ const ShowTagDescritor = () => {
                     <h1>{currenttagdescriptor.tagname}</h1>
                     {/* <div className="showTagDesc" dangerouslySetInnerHTML={putHTML(currenttagdescriptor.description)} />;
                     */}
-                    <div className="showTagDesc">{ReactHtmlParser(currenttagdescriptor.description)}</div>;
+                    <div className="showTagDesc">{ReactHtmlParser(currenttagdescriptor.description)}</div>
                 
 
                 </div>

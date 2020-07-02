@@ -1,6 +1,7 @@
 const TagDescriptor = require('../models/TagDescriptor')
 const System = require('../models/System')
 const {validationResult} = require('express-validator');
+const Entities = require('html-entities').XmlEntities
 
 
 exports.createTagDescriptor = async (req, res)=>{
@@ -12,8 +13,11 @@ exports.createTagDescriptor = async (req, res)=>{
     }
 
     try {
-        const tagdescriptor = new TagDescriptor(req.body);
-
+        const {name} = req.body
+        let tagdescriptor = new TagDescriptor(req.body);
+        if (tagdescriptor.name){
+            tagdescriptor.name = name.toUpperCase()
+        }
         const tagdescriptor_validation = await TagDescriptor.find({tagname:tagdescriptor.tagname}).sort({creado:-1})
         if (tagdescriptor_validation.length > 0){
             res.status(500).send({msg:'Ya existe un descriptor con ese tagname'})
@@ -55,7 +59,10 @@ exports.getTagsDescriptors = async (req,res)=>{
 exports.getTagDescriptor = async (req,res)=>{
     try {
         const tagname = req.params.id
-        const tagdescriptor = await TagDescriptor.find({tagname:tagname}).sort({creado:-1})
+        const tagdescriptor = await TagDescriptor.find({"tagname":tagname.toUpperCase()}).sort({creado:-1})
+        const entities = new Entities()
+        
+        tagdescriptor[0].description= entities.encodeNonUTF(tagdescriptor[0].description)
         if (tagdescriptor.length === 0){
             res.status(404).send({msg:"No existe el tag descriptor"})
         }else{
@@ -80,7 +87,7 @@ exports.updateTagDescriptor = async (req, res)=>{
     const {tagname, description} = req.body
     const newTagDescriptor = {};
     if (tagname){
-        newTagDescriptor.tagname=tagname;
+        newTagDescriptor.tagname=tagname.toUpperCase();
     }
     if (description){
         newTagDescriptor.description=description;

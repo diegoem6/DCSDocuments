@@ -41,12 +41,12 @@ const TagDescriptor = ({tagdescriptor}) => {
             <div className="acciones">
                 
                
-                <a 
+                {/* <a 
                     target='_blank'
                     href={`${process.env.REACT_APP_SHOWTAG_URL}/showTagDescriptor/${tagdescriptor.tagname}`}
                     className="btn btn-primario">
                     Ver
-                </a>
+                </a> */}
                 <button 
                     type="button"
                     className="btn btn-primario"

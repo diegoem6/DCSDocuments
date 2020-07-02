@@ -69,7 +69,7 @@ const TagDescriptorState = props=>{
             
             dispatch({
                 type: SEARCH_TAGSDESCRIPTORS,
-                payload: search
+                payload: search.toUpperCase()
             })
         } catch (error) {
             const alert = {

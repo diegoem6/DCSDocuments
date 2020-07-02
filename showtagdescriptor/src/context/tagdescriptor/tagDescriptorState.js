@@ -88,7 +88,8 @@ const TagDescriptorState = props=>{
         try {
             
             const res = await axiosClient.get(`/api/showtag/${id}`);
-            
+            console.log("esto es lo que retorno")
+            console.log(res)
             dispatch({
                  type: GET_TAGDESCRIPTOR,
                  payload: res.data.tagdescriptor

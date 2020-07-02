@@ -92,7 +92,7 @@ const NewTagDescriptor = () => {
 
         // llamo a agregar proyecto
         let newTagDescriptor = {}
-        newTagDescriptor.tagname = tagname
+        newTagDescriptor.tagname = tagname.toUpperCase()
         newTagDescriptor.description = description
         newTagDescriptor.system = systemSelected._id
         
@@ -154,17 +154,37 @@ const NewTagDescriptor = () => {
                         />
                         
                         {/* TODO: cambio de editor */}
-                        {/* <SunEditor 
+                        <SunEditor 
                             placeholder="descripción del tag"
                             name="description"
                             setOptions={{
                                 height: 300}}
                             setContents ={description}
                             onChange = {onChangeRichText}
-                        />  */}
+                        /> 
                         
+                        {/* <Editor
+                            initialValue={description}
+                            tinymceScriptSrc='/public/js/tinymce/tinymce.min.js'
+                            init={{
+                            height: 500,
+                            menubar: 'file edit view insert format tools table help',
+                            plugins: [
+                                'advlist autolink lists link image charmap print preview anchor',
+                                'searchreplace visualblocks code fullscreen',
+                                'insertdatetime media table paste code help wordcount'
+                            ],
+                            toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+                            toolbar_sticky: true,
+                            paste_retain_style_properties: "all"
+                            }
+                            }
+                            onEditorChange={onChangeRichText}
+                        /> 
                         <Editor
                             initialValue={description}
+                            apiKey='ak1az6sw8c9hjvqp8qt932v5wkgl29teq3qoys34bf11cjvo'
+                            tinymceScriptSrc='/js/tinymce/tinymce.min.js'
                             init={{
                             height: 500,
                             menubar: 'file edit view insert format tools table help',
@@ -180,7 +200,7 @@ const NewTagDescriptor = () => {
                             }
                             onEditorChange={onChangeRichText}
                         />
-
+                            */}
 
 
                         {/* TODO: attachments 
