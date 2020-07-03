@@ -1,12 +1,14 @@
 import React, {useContext, useState, useEffect} from 'react';
 import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext' 
 import systemContext from '../../context/system/systemContext';
+import { useHistory } from "react-router-dom";
 
 
 const SearchTagDescriptor = () => {
+    const history = useHistory();
     
     const tdContext = useContext(tagDescriptorContext)
-    const {showForm, searchTagsDescriptors} = tdContext
+    const {showForm, searchTagsDescriptors, createDocument, urlDoc} = tdContext
 
     const sContext = useContext(systemContext)
     const {systemSelected} = sContext
@@ -19,12 +21,23 @@ const SearchTagDescriptor = () => {
         // eslint-disable-next-line
     }, [systemSelected])
 
+    useEffect(() => {
+        if(urlDoc){
+            history.push(`../../../files/${urlDoc}`)
+        }    
+    }, [urlDoc])
+    
+    
     if (!systemSelected) return null
+
 
    
 
     const onClickNewTagDescription = ()=>{
         showForm()
+    }
+    const onClickCreateDocument = async ()=>{
+        createDocument(systemSelected._id)
     }
     
     const onChange = (e)=>{
@@ -45,12 +58,25 @@ const SearchTagDescriptor = () => {
                 />
             </div>
             <div 
-                className="contenedor-input">
+                className="contenedor-input"
+            >
                 <button
                         type="button"
                         className="btn btn-secundario btn-submit btn-block"
                         onClick = {onClickNewTagDescription}
                     >Nuevo tag descriptor</button>
+            </div>
+            <div 
+                className="contenedor-input"
+            >
+                
+
+                
+                <button
+                        type="button"
+                        className="btn btn-secundario btn-submit btn-block"
+                        onClick = {onClickCreateDocument}
+                    >Generar documento</button>
             </div>
        </div>
     );

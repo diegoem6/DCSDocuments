@@ -14,7 +14,8 @@ import {
     SEARCH_TAGSDESCRIPTORS,
     RESET_MESSAGE,
     VALIDATE_TAGDESCRIPTOR,
-    INVALIDATE_TAGDESCRIPTOR} from '../../types/index'
+    INVALIDATE_TAGDESCRIPTOR,
+    CREATE_DOCUMENT} from '../../types/index'
 
 import axiosClient from '../../config/axios'
 
@@ -28,7 +29,8 @@ const TagDescriptorState = props=>{
         form:false,
         tagname_ok: true, 
         tagdescriptor: null,
-        message:null
+        message:null,
+        urlDoc:null
     }
 
     //Dispatch para ejecutar las acciones
@@ -65,8 +67,6 @@ const TagDescriptorState = props=>{
 
     const searchTagsDescriptors = async (search)=>{
         try {
-            console.log(search)
-            
             dispatch({
                 type: SEARCH_TAGSDESCRIPTORS,
                 payload: search.toUpperCase()
@@ -118,6 +118,31 @@ const TagDescriptorState = props=>{
             const res = await axiosClient.post('/api/tagsdescriptors',ptagdescriptor);
             dispatch({
                 type: CREATE_TAGDESCRIPTOR,
+                payload: res.data
+            })
+            
+            
+        } catch (error) {
+            const alert = {
+                msg:error.response.data.msg,
+                category:"alerta-error"
+            }
+            dispatch({
+                type:SHOW_ERROR_TAGDESCRIPTOR,
+                payload: alert
+            })
+        }
+        
+        
+    }
+
+    const createDocument = async system =>{
+
+        try {
+            
+            const res = await axiosClient.get('/api/documents',{params:{system}});
+            dispatch({
+                type: CREATE_DOCUMENT,
                 payload: res.data
             })
             
@@ -221,6 +246,7 @@ const TagDescriptorState = props=>{
                 message: state.message,
                 searchtagdescriptors: state.searchtagdescriptors,
                 tagname_ok:state.tagname_ok,
+                urlDoc:state.urlDoc,
                 showForm, 
                 getTagsDescriptors,
                 createTagDescriptor,
@@ -232,7 +258,8 @@ const TagDescriptorState = props=>{
                 updateTagDescriptor,
                 searchTagsDescriptors,
                 resetMessage,
-                validateTagname
+                validateTagname,
+                createDocument
             }}
         >
 

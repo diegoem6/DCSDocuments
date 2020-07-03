@@ -33,6 +33,45 @@ exports.createTagDescriptor = async (req, res)=>{
 
 }
 
+exports.createDocument = async (req,res)=>{
+    try {
+        
+        const {system} = req.query;
+        //existe el asset?
+        const system_created_document = await System.findById(system)
+        if (!system_created_document){
+            console.log("No existe el sistema");
+            return res.status(404).send("No existe el sistema")
+        }
+
+        const tagsdescriptors = await TagDescriptor.find({system:system_created_document._id}).sort({creado:-1})
+        const pdf = require('html-pdf');
+
+        let content = `
+        <h1>Tags descriptors del sistema ${system_created_document.name}</h1>
+        <br>
+        <br>
+        `;
+        tagsdescriptors.map((tg)=>{
+            content = content + "<h1>" + tg.tagname +"</h1><br>"
+            content = content + tg.description + "<br><hr><hr>"
+        })
+        pdf.create(content).toFile(`../tagsdescriptions/public/files/descriptors_${system_created_document.name}.pdf`, function(err, res) {
+            if (err){
+                return res.status(500).send("Error al crear el documento en PDF")
+            } else {
+                console.log(res);
+            }
+        })
+        res.json(`descriptors_${system_created_document.name}.pdf`)
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Error en obtener tagsdescriptors")
+        
+    }
+}
+
 //obteniendo todos los tagsdescriptors
 exports.getTagsDescriptors = async (req,res)=>{
     try {

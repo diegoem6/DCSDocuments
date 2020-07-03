@@ -11,7 +11,8 @@ import {
     SEARCH_TAGSDESCRIPTORS,
     RESET_MESSAGE,
     VALIDATE_TAGDESCRIPTOR,
-    INVALIDATE_TAGDESCRIPTOR} from '../../types/index'
+    INVALIDATE_TAGDESCRIPTOR,
+    CREATE_DOCUMENT} from '../../types/index'
 
 export default (state,action)=>{
     switch(action.type){
@@ -105,6 +106,12 @@ export default (state,action)=>{
                 tagdescriptor: null,
                 form:false,
                 error:false
+            })
+        case CREATE_DOCUMENT:
+            return ({
+                ...state,
+                error:false, 
+                urlDoc: action.payload
             })
 
         default:
