@@ -45,9 +45,39 @@ exports.createDocument = async (req,res)=>{
         }
 
         const tagsdescriptors = await TagDescriptor.find({system:system_created_document._id}).sort({creado:-1})
-        const pdf = require('html-pdf');
+
+
+        let HtmlDocx = require('html-docx-js');
+        let fs = require('fs');
+
+        let inputFile = process.argv[2];
+        let outputFile = process.argv[3];
+
+        // fs.readFile(inputFile, 'utf-8', function(err, html) {
+        // if (err) throw err;
 
         let content = `
+        <style>
+        table{
+            width: 100%;
+            align-self: center;
+            border-spacing: 0;
+        }
+        table .td{
+            text-align: left;
+        }
+        .header-table{
+            // font-weight: 500px;
+            // text-align: left;
+            // border-bottom: 1pt solid #1a202d;
+            background-color:gray;
+        }
+        tr td {
+            /* border-top:0.5pt solid #1a202d;*/
+            padding: 1.5rem;
+        }
+        
+        </style>
         <h1>Tags descriptors del sistema ${system_created_document.name}</h1>
         <br>
         <br>
@@ -56,14 +86,32 @@ exports.createDocument = async (req,res)=>{
             content = content + "<h1>" + tg.tagname +"</h1><br>"
             content = content + tg.description + "<br><hr><hr>"
         })
-        pdf.create(content).toFile(`../tagsdescriptions/public/files/descriptors_${system_created_document.name}.pdf`, function(err, res) {
-            if (err){
-                return res.status(500).send("Error al crear el documento en PDF")
-            } else {
-                console.log(res);
-            }
-        })
-        res.json(`descriptors_${system_created_document.name}.pdf`)
+        //content = content.replace("<tbody><tr","<tbody><tr class='header-table'")
+        //console.log(content)
+        let docx = HtmlDocx.asBlob(content);
+        fs.writeFile(`../tagsdescriptions/public/files/descriptors_${system_created_document.name}.docx`, docx, function(err) {
+            if (err) throw err;
+        });
+
+        // const pdf = require('html-pdf');
+
+        // let content = `
+        // <h1>Tags descriptors del sistema ${system_created_document.name}</h1>
+        // <br>
+        // <br>
+        // `;
+        // tagsdescriptors.map((tg)=>{
+        //     content = content + "<h1>" + tg.tagname +"</h1><br>"
+        //     content = content + tg.description + "<br><hr><hr>"
+        // })
+        // pdf.create(content).toFile(`../tagsdescriptions/public/files/descriptors_${system_created_document.name}.pdf`, function(err, res) {
+        //     if (err){
+        //         return res.status(500).send("Error al crear el documento en PDF")
+        //     } else {
+        //         console.log(res);
+        //     }
+        // })
+        res.json(`descriptors_${system_created_document.name}.docx`)
 
     } catch (error) {
         console.log(error);

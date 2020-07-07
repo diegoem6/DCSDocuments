@@ -1,7 +1,7 @@
 import React,{Fragment, useState, useContext, useEffect} from 'react';
 import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext' 
 import systemContext from '../../context/system/systemContext' 
-import SunEditor from 'suneditor-react';
+import SunEditor,{buttonList} from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import alertContext from '../../context/alerts/alertContext';
 import { Editor } from '@tinymce/tinymce-react';
@@ -158,9 +158,13 @@ const NewTagDescriptor = () => {
                             placeholder="descripción del tag"
                             name="description"
                             setOptions={{
-                                height: 300}}
+                                height: 300,
+                                buttonList: buttonList.complex 
+                            }}
                             setContents ={description}
                             onChange = {onChangeRichText}
+                            showToolbar={true}
+                            
                         /> 
                         
                         {/* <Editor

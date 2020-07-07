@@ -23,7 +23,7 @@ const SearchTagDescriptor = () => {
 
     useEffect(() => {
         if(urlDoc){
-            history.push(`../../../files/${urlDoc}`)
+            window.open(`../../../files/${urlDoc}`,'_blank')
         }    
     }, [urlDoc])
     
