@@ -15,6 +15,10 @@ router.get('/',
     auth,
     tagDescriptorController.getTagsDescriptors) ;
 
+router.get('/related/:id',
+    auth,
+    tagDescriptorController.getTagsDescriptors_Related) ;
+
 
 router.put('/:id',
     auth,

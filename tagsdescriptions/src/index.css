@@ -241,6 +241,27 @@ aside  {
   width: 100%;
 }
 
+.formDescriptor{
+  display:flex;
+  flex-wrap:wrap;
+}
+.descriptor{
+  flex-basis: 75%;
+}
+.descriptorsRelated{
+  border-left: 1px black solid;
+  margin-left: 1rem;
+  padding-left: 1rem;
+  flex-basis: calc(25% - 2rem);
+}
+.itemRelated{
+  padding: 1rem 0rem;
+}
+.itemRelated a{
+  cursor: pointer;
+}
+
+
 /** TAREAS LISTADO **/
 .contenedor-tareas {
   padding: 4rem;

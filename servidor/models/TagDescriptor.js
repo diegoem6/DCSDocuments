@@ -21,5 +21,6 @@ const TagDescriptorSchema = mongoose.Schema({
         default: Date.now()
     }
 })
+TagDescriptorSchema.index({description: 'text'})
 
 module.exports = mongoose.model('TagDescriptor',TagDescriptorSchema)

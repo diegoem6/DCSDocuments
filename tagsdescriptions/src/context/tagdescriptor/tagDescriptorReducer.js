@@ -12,7 +12,10 @@ import {
     RESET_MESSAGE,
     VALIDATE_TAGDESCRIPTOR,
     INVALIDATE_TAGDESCRIPTOR,
-    CREATE_DOCUMENT} from '../../types/index'
+    GET_TAGSDESCRIPTORS_RELATED,
+    CREATE_DOCUMENT,
+    SELECT_ONLY_DESCRIPTOR} from '../../types/index'
+import { stat } from 'fs'
 
 export default (state,action)=>{
     switch(action.type){
@@ -25,14 +28,22 @@ export default (state,action)=>{
         case GET_TAGDESCRIPTOR:
             return ({
                 ...state,
-                tagdescriptor:action.payload,
+                tagdescriptor: action.payload,
                 error:false
             })
         case GET_TAGSDESCRIPTORS:
             return ({
                 ...state,
                 searchtagdescriptors: action.payload,
-                tagdescriptors:action.payload,
+                tagdescriptors: action.payload,
+                related:null,
+                error:false
+
+            })
+        case GET_TAGSDESCRIPTORS_RELATED:
+            return ({
+                ...state,
+                related: action.payload.filter (td => td.tagname !== state.tagdescriptor[0].tagname),
                 error:false
 
             })
@@ -40,6 +51,7 @@ export default (state,action)=>{
             return ({
                 ...state,
                 tagdescriptors:[...state.tagdescriptors, action.payload],
+                related:null,
                 form:false,
                 error:false
             })
@@ -53,6 +65,8 @@ export default (state,action)=>{
                 ...state,
                 tagdescriptor: state.tagdescriptors.filter(
                     tagdescriptor => tagdescriptor._id === action.payload),
+                related:null,
+                related: null,
                 error:false
             })
         case VALIDATE_TAGDESCRIPTOR:
@@ -88,6 +102,7 @@ export default (state,action)=>{
                 ...state,
                 form:false,
                 tagdescriptor:null,
+                related:null,
                 error:false
             })
         case UPDATE_TAGDESCRIPTOR:
@@ -113,7 +128,13 @@ export default (state,action)=>{
                 error:false, 
                 urlDoc: action.payload
             })
-
+        case SELECT_ONLY_DESCRIPTOR:
+            return ({
+                ...state,
+                form: true,
+                tagdescriptor: [action.payload],
+                error:false,
+            })
         default:
                 return state;
     }

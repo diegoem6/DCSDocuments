@@ -15,7 +15,9 @@ import {
     RESET_MESSAGE,
     VALIDATE_TAGDESCRIPTOR,
     INVALIDATE_TAGDESCRIPTOR,
-    CREATE_DOCUMENT} from '../../types/index'
+    CREATE_DOCUMENT,
+    GET_TAGSDESCRIPTORS_RELATED,
+    SELECT_ONLY_DESCRIPTOR} from '../../types/index'
 
 import axiosClient from '../../config/axios'
 
@@ -29,6 +31,7 @@ const TagDescriptorState = props=>{
         form:false,
         tagname_ok: true, 
         tagdescriptor: null,
+        related:[],
         message:null,
         urlDoc:null
     }
@@ -106,6 +109,7 @@ const TagDescriptorState = props=>{
         
     }
 
+    
     const resetMessage = ()=>{
         dispatch({
             type:RESET_MESSAGE
@@ -236,6 +240,34 @@ const TagDescriptorState = props=>{
         }
     }
 
+    const  selectOnlyDescriptor = async (tagdescriptor) =>{
+        dispatch({
+                type: SELECT_ONLY_DESCRIPTOR,
+                payload: tagdescriptor
+            })
+    }
+
+
+    const  getTagDescriptorsRelated = async (id) =>{
+        try {
+            const res = await axiosClient.get(`/api/tagsdescriptors/related/${id}`);
+            dispatch({
+                type: GET_TAGSDESCRIPTORS_RELATED,
+                payload: res.data.tagsDescriptors_related
+            })
+        } catch (error) {
+            const alert = {
+                msg:"No existen descriptores relacionados",
+                category:"alerta-error"
+            }
+            dispatch({
+                type:SHOW_ERROR_TAGDESCRIPTOR,
+                payload: alert
+            })
+        }
+        
+    }
+
     return (
         <tagDescriptorContext.Provider
             value={{
@@ -248,6 +280,7 @@ const TagDescriptorState = props=>{
                 tagname_ok:state.tagname_ok,
                 urlDoc:state.urlDoc,
                 showForm, 
+                related: state.related,
                 getTagsDescriptors,
                 createTagDescriptor,
                 showError, 
@@ -257,9 +290,11 @@ const TagDescriptorState = props=>{
                 deselectTagDescriptor,
                 updateTagDescriptor,
                 searchTagsDescriptors,
+                getTagDescriptorsRelated,
                 resetMessage,
                 validateTagname,
-                createDocument
+                createDocument,
+                selectOnlyDescriptor
             }}
         >
 

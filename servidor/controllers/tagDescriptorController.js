@@ -57,6 +57,10 @@ exports.createDocument = async (req,res)=>{
         // if (err) throw err;
 
         let content = `
+        <html>
+        <head lang="es">
+            <meta charset="UTF-8">
+        
         <style>
         table{
             width: 100%;
@@ -78,6 +82,8 @@ exports.createDocument = async (req,res)=>{
         }
         
         </style>
+        </head>
+        <body>
         <h1>Tags descriptors del sistema ${system_created_document.name}</h1>
         <br>
         <br>
@@ -86,6 +92,7 @@ exports.createDocument = async (req,res)=>{
             content = content + "<h1>" + tg.tagname +"</h1><br>"
             content = content + tg.description + "<br><hr><hr>"
         })
+        content = content + '</body></html>'
         //content = content.replace("<tbody><tr","<tbody><tr class='header-table'")
         //console.log(content)
         let docx = HtmlDocx.asBlob(content);
@@ -142,19 +149,75 @@ exports.getTagsDescriptors = async (req,res)=>{
     }
 }
 
+// obteniendo los related
+
+exports.getTagsDescriptors_Related = async (req,res)=>{
+    try {
+        const tagdescriptor = await TagDescriptor.findById(req.params.id)
+        //const tagsDescriptors_related = await TagDescriptor.find({$text: {$search: tagdescriptor.tagname}})
+        //tagsDescriptors_related = await TagDescriptor.find({"description":{ $regex: '.*' + tagdescriptor.tagname + '.*' }})
+        tagsDescriptors_related = await TagDescriptor.find({"description":{ $regex : new RegExp(tagdescriptor.tagname, "i") } })
+        if (tagdescriptor.length === 0){
+            res.status(404).send({msg:"No existe el tag descriptor"})
+        }else{
+            res.json({tagsDescriptors_related})
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({msg:"Error en obtener tagsdescriptors"})
+        
+    }
+}
+
 //obteniendo un tagdescriptor
 exports.getTagDescriptor = async (req,res)=>{
     try {
         const tagname = req.params.id
-        const tagdescriptor = await TagDescriptor.find({"tagname":tagname.toUpperCase()}).sort({creado:-1})
+        let tagdescriptor = {
+            tagname:'',
+            description:'',
+            tagsDescriptors_related:[]
+        }
+        let tagdescriptor_temp = await TagDescriptor.find({"tagname":tagname.toUpperCase()}).sort({creado:-1})
         const entities = new Entities()
+        tagdescriptor_temp[0].description = entities.encodeNonUTF(tagdescriptor_temp[0].description)
+        tagdescriptor.tagname = tagdescriptor_temp[0].tagname;
+        tagdescriptor.description = tagdescriptor_temp[0].description;
         
-        tagdescriptor[0].description= entities.encodeNonUTF(tagdescriptor[0].description)
-        if (tagdescriptor.length === 0){
+        const tagsDescriptors_related = await TagDescriptor.find({"description":{ $regex : new RegExp(tagdescriptor_temp[0].tagname, "i") } })
+        //console.log(tagsDescriptors_related)
+        tagdescriptor.tagsDescriptors_related = tagsDescriptors_related;
+        tagdescriptor_temp[0].tagsDescriptors_related = tagsDescriptors_related;
+        if (tagdescriptor_temp.length === 0){
             res.status(404).send({msg:"No existe el tag descriptor"})
         }else{
             res.json({tagdescriptor})
         }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({msg:"Error en obtener tagsdescriptors"})
+        
+    }
+}
+
+//obteniendo un tagdescriptor
+exports.getTagDescriptorsBySystem = async (req,res)=>{
+    try {
+
+        const system_name = req.params.id
+        const system = await System.find({name:system_name})
+        if (!system){
+            res.status(404).send({msg:"No existe el sistema"})
+        }
+        const tagdescriptors = await TagDescriptor.find({system:system[0]._id}).sort({creado:-1})
+        const entities = new Entities()
+        tagdescriptors.map (
+            tg => {
+                tg.description= entities.encodeNonUTF(tg.description)
+            }
+        )
+        res.json({tagdescriptors})
+        
     } catch (error) {
         console.log(error);
         res.status(500).send({msg:"Error en obtener tagsdescriptors"})
