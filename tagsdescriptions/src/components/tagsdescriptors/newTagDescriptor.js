@@ -41,6 +41,19 @@ const NewTagDescriptor = () => {
         }
         // eslint-disable-next-line
     }, [])
+    
+    useEffect(() => {
+        if (tagdescriptor !== null && tagdescriptor.length>0){
+            const [currentTagDescriptor] = tagdescriptor
+            setTagname(currentTagDescriptor.tagname)
+            setDescription(currentTagDescriptor.description)
+            getTagDescriptorsRelated(currentTagDescriptor._id)
+        }else{
+            setTagname('')
+            setDescription('')
+        }
+        // eslint-disable-next-line
+    }, [tagdescriptor])
 
       
     useEffect(() => {
@@ -59,7 +72,8 @@ const NewTagDescriptor = () => {
     }, [message])
 
 
-    if (!systemSelected || !related ) return null
+    if (!systemSelected) return null
+
 
     const onChangeTagDescriptor = (e)=>{
         setTagname(e.target.value)
@@ -249,16 +263,38 @@ const NewTagDescriptor = () => {
                     (tagdescriptor !== null && tagdescriptor.length>0)  &&
                             (
                                 <div className="descriptorsRelated">
-                                    <p><b>Descriptores relacionados</b></p>
+                                    {
+                                        (related != null) ? 
+                                            (<p><b>Descriptores relacionados</b></p>)
+                                            :
+                                            (null)
+                                    }
                                     <ul>
                                     {
-                                        related.map( r => 
-                                            (<li className="itemRelated">
-                                                <a onClick={()=>{goToRelated(r)}}> {r.tagname} </a>
-                                              </li>  
+                                        (related != null) ?
+                                        (
+                                            related.map( r => 
+                                                (<li className="itemRelated">
+                                                    <a onClick={()=>{goToRelated(r)}}> {r.tagname} </a>
+                                                </li>  
+                                                )
                                             )
-                                        )
+                                        ): 
+                                        (null)
+
                                     }
+                                    </ul>
+                                    <p><b>Interlocks</b></p>
+                                    <ul>
+                                        <li className="itemRelated">
+                                            <a> 200ZS0126 NO Abierta </a>
+                                        </li>  
+                                        <li className="itemRelated">
+                                            <a> 200ZS0127 NO Abierta </a>
+                                        </li>  
+                                        <li className="itemRelated">
+                                            <a> 200LC0119 &lt; 15 % </a>
+                                        </li>     
                                     </ul>
                                 </div>
                             )

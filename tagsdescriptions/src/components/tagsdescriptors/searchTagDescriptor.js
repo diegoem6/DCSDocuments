@@ -8,7 +8,7 @@ const SearchTagDescriptor = () => {
     const history = useHistory();
     
     const tdContext = useContext(tagDescriptorContext)
-    const {showForm, searchTagsDescriptors, createDocument, urlDoc} = tdContext
+    const {showForm, searchTagsDescriptors, createDocument, urlDoc, deselectTagDescriptor} = tdContext
 
     const sContext = useContext(systemContext)
     const {systemSelected} = sContext
@@ -34,7 +34,8 @@ const SearchTagDescriptor = () => {
    
 
     const onClickNewTagDescription = ()=>{
-        showForm()
+        deselectTagDescriptor();
+        showForm();
     }
     const onClickCreateDocument = async ()=>{
         createDocument(systemSelected._id)
