@@ -14,7 +14,8 @@ import {
     INVALIDATE_TAGDESCRIPTOR,
     GET_TAGSDESCRIPTORS_RELATED,
     CREATE_DOCUMENT,
-    SELECT_ONLY_DESCRIPTOR} from '../../types/index'
+    SELECT_ONLY_DESCRIPTOR,
+    GET_INTERLOCKS} from '../../types/index'
 import { stat } from 'fs'
 
 export default (state,action)=>{
@@ -36,6 +37,7 @@ export default (state,action)=>{
                 ...state,
                 searchtagdescriptors: action.payload,
                 tagdescriptors: action.payload,
+                interlocks:[],
                 related:null,
                 error:false
 
@@ -51,6 +53,7 @@ export default (state,action)=>{
             return ({
                 ...state,
                 tagdescriptors:[...state.tagdescriptors, action.payload],
+                interlocks:[],
                 related:null,
                 form:false,
                 error:false
@@ -66,7 +69,7 @@ export default (state,action)=>{
                 tagdescriptor: state.tagdescriptors.filter(
                     tagdescriptor => tagdescriptor._id === action.payload),
                 related:null,
-                related: null,
+                interlocks:[],
                 error:false
             })
         case VALIDATE_TAGDESCRIPTOR:
@@ -103,6 +106,7 @@ export default (state,action)=>{
                 form:false,
                 tagdescriptor:null,
                 related:null,
+                interlocks:[],
                 error:false
             })
         case UPDATE_TAGDESCRIPTOR:
@@ -133,6 +137,13 @@ export default (state,action)=>{
                 ...state,
                 form: true,
                 tagdescriptor: [action.payload],
+                error:false,
+            })
+        case GET_INTERLOCKS:
+            return ({
+                ...state,
+                form: true,
+                interlocks: [action.payload],
                 error:false,
             })
         default:

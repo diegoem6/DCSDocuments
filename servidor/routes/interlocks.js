@@ -11,7 +11,7 @@ const auth = require('../middlewares/auth')
     );
 */
 // loguea un usuario
-router.get('/', 
+router.get('/:id', 
     //auth,
     authController.getInterlock);
 

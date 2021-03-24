@@ -293,56 +293,82 @@ exports.deleteTagDescriptor = async (req, res)=>{
 
 exports.getInterlock = async (req, res)=>{
     let resp, IOC, EEC, StID;
+    const json_error = [
+        {
+            "Interlock": "No hay interlocks"
+        },
+        {
+            "Interlock": ""
+        },
+        {
+            "Interlock": ""
+        },
+        {
+            "Interlock": ""
+        },
+        {
+            "Interlock": ""
+        },
+        {
+            "Interlock": ""
+        },
+        {
+            "Interlock": ""
+        },
+        {
+            "Interlock": ""
+        },
+        {
+            "Interlock": ""
+        },
+        {
+            "Interlock": ""
+        },
+        {
+            "Interlock": ""
+        },
+        {
+            "Interlock": ""
+        },
+        {
+            "Interlock": ""
+        },
+        {
+            "Interlock": ""
+        },
+        {
+            "Interlock": ""
+        }
+    ]
     try {
+        const idTagDescriptor = req.params.id
+        const tag_descriptor = await TagDescriptor.findById(idTagDescriptor)
+        console.log(tag_descriptor.tagname)
+        if (!tag_descriptor){
+            console.log("No existe el tag descriptor");
+            return res.status(404).send("No existe el tag descriptor")
+        }
+
         const conn = await connSQL.conectarSQL();
         conn.connect().then(function () {
             const request = new sql.Request(conn);
-            //request.query("select * from dbo.Puntos").then(function (recordSet) {
-            //const TAG='-2127184201'
-            const TAG='251_42_030'
+            
+            const TAG=tag_descriptor.tagname
+            
             //levanto el IOC y el EEC
             request.query(`select IOC,EEC from STRATEGY where StrategyName = '${TAG}_INT' and StrategyID<0`).then(function (recordSet) {
-                console.log(recordSet)
-                //console.log(recordSet.recordset[0].StringValue);
                 IOC=recordSet.recordset[0].IOC;
                 EEC=recordSet.recordset[0].EEC;
-                //console.log(IOC, EEC)
                 resp = recordSet.recordset;
-                //res.json(resp);
-                //conn.close();
                 request.query(`SELECT spv.StringValue AS Interlock from Strategy AS s INNER JOIN Strategy_Param_Value AS spv ON (s.StrategyID = spv.StrategyID) and
                     s.StrategyName = 'CATCHER' and s.IOC=${IOC} and s.EEC=${EEC} and s.StrategyID<0 and (spv.ParamID like '44705' 
                     or spv.ParamID like '44706' or spv.ParamID like '44707' or spv.ParamID like '44708' or spv.ParamID like '44709' or spv.ParamID like '44710'
                     or spv.ParamID like '44711' or spv.ParamID like '44712' or spv.ParamID like '44713' or spv.ParamID like '44714' or spv.ParamID like '44715'
                     or spv.ParamID like '44716' or spv.ParamID like '44717' or spv.ParamID like '44718' or spv.ParamID like '44719')`).then(function (recordSet) {
-                    console.log(recordSet)
-                    //console.log(recordSet.recordset[0].StringValue);
                     resp =  recordSet.recordset;
                     res.json(resp);
                     conn.close();
-                //levanto el StrategyID del CATCHER de este CM_INT
-                /*
-                request.query(`select StrategyID from STRATEGY where StrategyName = 'CATCHER' and IOC=${IOC} and EEC=${EEC} and StrategyID<0`).then(function (recordSet) {
-                    console.log(recordSet)
-                    StID=recordSet.recordset[0].StrategyID;
-                    resp =  recordSet.recordset;
-                    
-                    //levanto la descripcion del CATCHER de este CM_INT
-                    request.query(`select StringValue from STRATEGY_PARAM_VALUE where StrategyID = ${StID} and (ParamID like '44705' 
-                        or ParamID like '44706' or ParamID like '44707' or ParamID like '44708' or ParamID like '44709' or ParamID like '44710'
-                        or ParamID like '44711' or ParamID like '44712' or ParamID like '44713' or ParamID like '44714' or ParamID like '44715'
-                        or ParamID like '44716' or ParamID like '44717' or ParamID like '44718' or ParamID like '44719')`).then(function (recordSet) {
-                        console.log(recordSet)
-                        //console.log(recordSet.recordset[0].StringValue);
-                        resp =  recordSet.recordset;
-                        res.json(resp);
-                        conn.close();
-                        }).catch(function (err) {
-                            console.log(err);
-                            conn.close();
-                        });
-                */
-
+                
                 }).catch(function (err) {
                     console.log(err);
                     conn.close();
@@ -354,7 +380,8 @@ exports.getInterlock = async (req, res)=>{
             });
 
         }).catch(function (err) {
-            console.log(err);
+            res.json({json_error})
+            //res.status(500).send("Error al conectarse")
         });
  
      } catch (error) {

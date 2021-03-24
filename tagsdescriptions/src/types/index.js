@@ -50,3 +50,5 @@ export const    GET_ASSETS_TREE     =   "GET_ASSETS_TREE"
 
 export const    RESET_MESSAGE           =   "RESET_MESSAGE"
 export const    SHOW_ERROR              =   "SHOW_ERROR"
+
+export const    GET_INTERLOCKS      =   "GET_INTERLOCKS"

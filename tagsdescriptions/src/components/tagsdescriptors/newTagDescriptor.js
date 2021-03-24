@@ -10,7 +10,7 @@ import { Editor } from '@tinymce/tinymce-react';
 const NewTagDescriptor = () => {
     
     const tdContext = useContext(tagDescriptorContext)
-    const {tagname_ok, message, createTagDescriptor, tagdescriptor, related, resetMessage, updateTagDescriptor, validateTagname, getTagDescriptorsRelated, selectOnlyDescriptor} = tdContext
+    const {tagname_ok, message, createTagDescriptor, tagdescriptor, related, interlocks, resetMessage, updateTagDescriptor, validateTagname, getTagDescriptorsRelated, selectOnlyDescriptor, getInterlocks} = tdContext
 
     const sContext = useContext(systemContext)
     const {systemSelected} = sContext
@@ -35,6 +35,7 @@ const NewTagDescriptor = () => {
             setTagname(currentTagDescriptor.tagname)
             setDescription(currentTagDescriptor.description)
             getTagDescriptorsRelated(currentTagDescriptor._id)
+            getInterlocks(currentTagDescriptor)
         }else{
             setTagname('')
             setDescription('')
@@ -48,6 +49,7 @@ const NewTagDescriptor = () => {
             setTagname(currentTagDescriptor.tagname)
             setDescription(currentTagDescriptor.description)
             getTagDescriptorsRelated(currentTagDescriptor._id)
+            getInterlocks(currentTagDescriptor)
         }else{
             setTagname('')
             setDescription('')
@@ -71,6 +73,17 @@ const NewTagDescriptor = () => {
         // eslint-disable-next-line
     }, [message])
 
+    // useEffect(() => {
+    //     if (interlocks){
+    //         console.log(interlocks)
+    //         if (interlocks[0]){
+    //             //interlocks[0].map(i => console.log(i.interlock))
+    //             interlocks[0].map(i => console.log(i.Interlock))
+    //         }
+    //     }else{
+    //         console.log("no hay nada")
+    //     }
+    // }, [interlocks])
 
     if (!systemSelected) return null
 
@@ -271,11 +284,35 @@ const NewTagDescriptor = () => {
                                     }
                                     <ul>
                                     {
-                                        (related != null) ?
+                                        (related != null && related.length != 0) ?
                                         (
                                             related.map( r => 
+                                                    (<li className="itemRelated">
+                                                        <a onClick={()=>{goToRelated(r)}}> {r.tagname} </a>
+                                                    </li>  
+                                                    )
+                                                )
+                                        ): 
+                                        (
+                                            <li className="itemRelated">
+                                                <span>No hay descriptores relacionados</span>
+                                            </li>  
+                                        )
+                                    }
+                                    </ul>
+                                    {
+                                        (interlocks != null) ? 
+                                            (<p><b>Interlocks</b></p>)
+                                            :
+                                            (null)
+                                    }
+                                    <ul>
+                                    {
+                                        (interlocks[0] != null) ?
+                                        (
+                                            interlocks[0].map( r => 
                                                 (<li className="itemRelated">
-                                                    <a onClick={()=>{goToRelated(r)}}> {r.tagname} </a>
+                                                    <span> {r.Interlock} </span>
                                                 </li>  
                                                 )
                                             )
@@ -283,18 +320,6 @@ const NewTagDescriptor = () => {
                                         (null)
 
                                     }
-                                    </ul>
-                                    <p><b>Interlocks</b></p>
-                                    <ul>
-                                        <li className="itemRelated">
-                                            <a> 200ZS0126 NO Abierta </a>
-                                        </li>  
-                                        <li className="itemRelated">
-                                            <a> 200ZS0127 NO Abierta </a>
-                                        </li>  
-                                        <li className="itemRelated">
-                                            <a> 200LC0119 &lt; 15 % </a>
-                                        </li>     
                                     </ul>
                                 </div>
                             )

@@ -17,6 +17,7 @@ exports.conectarSQL = async ()=>{
         return (conn)
     }
     catch{
+        console.log("FALLO LA CONEXIÓN")
         return('Fallo conexion');
     }
         

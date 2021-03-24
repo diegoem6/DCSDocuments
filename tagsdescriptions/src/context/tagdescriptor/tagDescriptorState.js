@@ -17,7 +17,8 @@ import {
     INVALIDATE_TAGDESCRIPTOR,
     CREATE_DOCUMENT,
     GET_TAGSDESCRIPTORS_RELATED,
-    SELECT_ONLY_DESCRIPTOR} from '../../types/index'
+    SELECT_ONLY_DESCRIPTOR,
+    GET_INTERLOCKS} from '../../types/index'
 
 import axiosClient from '../../config/axios'
 
@@ -28,6 +29,7 @@ const TagDescriptorState = props=>{
     const initialState={
         tagdescriptors : [],
         searchtagdescriptors: [],
+        interlocks : [],
         form:false,
         tagname_ok: true, 
         tagdescriptor: null,
@@ -251,6 +253,7 @@ const TagDescriptorState = props=>{
     const  getTagDescriptorsRelated = async (id) =>{
         try {
             const res = await axiosClient.get(`/api/tagsdescriptors/related/${id}`);
+            console.log(res.data)
             dispatch({
                 type: GET_TAGSDESCRIPTORS_RELATED,
                 payload: res.data.tagsDescriptors_related
@@ -268,6 +271,24 @@ const TagDescriptorState = props=>{
         
     }
 
+    const getInterlocks = async (tagdescriptor) =>{
+        try {
+            const id = tagdescriptor._id
+            const res = await axiosClient.get(`/api/interlocks/${id}`)
+            console.log(res)
+            dispatch({
+                type:GET_INTERLOCKS,
+                payload:res.data.json_error
+            })
+            
+
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
+    
+
     return (
         <tagDescriptorContext.Provider
             value={{
@@ -281,6 +302,7 @@ const TagDescriptorState = props=>{
                 urlDoc:state.urlDoc,
                 showForm, 
                 related: state.related,
+                interlocks: state.interlocks,
                 getTagsDescriptors,
                 createTagDescriptor,
                 showError, 
@@ -294,7 +316,8 @@ const TagDescriptorState = props=>{
                 resetMessage,
                 validateTagname,
                 createDocument,
-                selectOnlyDescriptor
+                selectOnlyDescriptor,
+                getInterlocks
             }}
         >
 
