@@ -24,6 +24,7 @@ app.use('/api/tree', require('./routes/tree'));
 app.use('/api/showtag', require('./routes/showtag'));
 app.use('/api/showtags', require('./routes/showtags'));
 app.use('/api/documents', require('./routes/documents'));
+app.use('/api/interlocks', require('./routes/interlocks'));
 
 
 app.listen (PORT, ()=>{
