@@ -4,6 +4,7 @@ const {validationResult} = require('express-validator');
 const Entities = require('html-entities').XmlEntities;
 const connSQL = require('../config/sql');
 const sql = require('mssql');
+const { Console } = require('console');
 
 exports.createTagDescriptor = async (req, res)=>{
     //valido errores
@@ -292,7 +293,7 @@ exports.deleteTagDescriptor = async (req, res)=>{
 //    or ParamID like '44706')`)
 
 exports.getInterlock = async (req, res)=>{
-    let resp, IOC, EEC, StID;
+    let resp, StID;
     const json_error = [
         {
             "Interlock": "No hay interlocks"
@@ -357,17 +358,14 @@ exports.getInterlock = async (req, res)=>{
             const TAG=tag_descriptor.tagname
             // console.log(TAG)
             //levanto el IOC y el EEC
-            request.query(`select IOC,EEC from STRATEGY where StrategyName = '${TAG}_INT' and StrategyID<0`).then(function (recordSet) {
-                IOC=recordSet.recordset[0].IOC;
-                EEC=recordSet.recordset[0].EEC;
-                // console.log(IOC)
-                // console.log(EEC)
+            request.query(`select s2.StrategyID AS StID from STRATEGY as s1 INNER JOIN STRATEGY AS s2 ON (s1.IOC = s2.IOC and s1.EEC = s2.EEC) and s1.StrategyName = '${TAG}_INT' and s1.StrategyID<0 and s2.StrategyID<0 and s2.StrategyName = 'CATCHER'`).then(function (recordSet) {
+            //request.query(`select IOC,EEC from STRATEGY where StrategyName = '${TAG}_INT' and StrategyID<0`).then(function (recordSet) {
+                StID=recordSet.recordset[0].StID;
+                //Console.log(StID)
+                //EEC=recordSet.recordset[0].EEC;
                 resp = recordSet.recordset;
-                request.query(`SELECT spv.StringValue AS Interlock from Strategy AS s INNER JOIN Strategy_Param_Value AS spv ON (s.StrategyID = spv.StrategyID) and
-                    s.StrategyName = 'CATCHER' and s.IOC=${IOC} and s.EEC=${EEC} and s.StrategyID<0 and (spv.ParamID like '36466' 
-                    or spv.ParamID like '36457' or spv.ParamID like '36458' or spv.ParamID like '36459' or spv.ParamID like '36460' or spv.ParamID like '36461'
-                    or spv.ParamID like '36462' or spv.ParamID like '36463' or spv.ParamID like '36464' or spv.ParamID like '36465' or spv.ParamID like '36467'
-                    or spv.ParamID like '36468' or spv.ParamID like '36470' or spv.ParamID like '36471' or spv.ParamID like '36469')`).then(function (recordSet) {
+                request.query(`select spv.StringValue from PARAM_DEF as pd inner join TEMPLATE as t on pd.TemplateID=t.TemplateID and t.TemplateName='FirstOut' and pd.ParamName like 'INDESC%'
+                inner join STRATEGY_PARAM_VALUE as spv on spv.ParamID=pd.ParamID and spv.StrategyID = ${StID}`).then(function (recordSet) {
                     resp =  recordSet.recordset;
                     // console.log(resp)
                     res.json({resp});
@@ -375,11 +373,13 @@ exports.getInterlock = async (req, res)=>{
                 
                 }).catch(function (err) {
                     console.log(err);
+                    res.json({resp});
                     conn.close();
                 });
 
             }).catch(function (err) {
                 console.log(err);
+                res.json({resp});
                 conn.close();
             });
 
