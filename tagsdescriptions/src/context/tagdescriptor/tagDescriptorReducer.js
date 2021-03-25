@@ -123,6 +123,7 @@ export default (state,action)=>{
                     tagdescriptor=> tagdescriptor.tagname.indexOf(action.payload) > -1
                 ),
                 tagdescriptor: null,
+                interlocks:[],
                 form:false,
                 error:false
             })
@@ -137,6 +138,7 @@ export default (state,action)=>{
                 ...state,
                 form: true,
                 tagdescriptor: [action.payload],
+                interlocks:[],
                 error:false,
             })
         case GET_INTERLOCKS:

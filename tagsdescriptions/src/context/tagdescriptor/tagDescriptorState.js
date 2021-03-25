@@ -278,7 +278,7 @@ const TagDescriptorState = props=>{
             console.log(res)
             dispatch({
                 type:GET_INTERLOCKS,
-                payload:res.data.json_error
+                payload:res.data.resp
             })
             
 

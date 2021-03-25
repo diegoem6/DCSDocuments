@@ -311,10 +311,11 @@ const NewTagDescriptor = () => {
                                         (interlocks[0] != null) ?
                                         (
                                             interlocks[0].map( r => 
-                                                (<li className="itemRelated">
-                                                    <span> {r.Interlock} </span>
-                                                </li>  
-                                                )
+                                                (r.Interlock !== "") ?
+                                                    (<li className="itemRelated">
+                                                        (<span> {r.Interlock} </span>)
+                                                    </li>  
+                                                    ):null
                                             )
                                         ): 
                                         (null)
