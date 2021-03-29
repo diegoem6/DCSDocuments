@@ -66,19 +66,13 @@ const SearchTagDescriptor = () => {
                         className="btn btn-secundario btn-submit btn-block"
                         onClick = {onClickNewTagDescription}
                     >Nuevo tag descriptor</button>
-            </div>
-            <div 
-                className="contenedor-input"
-            >
-                
-
-                
-                <button
+                    <button
                         type="button"
                         className="btn btn-secundario btn-submit btn-block"
                         onClick = {onClickCreateDocument}
                     >Generar documento</button>
             </div>
+            
        </div>
     );
 }
