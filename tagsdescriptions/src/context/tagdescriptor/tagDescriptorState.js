@@ -275,7 +275,7 @@ const TagDescriptorState = props=>{
         try {
             const id = tagdescriptor._id
             const res = await axiosClient.get(`/api/interlocks/${id}`)
-            console.log(res)
+            //console.log(res)
             dispatch({
                 type:GET_INTERLOCKS,
                 payload:res.data.resp

@@ -294,102 +294,39 @@ exports.deleteTagDescriptor = async (req, res)=>{
 
 exports.getInterlock = async (req, res)=>{
     let resp, StID;
-    const json_error = [
-        {
-            "Interlock": "No hay interlocks"
-        },
-        {
-            "Interlock": ""
-        },
-        {
-            "Interlock": ""
-        },
-        {
-            "Interlock": ""
-        },
-        {
-            "Interlock": ""
-        },
-        {
-            "Interlock": ""
-        },
-        {
-            "Interlock": ""
-        },
-        {
-            "Interlock": ""
-        },
-        {
-            "Interlock": ""
-        },
-        {
-            "Interlock": ""
-        },
-        {
-            "Interlock": ""
-        },
-        {
-            "Interlock": ""
-        },
-        {
-            "Interlock": ""
-        },
-        {
-            "Interlock": ""
-        },
-        {
-            "Interlock": ""
-        }
-    ]
+    const json_error = [{"Interlock": "No hay interlocks"},{"Interlock": ""}]
+    resp = json_error;
     try {
         
         const conn = await connSQL.conectarSQL();
-        const request = new sql.Request(conn);
-
         
-        conn.connect().then(async function () {
-            const idTagDescriptor = req.params.id
-            const tag_descriptor = await TagDescriptor.findById(idTagDescriptor)
+        const idTagDescriptor = req.params.id
+        const tag_descriptor = await TagDescriptor.findById(idTagDescriptor)
             // console.log(tag_descriptor.tagname)
-            if (!tag_descriptor){
-                console.log("No existe el tag descriptor");
-                return res.status(404).send("No existe el tag descriptor")
-            }
-            const TAG=tag_descriptor.tagname
-            // console.log(TAG)
-            //levanto el IOC y el EEC
-            request.query(`select s2.StrategyID AS StID from STRATEGY as s1 INNER JOIN STRATEGY AS s2 ON (s1.IOC = s2.IOC and s1.EEC = s2.EEC) and s1.StrategyName = '${TAG}_INT' and s1.StrategyID<0 and s2.StrategyID<0 and s2.StrategyName = 'CATCHER'`).then(function (recordSet) {
-            //request.query(`select IOC,EEC from STRATEGY where StrategyName = '${TAG}_INT' and StrategyID<0`).then(function (recordSet) {
-                StID=recordSet.recordset[0].StID;
-                //Console.log(StID)
-                //EEC=recordSet.recordset[0].EEC;
-                resp = recordSet.recordset;
-                request.query(`select spv.StringValue from PARAM_DEF as pd inner join TEMPLATE as t on pd.TemplateID=t.TemplateID and t.TemplateName='FirstOut' and pd.ParamName like 'INDESC%'
-                inner join STRATEGY_PARAM_VALUE as spv on spv.ParamID=pd.ParamID and spv.StrategyID = ${StID}`).then(function (recordSet) {
-                    resp =  recordSet.recordset;
-                    // console.log(resp)
-                    res.json({resp});
-                    conn.close();
-                
-                }).catch(function (err) {
-                    console.log(err);
-                    res.json({resp});
-                    conn.close();
-                });
+        if (!tag_descriptor){
+            console.log("No existe el tag descriptor");
+            return res.status(404).send("No existe el tag descriptor")
+        }
+        const TAG=tag_descriptor.tagname
+        let pool = await conn.connect();
+        resp = await pool.request()
+            .query(`select s2.StrategyID AS StID from STRATEGY as s1 INNER JOIN STRATEGY AS s2 ON (s1.IOC = s2.IOC and s1.EEC = s2.EEC) and s1.StrategyName = '${TAG}_INT' and s1.StrategyID<0 and s2.StrategyID<0 and s2.StrategyName = 'CATCHER'`)
+        if (!resp.recordset[0]){
+            resp = json_error;
+            res.json({resp});
+            conn.close();
+            return;
+        }
+        StID=resp.recordset[0].StID;
+        resp = await pool.request()
+        .query(`select spv.StringValue as Interlock from PARAM_DEF as pd inner join TEMPLATE as t on pd.TemplateID=t.TemplateID and t.TemplateName='FirstOut' and pd.ParamName like 'INDESC%'
+        inner join STRATEGY_PARAM_VALUE as spv on spv.ParamID=pd.ParamID and spv.StrategyID = ${StID}`)
+        
+        resp =  resp.recordset;
+        res.json({resp});
+        conn.close();
+        return;
 
-            }).catch(function (err) {
-                console.log(err);
-                res.json({resp});
-                conn.close();
-            });
-
-        }).catch(function (err) {
-            resp = json_error
-            res.json({resp})
-            console.log(err)
-            //res.status(500).send("Error al conectarse")
-        });
- 
      } catch (error) {
          console.log(error);
          res.status(500).send("Error al visualizar los interlocks")
