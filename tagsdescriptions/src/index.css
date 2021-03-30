@@ -86,7 +86,19 @@ a {
 .btn-block {
   display: block;
   width: 100%;
+  margin: 1rem;
 }
+.btn-block:last-of-type {
+  display: block;
+  width: 100%;
+  margin: 1rem 0rem 1rem 1rem;
+}
+.btn-block:first-of-type {
+  display: block;
+  width: 100%;
+  margin: 1rem 1rem 1rem 0rem;
+}
+
 .btn-submit:hover {
   background-color: var(--gris2);
 }
