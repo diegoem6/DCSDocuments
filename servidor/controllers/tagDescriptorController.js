@@ -296,9 +296,10 @@ exports.getInterlock = async (req, res)=>{
     let resp, StID;
     const json_error = [{"Interlock": "No hay interlocks"},{"Interlock": ""}]
     resp = json_error;
+    
     try {
         
-        const conn = await connSQL.conectarSQL();
+        //const TAG='251_42_030';
         
         const idTagDescriptor = req.params.id
         const tag_descriptor = await TagDescriptor.findById(idTagDescriptor)
@@ -308,6 +309,12 @@ exports.getInterlock = async (req, res)=>{
             return res.status(404).send("No existe el tag descriptor")
         }
         const TAG=tag_descriptor.tagname
+
+        const servidor = findServer(TAG);
+        //servidor='localhost';
+        //console.log('El server es:', servidor);
+        const conn = await connSQL.conectarSQL(servidor);
+                
         let pool = await conn.connect();
         resp = await pool.request()
             .query(`select s2.StrategyID AS StID from STRATEGY as s1 INNER JOIN STRATEGY AS s2 ON (s1.IOC = s2.IOC and s1.EEC = s2.EEC) and s1.StrategyName = '${TAG}_INT' and s1.StrategyID<0 and s2.StrategyID<0 and s2.StrategyName = 'CATCHER'`)
@@ -331,4 +338,24 @@ exports.getInterlock = async (req, res)=>{
          console.log(error);
          res.status(500).send("Error al visualizar los interlocks")
      }
+}
+
+const findServer=(TAG) => {
+    const area=parseInt(TAG.substring(0, 3),10);
+    let servidor;
+    if ((area<200) || (area==403) || (area==402) || (area==600)){
+        //console.log('PMCLS001');
+        return ('PMCLS001');
+    }
+    else if ((area<250) && (area>200)){
+        //console.log('PMCLS005');
+        return ('PMCLS005');
+    }
+    else if (area>250){
+        //console.log('PMCLS006');
+        return ('PMCLS006');        
+    }
+    else{
+        return;    
+    }
 }

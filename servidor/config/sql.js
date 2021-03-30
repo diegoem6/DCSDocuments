@@ -1,9 +1,10 @@
 const sql = require ('mssql') //npm i mssql
 
-exports.conectarSQL = async ()=>{
+exports.conectarSQL = async (servidor)=>{
     const sql = require('mssql');
+    //console.log('El servidor desde SQL es',servidor);
     const config = {
-        server: 'localhost',
+        server: servidor, //'localhost',
         database: 'ps_erdb',
         domain: 'DESKTOP-O5VJAUN',
         connectionTimeout: 6000,
