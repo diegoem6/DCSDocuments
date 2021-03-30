@@ -293,7 +293,7 @@ exports.deleteTagDescriptor = async (req, res)=>{
 //    or ParamID like '44706')`)
 
 exports.getInterlock = async (req, res)=>{
-    let resp, StID;
+    let resp, StID, IOC, EEC;
     const json_error = [{"Interlock": "No hay interlocks"},{"Interlock": ""}]
     resp = json_error;
     
@@ -313,18 +313,35 @@ exports.getInterlock = async (req, res)=>{
         const servidor = findServer(TAG);
         //servidor='localhost';
         //console.log('El server es:', servidor);
+        console.log(servidor)
         const conn = await connSQL.conectarSQL(servidor);
-                
+        console.log(1)
         let pool = await conn.connect();
+        console.log(2)
+
         resp = await pool.request()
-            .query(`select s2.StrategyID AS StID from STRATEGY as s1 INNER JOIN STRATEGY AS s2 ON (s1.IOC = s2.IOC and s1.EEC = s2.EEC) and s1.StrategyName = '${TAG}_INT' and s1.StrategyID<0 and s2.StrategyID<0 and s2.StrategyName = 'CATCHER'`)
+            .query(`select IOC,EEC from STRATEGY where StrategyName = '${TAG}_INT' and StrategyID<0`)
+        if (!resp.recordset[0]){
+            resp = json_error;
+            res.json({resp});
+            conn.close();
+            return;
+        }    
+        IOC = resp.recordset[0].IOC
+        EEC = resp.recordset[0].EEC
+        
+        resp = await pool.request()
+            .query(`select top 1 StrategyID as StID from STRATEGY where StrategyName = 'CATCHER' and IOC=${IOC} and EEC=${EEC} and StrategyID<0`)
+        
         if (!resp.recordset[0]){
             resp = json_error;
             res.json({resp});
             conn.close();
             return;
         }
+        console.log(4)
         StID=resp.recordset[0].StID;
+        console.log(StID)
         resp = await pool.request()
         .query(`select spv.StringValue as Interlock from PARAM_DEF as pd inner join TEMPLATE as t on pd.TemplateID=t.TemplateID and t.TemplateName='FirstOut' and pd.ParamName like 'INDESC%'
         inner join STRATEGY_PARAM_VALUE as spv on spv.ParamID=pd.ParamID and spv.StrategyID = ${StID}`)
@@ -345,15 +362,15 @@ const findServer=(TAG) => {
     let servidor;
     if ((area<200) || (area==403) || (area==402) || (area==600)){
         //console.log('PMCLS001');
-        return ('PMCLS001');
+        return ('10.11.2.101');
     }
-    else if ((area<250) && (area>200)){
+    else if ((area<250) && (area>=200)){
         //console.log('PMCLS005');
-        return ('PMCLS005');
+        return ('10.11.2.114');
     }
     else if (area>250){
         //console.log('PMCLS006');
-        return ('PMCLS006');        
+        return ('10.11.2.109');        
     }
     else{
         return;    
