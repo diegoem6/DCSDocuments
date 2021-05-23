@@ -357,6 +357,59 @@ exports.getInterlock = async (req, res)=>{
      }
 }
 
+
+exports.getAlarmasyEventos = async (req, res)=>{
+    //console.log('Desde getAlarmasyEventos del servidor')
+    let resp, StID;
+    const json_error = [{"Alarmas y Eventos": "No hay alarmas y eventos"},{"Alarmas y Eventos": ""}]
+    resp = json_error;
+    
+    try {
+        
+        //const TAG='251_42_030';
+        
+        const idTagDescriptor = req.params.id
+        const tag_descriptor = await TagDescriptor.findById(idTagDescriptor)
+            // console.log(tag_descriptor.tagname)
+        if (!tag_descriptor){
+            console.log("No existe el tag descriptor");
+            return res.status(404).send("No existe el tag descriptor")
+        }
+        let TAG=tag_descriptor.tagname
+        TAG='NDM'
+        const servidor = findServer(TAG);
+        //servidor='localhost';
+        //console.log('El server es:', servidor);
+        
+        //const conn = await connSQL.conectarSQL(servidor);
+        const conn = await connSQL.conectarSQL('localhost');
+        let pool = await conn.connect();
+        resp = await pool.request()
+            /*.query(`SELECT AreaName, Source AS Tagname, Block, AlarmLimit, ConditionName, Description, Action, Priority, Actor, Value, [EMSEvents].dbo.UTCFILETIMEToDateTime(LocalTime) as Fecha FROM [EMSEvents].dbo.Events where Source like '${TAG}'
+            AND dbo.UTCFILETIMEToDateTime(LocalTime) >= DATEADD(day, -1, GETDATE())`)*/
+            .query(`SELECT AreaName, Source AS Tagname, Block, AlarmLimit, ConditionName, Description, Action, Priority, Actor, Value, [EMSEvents].dbo.UTCFILETIMEToDateTime(LocalTime) as Fecha FROM [EMSEvents].dbo.Events where Source like '${TAG}'`)
+        
+        console.log(resp)    
+        if (!resp.recordset[0]){
+            resp = json_error;
+            res.json({resp});
+            conn.close();
+            return;
+        }
+        resp =  resp.recordset;
+        res.json({resp});
+        console.log(res);
+        conn.close();
+        return;
+        
+     } catch (error) {
+         console.log(error);
+         res.status(500).send("Error al visualizar las alarmas y eventos")
+     }
+}
+
+
+
 const findServer=(TAG) => {
     const area=parseInt(TAG.substring(0, 3),10);
     let servidor;

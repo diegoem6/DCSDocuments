@@ -52,3 +52,5 @@ export const    RESET_MESSAGE           =   "RESET_MESSAGE"
 export const    SHOW_ERROR              =   "SHOW_ERROR"
 
 export const    GET_INTERLOCKS      =   "GET_INTERLOCKS"
+export const    GET_AYE      =   "GET_AYE"
+export const    GET_FOTOS      =   "GET_FOTOS"

@@ -18,7 +18,9 @@ import {
     CREATE_DOCUMENT,
     GET_TAGSDESCRIPTORS_RELATED,
     SELECT_ONLY_DESCRIPTOR,
-    GET_INTERLOCKS} from '../../types/index'
+    GET_INTERLOCKS,
+    GET_AYE,
+    GET_FOTOS} from '../../types/index'
 
 import axiosClient from '../../config/axios'
 
@@ -30,6 +32,8 @@ const TagDescriptorState = props=>{
         tagdescriptors : [],
         searchtagdescriptors: [],
         interlocks : [],
+        alarmasyeventos : [],
+        fotos : null,
         form:false,
         tagname_ok: true, 
         tagdescriptor: null,
@@ -288,6 +292,39 @@ const TagDescriptorState = props=>{
         }
     }
     
+    const getAlarmayEventos = async (id) =>{
+        try {
+            //console.log('El id es ',id)
+            const res = await axiosClient.get(`/api/alarmasyeventos/${id}`) //consulta al server
+            //console.log(res)
+
+            dispatch({
+                type:GET_AYE,
+                payload:res.data.resp //aca tengo el resultado de la consulta al server, y en el reducer es donde le digo que el payload lo guarde en alarmasyeventos
+            })
+            
+
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
+
+    const getFotos = async (tagdescriptor) =>{
+        try {
+            const id = tagdescriptor._id
+            const res = await axiosClient.get(`/api/fotos/${id}`)
+            //console.log(res)
+            dispatch({
+                type:GET_FOTOS,
+                payload:res.data.resp
+            })
+            
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
 
     return (
         <tagDescriptorContext.Provider
@@ -303,6 +340,7 @@ const TagDescriptorState = props=>{
                 showForm, 
                 related: state.related,
                 interlocks: state.interlocks,
+                alarmasyeventos: state.alarmasyeventos,
                 getTagsDescriptors,
                 createTagDescriptor,
                 showError, 
@@ -317,7 +355,9 @@ const TagDescriptorState = props=>{
                 validateTagname,
                 createDocument,
                 selectOnlyDescriptor,
-                getInterlocks
+                getInterlocks,
+                getAlarmayEventos,
+                getFotos
             }}
         >
 

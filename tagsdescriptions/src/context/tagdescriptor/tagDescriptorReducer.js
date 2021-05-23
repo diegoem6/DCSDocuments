@@ -15,7 +15,9 @@ import {
     GET_TAGSDESCRIPTORS_RELATED,
     CREATE_DOCUMENT,
     SELECT_ONLY_DESCRIPTOR,
-    GET_INTERLOCKS} from '../../types/index'
+    GET_INTERLOCKS,
+    GET_AYE,
+    GET_FOTOS} from '../../types/index'
 import { stat } from 'fs'
 
 export default (state,action)=>{
@@ -146,6 +148,20 @@ export default (state,action)=>{
                 ...state,
                 form: true,
                 interlocks: [action.payload],
+                error:false,
+            })
+        case GET_AYE:
+                return ({
+                    ...state,
+                    form: true,
+                    alarmasyeventos: [action.payload],
+                    error:false,
+                })
+        case GET_FOTOS:
+            return ({
+                ...state,
+                form: true,
+                fotos: action.payload,
                 error:false,
             })
         default:

@@ -2,12 +2,14 @@ import React, {useContext} from 'react';
 import { Link } from 'react-router-dom'
 import tagDescriptorContext from "../../context/tagdescriptor/tagDescriptorContext";
 import { confirmAlert } from 'react-confirm-alert';
+
+
 //import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const TagDescriptor = ({tagdescriptor}) => {
-
+    
     const tContext = useContext(tagDescriptorContext)
-    const {deleteTagDescriptor, selectTagDescriptor, showForm} = tContext
+    const {deleteTagDescriptor, selectTagDescriptor, showForm, getAlarmayEventos} = tContext
     const editTagDescriptor = (tagdescriptor)=>{
         selectTagDescriptor(tagdescriptor._id);
         showForm();
@@ -18,6 +20,13 @@ const TagDescriptor = ({tagdescriptor}) => {
         deleteTagDescriptor(tagdescriptor._id)
     }
     
+    const showAlarmayEventoOnClick = () => {
+        localStorage.setItem('tagdescriptorID',tagdescriptor._id) //guardo en el localstorage una variable tagdescriptorID con el dato tagdescriptor._id
+        //getAlarmayEventos(tagdescriptor._id)
+        //props.history.push('/events')
+        window.open('/events') // /events esta definido en app.js
+    }
+   
     const showDialogConfirm = ()=>{
         confirmAlert({
             title: 'Confirmar',
@@ -34,6 +43,7 @@ const TagDescriptor = ({tagdescriptor}) => {
             ]
           });
     }
+
     return ( 
         <li className="tarea sombra">
             <p>{tagdescriptor.tagname} </p>
@@ -47,6 +57,12 @@ const TagDescriptor = ({tagdescriptor}) => {
                     className="btn btn-primario">
                     Ver
                 </a> */}
+                <button 
+                    type="button"
+                    className="btn btn-terciario"
+                    onClick = {()=>{showAlarmayEventoOnClick(tagdescriptor)}}
+                > Alarmas </button>
+                
                 <button 
                     type="button"
                     className="btn btn-primario"
