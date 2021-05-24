@@ -361,7 +361,7 @@ exports.getInterlock = async (req, res)=>{
 exports.getAlarmasyEventos = async (req, res)=>{
     //console.log('Desde getAlarmasyEventos del servidor')
     let resp, StID;
-    const json_error = [{"Alarmas y Eventos": "No hay alarmas y eventos"},{"Alarmas y Eventos": ""}]
+    const json_error = [{"Alarmas y Eventos": "No hay alarmas y eventos"}]
     resp = json_error;
     
     try {

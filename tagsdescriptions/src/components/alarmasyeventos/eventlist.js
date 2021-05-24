@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import tagDescriptorContext from "../../context/tagdescriptor/tagDescriptorContext";
 import ReactPaginate from 'react-paginate';
+import { Fragment } from 'react';
 
 const Eventlist = () => {
     
@@ -22,7 +23,7 @@ const Eventlist = () => {
     useEffect(() => {
             if (tagdescriptorID){
                 getAlarmayEventos(tagdescriptorID)
-                localStorage.removeItem('tagdescriptorID');
+                //localStorage.removeItem('tagdescriptorID');
             }
             else{
                 return <h2>Seleccione un tagname</h2>
@@ -61,24 +62,25 @@ const Eventlist = () => {
 
     return ( 
         <>
-        <h2>Tabla de eventos</h2>
-            <table>
-             <tr>
-                <th>Area</th>
-                <th>Tagname</th>
-                <th>Bloque</th>
-                <th>Limite Alarma</th>
-                <th>Condicion</th>
-                <th>Descripcion</th>
-                <th>Accion</th>
-                <th>Prioridad</th>
-                <th>Actor</th>
-                <th>Valor</th>
-                <th>Fecha</th>
-            </tr>
-            {(alarmasyeventos[0] != null) ?
+        {(alarmasyeventos[0] != null) ?
             (
-                pag.data.slice(pag.offset,pag.offset+pag.perPage).map(alarma =>(
+            <>
+            <h2>Tabla de eventos {alarmasyeventos[0][0].Tagname}</h2>
+                <table>
+                <tr>
+                    <th>Area</th>
+                    <th>Tagname</th>
+                    <th>Bloque</th>
+                    <th>Limite Alarma</th>
+                    <th>Condicion</th>
+                    <th>Descripcion</th>
+                    <th>Accion</th>
+                    <th>Prioridad</th>
+                    <th>Actor</th>
+                    <th>Valor</th>
+                    <th>Fecha</th>
+                </tr>
+                {pag.data.slice(pag.offset,pag.offset+pag.perPage).map(alarma =>(
                     <tr>
                     <td key={alarma.Fecha}>{alarma.AreaName}</td>
                     <td>{alarma.Tagname}</td>
@@ -91,11 +93,14 @@ const Eventlist = () => {
                     <td>{(alarma.Actor)!=null ? (alarma.Actor) : '-----'  }</td>
                     <td>{(alarma.Value)!=null ? (alarma.Value) : '-----'  }</td>
                     <td>{alarma.Fecha}</td>
-                </tr>
-            )))
+                    </tr>
+                ))}
+            </table>
+            </>
+            )
             :(<h2>No existen alarmas y eventos asociados a ese tagname</h2>)
             }
-            </table>
+            
             <div className='paginador'>
             <ReactPaginate
                     previousLabel={"<"}
