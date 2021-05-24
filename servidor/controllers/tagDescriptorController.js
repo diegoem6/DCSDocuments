@@ -366,8 +366,6 @@ exports.getAlarmasyEventos = async (req, res)=>{
     
     try {
         
-        //const TAG='251_42_030';
-        
         const idTagDescriptor = req.params.id
         const tag_descriptor = await TagDescriptor.findById(idTagDescriptor)
             // console.log(tag_descriptor.tagname)
@@ -376,7 +374,7 @@ exports.getAlarmasyEventos = async (req, res)=>{
             return res.status(404).send("No existe el tag descriptor")
         }
         let TAG=tag_descriptor.tagname
-        TAG='NDM'
+        //TAG='NDM'
         const servidor = findServer(TAG);
         //servidor='localhost';
         //console.log('El server es:', servidor);
