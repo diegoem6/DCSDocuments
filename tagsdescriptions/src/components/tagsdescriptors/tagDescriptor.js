@@ -9,7 +9,7 @@ import { confirmAlert } from 'react-confirm-alert';
 const TagDescriptor = ({tagdescriptor}) => {
     
     const tContext = useContext(tagDescriptorContext)
-    const {deleteTagDescriptor, selectTagDescriptor, showForm, getAlarmayEventos} = tContext
+    const {deleteTagDescriptor, selectTagDescriptor, showForm} = tContext
     const editTagDescriptor = (tagdescriptor)=>{
         selectTagDescriptor(tagdescriptor._id);
         showForm();
