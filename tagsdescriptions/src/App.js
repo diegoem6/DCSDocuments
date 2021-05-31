@@ -11,7 +11,7 @@ import AssetState from './context/asset/assetState';
 import SystemState from './context/system/systemState';
 import Menu from './layout/menu';
 import TagDescriptorState from './context/tagdescriptor/tagDescriptorState';
-import Docpdf from './components/tagsdescriptors/docpdf'
+//import Docpdf from './components/tagsdescriptors/docpdf'
 import Eventlist from './components/alarmasyeventos/eventlist'
 
 
@@ -40,7 +40,6 @@ function App() {
                   <Route exact path="/newuser" component={Newuser}/>
                   <PrivateRoute exact path="/tagsdescriptors" component={Tagsdescriptors}/>
                   <PrivateRoute exact path="/assets" component={Assets}/>
-                  <PrivateRoute exact path="/docpdf" component={Docpdf}/>
                   <PrivateRoute exact path="/menu" component={Menu}/>
                   <PrivateRoute exact path="/events" component={Eventlist}/>
                 </Switch>
