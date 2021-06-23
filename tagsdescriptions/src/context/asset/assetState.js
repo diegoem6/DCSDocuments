@@ -10,7 +10,9 @@ import {
     SELECT_ASSET,    
     DELETE_ASSET,
     GET_ASSETS_TREE,
-    RESET_MESSAGE   } from '../../types/index'
+    DESELECT_ASSET,
+    RESET_MESSAGE   
+    } from '../../types/index'
 import axiosClient from '../../config/axios'
 
 
@@ -57,6 +59,8 @@ const AssetState = props=>{
         
     }
 
+    
+
     const addAsset = async asset =>{
 
         try {
@@ -92,6 +96,14 @@ const AssetState = props=>{
             payload:asset
         })
     }
+
+    const deSelectAsset = async ()=>{
+        dispatch({
+            type: DESELECT_ASSET,
+            payload: null
+        })
+    }
+
     const resetMessage = () =>{
         dispatch({
             type: RESET_MESSAGE
@@ -174,7 +186,8 @@ const AssetState = props=>{
                 selectAsset,
                 deleteAsset,
                 getAssetTree,
-                resetMessage
+                resetMessage,
+                deSelectAsset
             }}
         >
             {props.children}

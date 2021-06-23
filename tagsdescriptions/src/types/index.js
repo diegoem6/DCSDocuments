@@ -46,11 +46,17 @@ export const    VALIDATE_ASSET      =   "VALIDATE_ASSET"
 export const    SELECT_ASSET        =   "SELECT_ASSET"
 export const    DELETE_ASSET        =   "DELETE_ASSET"
 export const    GET_ASSETS_TREE     =   "GET_ASSETS_TREE"
+export const    DESELECT_ASSET      =   "DESELECT_ASSET"
 
 
-export const    RESET_MESSAGE           =   "RESET_MESSAGE"
-export const    SHOW_ERROR              =   "SHOW_ERROR"
+export const    RESET_MESSAGE       =   "RESET_MESSAGE"
+export const    SHOW_ERROR          =   "SHOW_ERROR"
 
 export const    GET_INTERLOCKS      =   "GET_INTERLOCKS"
-export const    GET_AYE      =   "GET_AYE"
-export const    GET_FOTOS      =   "GET_FOTOS"
+export const    GET_AYE             =   "GET_AYE"
+export const    GET_FOTOS           =   "GET_FOTOS"
+
+
+export const    SHOW_FORM_NETWORK   =   "HIDE_FORM_NETWORK"
+export const    CREATE_NETWORK_NODE =   "CREATE_NETWORK_NODE"
+export const    GET_NETWORK_NODES =   "GET_NETWORK_NODES"

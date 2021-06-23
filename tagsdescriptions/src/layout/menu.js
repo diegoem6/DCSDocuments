@@ -40,6 +40,14 @@ const Menu = () => {
                                 Descriptores DCS
                             </Link>
                         </div>
+                        <div className="campo-form">
+                            <Link 
+                                to={'/network'}
+                                className="btn btn-block btn-primario"
+                            >
+                                Network DCS
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </Fragment>

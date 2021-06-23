@@ -185,7 +185,7 @@ exports.getTagDescriptor = async (req,res)=>{
         tagdescriptor_temp[0].description = entities.encodeNonUTF(tagdescriptor_temp[0].description)
         tagdescriptor.tagname = tagdescriptor_temp[0].tagname;
         tagdescriptor.description = tagdescriptor_temp[0].description;
-        
+        tagdescriptor._id = tagdescriptor_temp[0]._id
         const tagsDescriptors_related = await TagDescriptor.find({"description":{ $regex : new RegExp(tagdescriptor_temp[0].tagname, "i") } })
         //console.log(tagsDescriptors_related)
         tagdescriptor.tagsDescriptors_related = tagsDescriptors_related;

@@ -5,6 +5,7 @@ import {
     SHOW_ERROR_ASSET,
     VALIDATE_ASSET,  
     SELECT_ASSET,    
+    DESELECT_ASSET,
     DELETE_ASSET, 
     GET_ASSETS_TREE,
     RESET_MESSAGE } from '../../types/index'
@@ -54,6 +55,12 @@ export default (state,action)=>{
                 ...state,
                 asset: state.assets.filter(
                     asset => asset._id === action.payload._id),
+                message:null
+            })
+        case DESELECT_ASSET:
+            return ({
+                ...state,
+                asset: null,
                 message:null
             })
         case DELETE_ASSET:
