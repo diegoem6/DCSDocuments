@@ -68,6 +68,7 @@ const NodesList = () => {
 
     };
 
+
     return ( 
         <Fragment>
             <h2>Nodos de red para el asset: {asset[0].name}</h2>

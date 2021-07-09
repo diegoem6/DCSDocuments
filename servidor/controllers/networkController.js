@@ -118,6 +118,24 @@ exports.getNetworkNodes = async (req,res)=>{
     }
 }
 
+exports.getNetworkNodeModels = async (req,res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+
+    try {
+
+        const networkNodeModels = await NetworkModel.find()
+        res.json({networkNodeModels})
+
+    } catch ({error}) {
+        console.log(error);
+        res.status(500).send({msg:"No se pudo obtener los modelos de los nodos"})
+        
+    }
+}
+
 
 exports.getNetworkNode = async (req,res)=>{
     const errors = validationResult(req);

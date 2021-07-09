@@ -12,10 +12,10 @@ const NewNodeNetwork = () => {
     const {asset} = asContext
 
     const nContext = useContext(networkContext)
-    const {networkNodeSelected, showForm, createNetworkNode, updateNetworkNode} = nContext
+    const {networkNodeSelected, showForm, createNetworkNode, updateNetworkNode, networkmodelos, getNetworkModels, message, resetMessage} = nContext
 
     const aContext = useContext(alertContext)
-    const {showAlert} = aContext
+    const {alert, showAlert} = aContext
 
 
     const [nodeName, setNodeName] = useState('')
@@ -23,9 +23,9 @@ const NewNodeNetwork = () => {
     const [nodeModel, setNodeModel] = useState('')
     const [nodeIP, setNodeIP] = useState('')
 
-
     useEffect(() => { /*tuve que meterlo en un useeffect porque en una funcion entraba dos veces*/
         console.log(networkNodeSelected)
+        getNetworkModels()
         if (networkNodeSelected !== null && networkNodeSelected.length>0){
             console.log(networkNodeSelected)
             const [currentnetworkNode] = networkNodeSelected
@@ -42,15 +42,16 @@ const NewNodeNetwork = () => {
         // eslint-disable-next-line
     }, [networkNodeSelected])
 
-    /*if (selectNetworkNode){
-        console.log('Entro')
-        //setNodeName('Prueba')
-    }*/
+    useEffect(() => {
+        console.log(networkmodelos)
+    }, [networkmodelos])
 
-    // TODO: attachments
-    // const [attachments, setattachments] = useState({
-    //     files:[]
-    // })
+    useEffect(() => { //para los errores
+        if(message){
+            showAlert(message.msg, message.category)
+            resetMessage()
+        }
+    }, [message])
     
     const [icon, seticon] = useState('')
       
@@ -79,6 +80,11 @@ const NewNodeNetwork = () => {
     const onSubmitNodeNetwork = (e)=>{
 
         e.preventDefault();
+
+        if(nodeModel==="")
+            {showAlert("Se debe ingresar un modelo válido", "alerta-error")
+            return
+            }
         const newNetworkNode = {}
         newNetworkNode.nodeName = nodeName;
         newNetworkNode.nodeDescription = nodeDescription;
@@ -99,6 +105,8 @@ const NewNodeNetwork = () => {
        
     return ( 
         <Fragment>
+            {alert? (<div className={`alerta ${alert.category}`}>{alert.msg} </div>)
+                    :null}
                 <h2>Node en el asset: {asset[0].name}</h2>
                 <div className="formNode">
                     <div className="node">
@@ -122,14 +130,18 @@ const NewNodeNetwork = () => {
                                 value ={nodeDescription}
                                 onChange = {onChangeNodeDescription}
                             />
-                             <input  
-                                type="text"
-                                className={`input-text${icon}`}
-                                placeholder="Model"
-                                name="nodeModel"
-                                value ={nodeModel}
-                                onChange = {onChangeNodeModel}
-                            />
+                             <select className={`input-text${icon}`}
+                                onChange={e => setNodeModel(e.target.value)} //actualizo el state
+                                value={nodeModel} //esto es para que se mantenga seleccionado lo que elegi en el combo, sino vuelve al "-- Seleccione --"
+                             >
+                                {networkmodelos ?
+                                networkmodelos.map(networkmodelo=>( //al ser un array puedo utilizar map, que siempre requiere de un key
+                                <option key={networkmodelo._id} value={networkmodelo._id}>{networkmodelo.model}</option>
+                                ))
+                                : null
+                                }
+                             </select>
+                                
                              <input  
                                 type="text"
                                 className={`input-text${icon}`}

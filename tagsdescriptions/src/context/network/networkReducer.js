@@ -6,7 +6,9 @@ import {
     SHOW_ERROR,
     DELETE_NETWORK_NODE,
     SELECT_NETWORK_NODE,
-    UPDATE_NETWORK_NODE
+    UPDATE_NETWORK_NODE,
+    GET_NETWORK_MODELS,
+    RESET_MESSAGE
     } from '../../types/index'
 
 export default (state,action)=>{
@@ -53,6 +55,13 @@ export default (state,action)=>{
                     message:action.payload,
                     error:true
                 })
+            
+        case RESET_MESSAGE:
+            return ({
+                ...state,
+                message:null
+            })
+
         case SELECT_NETWORK_NODE:
             return ({
                 ...state,
@@ -66,6 +75,11 @@ export default (state,action)=>{
                 networkNodeSelected:null,
                 form:!state.form,
                 error:false
+            })
+        case GET_NETWORK_MODELS:
+            return({
+                ...state,
+                networkmodelos: action.payload
             })
         default:
             return state;

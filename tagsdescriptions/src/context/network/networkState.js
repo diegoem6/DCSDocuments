@@ -9,7 +9,9 @@ import {
     UPDATE_NETWORK_NODE,
     DELETE_NETWORK_NODE,
     SELECT_NETWORK_NODE,
-    GET_NETWORK_NODE
+    GET_NETWORK_NODE,
+    GET_NETWORK_MODELS,
+    RESET_MESSAGE
     } from '../../types/index'
 
 import axiosClient from '../../config/axios'
@@ -22,7 +24,8 @@ const NetworkState = props=>{
         form:false,
         networkNodes:[],
         networkNodeSelected:null,
-        message:null
+        message:null,
+        networkmodelos:[]
     }
 
     //Dispatch para ejecutar las acciones
@@ -76,6 +79,12 @@ const NetworkState = props=>{
         }      
     }
 
+    const resetMessage = ()=>{
+        dispatch({
+            type:RESET_MESSAGE
+        })
+    }
+
     const getNetworkNodes = async (asset) =>{
         try {
             const res = await axiosClient.get('/api/network', {params:{asset}})
@@ -100,6 +109,26 @@ const NetworkState = props=>{
         dispatch({
             type: SHOW_ERROR
         })
+    }
+
+    const getNetworkModels = async () =>{
+        try{
+            const res = await axiosClient.get('/api/networkmodels')
+            dispatch({
+                type: GET_NETWORK_MODELS,
+                payload: res.data.networkNodeModels /*mismo nombre que devuelve el controller en el server*/ 
+            })
+        }
+        catch(error){
+            const alert = {
+                msg: error.response.data.msg,
+                category: 'alerta-error'
+            }
+            dispatch({
+                type:SHOW_ERROR,
+                payload:alert
+            })
+        }
     }
 
     const selectNetworkNode = (idNetworkNode) =>{
@@ -153,6 +182,7 @@ const NetworkState = props=>{
                 networkNodes: state.networkNodes,
                 networkNodeSelected: state.networkNodeSelected,
                 error: state.error,
+                networkmodelos: state.networkmodelos,
                 showForm, 
                 createNetworkNode,
                 getNetworkNodes,
@@ -160,7 +190,9 @@ const NetworkState = props=>{
                 updateNetworkNode,
                 showError,
                 selectNetworkNode,
-                deleteNetworkNode
+                deleteNetworkNode,
+                getNetworkModels,
+                resetMessage
             }}
         >
 

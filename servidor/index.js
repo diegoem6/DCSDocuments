@@ -27,6 +27,7 @@ app.use('/api/documents', require('./routes/documents'));
 app.use('/api/interlocks', require('./routes/interlocks'));
 app.use('/api/alarmasyeventos', require('./routes/alarmasyeventos'));
 app.use('/api/network', require('./routes/network'));
+app.use('/api/networkmodels', require('./routes/networkmodels'));
 /*app.get('/api/alarmasyeventos/60a2c8303435ccb4b9e0b63f',function(peticion, respuesta){ //desde el navegador localhost:4000/api/alarmasyeventos
     //le envio al navegador "Peluche"
     respuesta.send("api/alarmasyeventos - GET")

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {Fragment, useContext, useEffect, useState} from 'react';
 import networkContext from "../../context/network/networkContext";
 
 const NetworkStatus = () => {
@@ -37,7 +37,12 @@ const NetworkStatus = () => {
     }, [networkNodeSelected])
 
     return ( 
-        <h1>{nodeName}</h1>
+        <Fragment>
+            <h1>{nodeName}</h1>
+            <h1>{nodeDescription}</h1>
+            <h1>{nodeModel}</h1>
+            <h1>{nodeIP}</h1>
+        </Fragment>
         
 
      );
