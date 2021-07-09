@@ -57,6 +57,10 @@ export const    GET_AYE             =   "GET_AYE"
 export const    GET_FOTOS           =   "GET_FOTOS"
 
 
-export const    SHOW_FORM_NETWORK   =   "HIDE_FORM_NETWORK"
+export const    SHOW_FORM_NETWORK   =   "SHOW_FORM_NETWORK"
 export const    CREATE_NETWORK_NODE =   "CREATE_NETWORK_NODE"
 export const    GET_NETWORK_NODES =   "GET_NETWORK_NODES"
+export const    GET_NETWORK_NODE =   "GET_NETWORK_NODE"
+export const    UPDATE_NETWORK_NODE = "UPDATE_NETWORK_NODE"
+export const    DELETE_NETWORK_NODE = "DELETE_NETWORK_NODE"
+export const    SELECT_NETWORK_NODE = "SELECT_NETWORK_NODE"

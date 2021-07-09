@@ -5,6 +5,7 @@ import Login from './components/auth/login'
 import Newuser from './components/auth/newUser'
 import Tagsdescriptors from './components/tagsdescriptors/tagsDescriptors'
 import Network from './components/network/network'
+import NetworkStatus from './components/network/networkStatus'
 
 import AlertState from './context/alerts/alertState';
 import AuthState from './context/auth/authState';
@@ -45,6 +46,7 @@ function App() {
                     <PrivateRoute exact path="/menu" component={Menu}/>
                     <PrivateRoute exact path="/events" component={Eventlist}/>
                     <PrivateRoute exact path="/network" component={Network}/>
+                    <PrivateRoute exact path="/networkstatus" component={NetworkStatus}/>
                   </Switch>
                 </Router>
               </NetworkState>

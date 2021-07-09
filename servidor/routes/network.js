@@ -16,6 +16,9 @@ router.get('/',
     auth,
     networkController.getNetworkNodes) ;
 
+router.get('/:id',
+    auth,
+    networkController.getNetworkNode) ;
 
 router.put('/:id',
     auth,

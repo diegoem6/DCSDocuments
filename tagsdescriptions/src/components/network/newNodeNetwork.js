@@ -12,7 +12,7 @@ const NewNodeNetwork = () => {
     const {asset} = asContext
 
     const nContext = useContext(networkContext)
-    const {showForm, createNetworkNode} = nContext
+    const {networkNodeSelected, showForm, createNetworkNode, updateNetworkNode} = nContext
 
     const aContext = useContext(alertContext)
     const {showAlert} = aContext
@@ -22,6 +22,31 @@ const NewNodeNetwork = () => {
     const [nodeDescription, setNodeDescription] = useState('')
     const [nodeModel, setNodeModel] = useState('')
     const [nodeIP, setNodeIP] = useState('')
+
+
+    useEffect(() => { /*tuve que meterlo en un useeffect porque en una funcion entraba dos veces*/
+        console.log(networkNodeSelected)
+        if (networkNodeSelected !== null && networkNodeSelected.length>0){
+            console.log(networkNodeSelected)
+            const [currentnetworkNode] = networkNodeSelected
+            setNodeName(currentnetworkNode.nodeName)
+            setNodeDescription(currentnetworkNode.nodeDescription)
+            setNodeModel(currentnetworkNode.nodeModel)
+            setNodeIP(currentnetworkNode.nodeIP)
+        }else{
+            setNodeName('')
+            setNodeDescription('')
+            setNodeModel('')
+            setNodeIP('')
+        }
+        // eslint-disable-next-line
+    }, [networkNodeSelected])
+
+    /*if (selectNetworkNode){
+        console.log('Entro')
+        //setNodeName('Prueba')
+    }*/
+
     // TODO: attachments
     // const [attachments, setattachments] = useState({
     //     files:[]
@@ -32,7 +57,6 @@ const NewNodeNetwork = () => {
  
     
     if (!asset) return null
-
 
     const onChangeNodeName = (e)=>{
         setNodeName(e.target.value)
@@ -61,20 +85,18 @@ const NewNodeNetwork = () => {
         newNetworkNode.nodeModel = nodeModel;
         newNetworkNode.nodeIP = nodeIP;
         newNetworkNode.asset = asset[0]._id;
-        console.log(newNetworkNode)
-        // if (networkNode !== null && networkNode.length>0){
-        //     const [currentNetworkNode] = networkNode
-        //     newNetworkNode._id = currentNetworkNode._id
-        //     updateNetworkNode(newNetworkNode)  
-        // }else{
-         
+        //console.log(newNetworkNode)
+        if(networkNodeSelected===null)
             createNetworkNode(newNetworkNode)
-
+        else{
+            //console.log("Entro Update");
+            newNetworkNode._id=networkNodeSelected[0]._id;
+            updateNetworkNode(newNetworkNode)
+        }
         //}
     }
 
-   
-    
+       
     return ( 
         <Fragment>
                 <h2>Node en el asset: {asset[0].name}</h2>
@@ -111,23 +133,34 @@ const NewNodeNetwork = () => {
                              <input  
                                 type="text"
                                 className={`input-text${icon}`}
-                                placeholder="IP"
+                                placeholder="IP Address"
                                 name="nodeIP"
                                 value ={nodeIP}
                                 onChange = {onChangeNodeIP}
                             />
-                            <input 
+                            {networkNodeSelected===null ?  
+                                (<input 
                                 type="button"
                                 className="btn btn-primario btn-block"
                                 onClick = {onSubmitNodeNetwork}
                                 value = "Agregar Nodo"
-                            />
-                            <input 
-                                type="button"
-                                className="btn btn-primario btn-block"
-                                onClick = {onClickCancelar}
-                                value = "Cancelar"
-                            />
+                                />
+                                )
+                                :
+                                (<input 
+                                    type="button"
+                                    className="btn btn-primario btn-block"
+                                    onClick = {onSubmitNodeNetwork}
+                                    value = "Guadrdar Nodo"
+                                    />
+                                )
+                            }
+                                <input 
+                                    type="button"
+                                    className="btn btn-primario btn-block"
+                                    onClick = {onClickCancelar}
+                                    value = "Cancelar"
+                                />
                             {/* {(tagdescriptor !== null && tagdescriptor.length>0) ?
                         
                                 (<input 
