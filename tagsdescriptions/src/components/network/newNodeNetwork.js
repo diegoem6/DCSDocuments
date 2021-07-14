@@ -65,9 +65,9 @@ const NewNodeNetwork = () => {
     const onChangeNodeDescription = (e)=>{
         setNodeDescription(e.target.value)
     }
-    const onChangeNodeModel = (e)=>{
+    /*const onChangeNodeModel = (e)=>{
         setNodeModel(e.target.value)
-    }
+    }*/
     const onChangeNodeIP = (e)=>{
         setNodeIP(e.target.value)
     }
@@ -92,11 +92,11 @@ const NewNodeNetwork = () => {
         newNetworkNode.nodeIP = nodeIP;
         newNetworkNode.asset = asset[0]._id;
         //console.log(newNetworkNode)
-        if(networkNodeSelected===null)
+        if(networkNodeSelected===null) /*Nuevo*/
             createNetworkNode(newNetworkNode)
-        else{
+        else{ /*update*/ 
             //console.log("Entro Update");
-            newNetworkNode._id=networkNodeSelected[0]._id;
+            newNetworkNode._id=networkNodeSelected[0]._id; /* le agrego el ID porque es existente */
             updateNetworkNode(newNetworkNode)
         }
         //}
@@ -131,10 +131,11 @@ const NewNodeNetwork = () => {
                                 onChange = {onChangeNodeDescription}
                             />
                              <select className={`input-text${icon}`}
-                                onChange={e => setNodeModel(e.target.value)} //actualizo el state
-                                value={nodeModel} //esto es para que se mantenga seleccionado lo que elegi en el combo, sino vuelve al "-- Seleccione --"
+                                onChange={e => setNodeModel(e.target.value)}
+                                value={nodeModel} //esto es para que se mantenga seleccionado lo que elegi en el combo, sino vuelve al que estaba antes
                              >
-                                {networkmodelos ?
+                                {//cargo todos los modelos:
+                                networkmodelos ?
                                 networkmodelos.map(networkmodelo=>( //al ser un array puedo utilizar map, que siempre requiere de un key
                                 <option key={networkmodelo._id} value={networkmodelo._id}>{networkmodelo.model}</option>
                                 ))

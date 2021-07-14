@@ -97,7 +97,6 @@ exports.getNetworkNodes = async (req,res)=>{
     }
 
     try {
-        
         const {asset} = req.query;
         //existe el asset?
         //console.log(asset)
@@ -136,6 +135,33 @@ exports.getNetworkNodeModels = async (req,res)=>{
     }
 }
 
+exports.getNetworkModelByID = async(req, res) =>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+
+    try {
+        //revisar el id
+        const idModelo = req.params.id
+        //console.log(idModelo)
+        //console.log('El ID es: ',idNodo)
+        const networkModel_get = await NetworkModel.findById(idModelo)
+        //console.log('El nodo es: ',networkModel_get)
+        if (!networkModel_get){
+            console.log("No existe el modelo del nodo de red");
+            return res.status(404).send("No existe el modelo del nodo de red")
+        }
+        
+        //envío el modelo del nodo
+        res.json({networkModel_get})
+
+    } catch ({error}) {
+        console.log(error);
+        res.status(500).send({msg:"No se pudo procesar el modelo del nodo de red, contacte a un administrador"})
+        
+    }
+}
 
 exports.getNetworkNode = async (req,res)=>{
     const errors = validationResult(req);

@@ -8,6 +8,7 @@ import {
     SELECT_NETWORK_NODE,
     UPDATE_NETWORK_NODE,
     GET_NETWORK_MODELS,
+    GET_NETWORK_MODEL,
     RESET_MESSAGE
     } from '../../types/index'
 
@@ -80,6 +81,11 @@ export default (state,action)=>{
             return({
                 ...state,
                 networkmodelos: action.payload
+            })
+        case GET_NETWORK_MODEL:
+            return({
+                ...state,
+                networkmodelo: action.payload
             })
         default:
             return state;

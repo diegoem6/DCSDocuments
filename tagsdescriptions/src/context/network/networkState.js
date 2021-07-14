@@ -11,6 +11,7 @@ import {
     SELECT_NETWORK_NODE,
     GET_NETWORK_NODE,
     GET_NETWORK_MODELS,
+    GET_NETWORK_MODEL,
     RESET_MESSAGE
     } from '../../types/index'
 
@@ -25,7 +26,8 @@ const NetworkState = props=>{
         networkNodes:[],
         networkNodeSelected:null,
         message:null,
-        networkmodelos:[]
+        networkmodelos:[],
+        networkmodelo:null
     }
 
     //Dispatch para ejecutar las acciones
@@ -131,6 +133,23 @@ const NetworkState = props=>{
         }
     }
 
+    const getNetworkModel = async(idNetworkModel) =>{
+        try {
+            const res = await axiosClient.get(`/api/networkmodels/${idNetworkModel}`);
+            //console.log('En El network state:', res)
+            console.log('En El network state, el .model es: ', res.data.networkModel_get.model)
+            dispatch({
+                type:GET_NETWORK_MODEL,
+                payload:res.data.networkModel_get /*mismo nombre que devuelve el controller en el server*/
+            })
+        } catch (error) {
+            const alert = {
+                msg:"No existe el modelo del nodo de red",
+                category:"alerta-error"
+            }
+        }
+    }
+
     const selectNetworkNode = (idNetworkNode) =>{
         dispatch({
             type: SELECT_NETWORK_NODE,
@@ -147,7 +166,7 @@ const NetworkState = props=>{
             })
         } catch (error) {
             const alert = {
-                msg:"hubo un error eliminando el node de red",
+                msg:"hubo un error eliminando el nodo de red",
                 category:"alerta-error"
             }
             dispatch({
@@ -183,6 +202,7 @@ const NetworkState = props=>{
                 networkNodeSelected: state.networkNodeSelected,
                 error: state.error,
                 networkmodelos: state.networkmodelos,
+                networkmodelo: state.networkmodelo,
                 showForm, 
                 createNetworkNode,
                 getNetworkNodes,
@@ -192,6 +212,7 @@ const NetworkState = props=>{
                 selectNetworkNode,
                 deleteNetworkNode,
                 getNetworkModels,
+                getNetworkModel,
                 resetMessage
             }}
         >

@@ -15,11 +15,11 @@ router.post('/',
 router.get('/',
     auth,
     networkController.getNetworkNodeModels) ;
-/*
+
 router.get('/:id',
     auth,
-    networkController.getNetworkNode) ;
-
+    networkController.getNetworkModelByID) ;
+/*
 router.put('/:id',
     auth,
     networkController.updateNetworkNode) ;
