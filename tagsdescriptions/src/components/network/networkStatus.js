@@ -1,6 +1,5 @@
 import React, {Fragment, useContext, useEffect, useState} from 'react';
 import networkContext from "../../context/network/networkContext";
-import imagenes from './img/imgenes';
 
 const NetworkStatus = () => {
 
@@ -44,17 +43,7 @@ const NetworkStatus = () => {
         }
     }, [networkmodelo])
 
-    const getImageModel =()=> {
-        switch (networkmodelo.model){
-            case "Cisco 2960":
-                return(imagenes.cisco_2960)
-            case "Cisco 3750":
-                return(imagenes.cisco_3750)
-                case "Cisco 3850":
-                    return(imagenes.cisco_3850)
-        }
 
-    }
     return ( 
         <Fragment>
             <h1>{nodeName}</h1>
@@ -62,9 +51,7 @@ const NetworkStatus = () => {
             <h1>{nodeModel}</h1>
             <h1>{nodeIP}</h1>
             {networkmodelo?
-                <img class="status_modelo_imagen" src={getImageModel()} alt={networkmodelo.model}/>
-                //<img src={imagenes.cisco_2960} alt={networkmodelo.model}/>
-                //<img src="img/cisco_2960.PNG" alt="imagen2"/> 
+                <img class="status_modelo_imagen" src={networkmodelo.url} alt={networkmodelo.url}/>
             : null
             }
         </Fragment>
