@@ -37,8 +37,8 @@ const NetworkNode = ({networkNode}) => {
                 onClick: () => deleteNetworkNodeOnCick()
               },
               {
-                label: 'No',
-                onClick: () => console.log("no")
+                label: 'No'
+                //onClick: () => console.log("no")
               }
             ]
           });
@@ -73,9 +73,9 @@ const NetworkNode = ({networkNode}) => {
                     type="button"
                     className="btn btn-secundario"
                     onClick={()=>
-                        {console.log("Entrooooo")
-                        localStorage.setItem('networkstatusID',networkNode._id) //guardo en el localstorage una variable tagdescriptorID con el dato tagdescriptor._id
-                        window.open('/networkstatus') // /events esta definido en app.js
+                        {
+                            localStorage.setItem('networkstatusID',networkNode._id) //guardo en el localstorage una variable tagdescriptorID con el dato tagdescriptor._id
+                            window.open('/networkstatus') // /events esta definido en app.js
                         }
                         /*<NetworkStatus />*/
                     }

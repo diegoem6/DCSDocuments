@@ -24,10 +24,10 @@ const NewNodeNetwork = () => {
     const [nodeIP, setNodeIP] = useState('')
 
     useEffect(() => { /*tuve que meterlo en un useeffect porque en una funcion entraba dos veces*/
-        console.log(networkNodeSelected)
+        //console.log(networkNodeSelected)
         getNetworkModels()
         if (networkNodeSelected !== null && networkNodeSelected.length>0){
-            console.log(networkNodeSelected)
+            //console.log(networkNodeSelected)
             const [currentnetworkNode] = networkNodeSelected
             setNodeName(currentnetworkNode.nodeName)
             setNodeDescription(currentnetworkNode.nodeDescription)
@@ -42,9 +42,9 @@ const NewNodeNetwork = () => {
         // eslint-disable-next-line
     }, [networkNodeSelected])
 
-    useEffect(() => {
-        console.log(networkmodelos)
-    }, [networkmodelos])
+    // useEffect(() => {
+    //     console.log(networkmodelos)
+    // }, [networkmodelos])
 
     useEffect(() => { //para los errores
         if(message){
@@ -134,10 +134,11 @@ const NewNodeNetwork = () => {
                                 onChange={e => setNodeModel(e.target.value)}
                                 value={nodeModel} //esto es para que se mantenga seleccionado lo que elegi en el combo, sino vuelve al que estaba antes
                              >
+                                <option key="asdasd" value="">Seleccione un modelo</option>
                                 {//cargo todos los modelos:
                                 networkmodelos ?
-                                networkmodelos.map(networkmodelo=>( //al ser un array puedo utilizar map, que siempre requiere de un key
-                                <option key={networkmodelo._id} value={networkmodelo._id}>{networkmodelo.model}</option>
+                                    networkmodelos.map(networkmodelo=>( //al ser un array puedo utilizar map, que siempre requiere de un key
+                                    <option key={networkmodelo._id} value={networkmodelo._id}>{networkmodelo.model}</option>
                                 ))
                                 : null
                                 }

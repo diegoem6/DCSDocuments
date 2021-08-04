@@ -29,7 +29,6 @@ const NodesList = () => {
     useEffect(() => {
         const listNetworkNodes = ()=>{
             if (asset){
-                console.log(asset[0]._id)
                 getNetworkNodes(asset[0]._id)
             }
         }

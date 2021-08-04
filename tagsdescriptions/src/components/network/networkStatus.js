@@ -1,5 +1,6 @@
 import React, {Fragment, useContext, useEffect, useState} from 'react';
 import networkContext from "../../context/network/networkContext";
+import ReactPaginate from 'react-paginate';
 
 const NetworkStatus = () => {
 
@@ -12,7 +13,15 @@ const NetworkStatus = () => {
     const [nodeModel, setnodeModel]=useState("")
     const [nodeIP, setnodeIP]=useState("")
 
-    
+    const [pag, setPag] = useState(
+        {
+            offset:0,
+            perPage:12,
+            currentPage:0,
+            pageCount:0,
+            data:[]
+        })
+
 
     useEffect(() => {
             if (networkstatusID){
@@ -32,8 +41,17 @@ const NetworkStatus = () => {
             //setnodeModel(getNetworkModel(networkNodeSelected.nodeModel).model)
             getNetworkModel(networkNodeSelected.nodeModel) /* pido el networkmodelo */
             setnodeIP(networkNodeSelected.nodeIP)
+            setPag(
+                 {...pag,
+                     pageCount: Math.ceil(networkNodeSelected.status.length/pag.perPage),
+                     data:networkNodeSelected.status,
+                     offset:0,
+                     currentPage:0
+                 })
         }
     }, [networkNodeSelected])
+
+
 
     useEffect(() => {
         if(networkmodelo){
@@ -42,46 +60,72 @@ const NetworkStatus = () => {
             console.log(networkmodelo.url)
         }
     }, [networkmodelo])
+    
+    const handlePageClick = (e) => {
+        const selectedPage = e.selected;
+        const offset = selectedPage * pag.perPage;
+        setPag(
+            {...pag,
+                currentPage: selectedPage,
+                offset:offset
+            })
 
+    };
 
     return ( 
         <Fragment>
             <h1>{nodeName}</h1>
-            <h1>{nodeDescription}</h1>
-            <h1>{nodeModel}</h1>
-            <h1>{nodeIP}</h1>
+            <h2>{nodeDescription} : {nodeIP}</h2>
             {networkmodelo?
+                
                 <img class="status_modelo_imagen" src={networkmodelo.url} alt={networkmodelo.url}/>
             : null
             }
-            <h2>Tabla de eventos {alarmasyeventos[0][0].Tagname}</h2>
+            <h2></h2>
                 <table>
                 <tr>
-                    <th>Interface</th>
-                    <th>Descripcion</th>
-                    <th>Estado</th>
-                    <th>Vlan</th>
-                    <th>Speed</th>
-                    <th>Duplex</th>
-                    <th>Type</th>
+                    <th width="15%">Interface</th>
+                    <th width="45%">Descripcion</th>
+                    <th width="10%">Estado</th>
+                    <th width="5%" >Vlan</th>
+                    <th width="5%">Speed</th>
+                    <th width="10%">Duplex</th>
+                    <th width="10%">Type</th>
                 </tr>
-                {pag.data.slice(pag.offset,pag.offset+pag.perPage).map(alarma =>(
+                {pag.data.slice(pag.offset,pag.offset+pag.perPage).map(inter =>(
                     <tr>
-                    <td key={alarma.Fecha}>{alarma.AreaName}</td>
-                    <td>{alarma.Tagname}</td>
-                    <td>{(alarma.Block)!=null ? (alarma.Block) : '-----'  }</td>
-                    <td>{(alarma.AlarmLimit)!=null ? (alarma.AlarmLimit) : '-----'  }</td>
-                    <td>{(alarma.ConditionName)!=null ? (alarma.ConditionName) : '-----'  }</td>
-                    <td>{(alarma.Description)!=null ? (alarma.Description) : '-----'  }</td>
-                    <td>{(alarma.Action)!=null ? (alarma.Action) : '-----'  }</td>
-                    <td>{(alarma.Priority)!=null ? (alarma.Priority) : '-----'  }</td>
-                    <td>{(alarma.Actor)!=null ? (alarma.Actor) : '-----'  }</td>
-                    <td>{(alarma.Value)!=null ? (alarma.Value) : '-----'  }</td>
-                    <td>{alarma.Fecha}</td>
+                    <td width="15%" key={inter._id}>{inter.interface}</td>
+                    <td width="45%">{inter.description}</td>
+                    <td width="10%">
+                        {
+                            inter.state === "up" ?
+                                (<img src = "/img/icon_green.svg.png" className="img_status_interface"/>)
+                                :
+                                (<img src = "/img/icon_red.svg.png" className="img_status_interface"/>)
+                        }
+                    </td>
+                    <td width="5%">{inter.vlan}</td>
+                    <td width="5%">{inter.speed}</td>
+                    <td width="10%">{inter.duplex}</td>
+                    <td width="10%">{inter.type}</td>
                     </tr>
                 ))}
+                
             </table>
-
+            <div className = "paginador">
+                <ReactPaginate
+                    previousLabel={"<"}
+                    nextLabel={">"}
+                    breakLabel={"..."}
+                    breakClassName={"break-me"}
+                    pageCount={pag.pageCount}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={handlePageClick}
+                    containerClassName={"pagination"}
+                    subContainerClassName={"pages pagination"}
+                    activeClassName={"active"}/>
+            </div>
         </Fragment>
         
 

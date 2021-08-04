@@ -137,7 +137,6 @@ const NetworkState = props=>{
         try {
             const res = await axiosClient.get(`/api/networkmodels/${idNetworkModel}`);
             //console.log('En El network state:', res)
-            console.log('En El network state, el .model es: ', res.data.networkModel_get.model)
             dispatch({
                 type:GET_NETWORK_MODEL,
                 payload:res.data.networkModel_get /*mismo nombre que devuelve el controller en el server*/
