@@ -54,6 +54,34 @@ const NetworkStatus = () => {
                 <img class="status_modelo_imagen" src={networkmodelo.url} alt={networkmodelo.url}/>
             : null
             }
+            <h2>Tabla de eventos {alarmasyeventos[0][0].Tagname}</h2>
+                <table>
+                <tr>
+                    <th>Interface</th>
+                    <th>Descripcion</th>
+                    <th>Estado</th>
+                    <th>Vlan</th>
+                    <th>Speed</th>
+                    <th>Duplex</th>
+                    <th>Type</th>
+                </tr>
+                {pag.data.slice(pag.offset,pag.offset+pag.perPage).map(alarma =>(
+                    <tr>
+                    <td key={alarma.Fecha}>{alarma.AreaName}</td>
+                    <td>{alarma.Tagname}</td>
+                    <td>{(alarma.Block)!=null ? (alarma.Block) : '-----'  }</td>
+                    <td>{(alarma.AlarmLimit)!=null ? (alarma.AlarmLimit) : '-----'  }</td>
+                    <td>{(alarma.ConditionName)!=null ? (alarma.ConditionName) : '-----'  }</td>
+                    <td>{(alarma.Description)!=null ? (alarma.Description) : '-----'  }</td>
+                    <td>{(alarma.Action)!=null ? (alarma.Action) : '-----'  }</td>
+                    <td>{(alarma.Priority)!=null ? (alarma.Priority) : '-----'  }</td>
+                    <td>{(alarma.Actor)!=null ? (alarma.Actor) : '-----'  }</td>
+                    <td>{(alarma.Value)!=null ? (alarma.Value) : '-----'  }</td>
+                    <td>{alarma.Fecha}</td>
+                    </tr>
+                ))}
+            </table>
+
         </Fragment>
         
 
