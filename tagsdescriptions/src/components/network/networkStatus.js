@@ -76,6 +76,11 @@ const NetworkStatus = () => {
         <Fragment>
             <h1>{nodeName}</h1>
             <h2>{nodeDescription} : {nodeIP}</h2>
+            <div className = "download">
+                <p>show tech <a href="/files/PMSWSY001A_show_tech.txt" target="_blank"><img className="download_icon" src="/img/download.png"/></a></p>
+                <p>show run <a href="/files/PMSWSY001A_show_run.txt" target="_blank"><img className="download_icon" src="/img/download.png"/></a></p>
+            </div>
+            
             {networkmodelo?
                 
                 <img class="status_modelo_imagen" src={networkmodelo.url} alt={networkmodelo.url}/>

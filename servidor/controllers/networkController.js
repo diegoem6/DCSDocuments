@@ -173,12 +173,127 @@ exports.getNetworkNode = async (req,res)=>{
         //revisar el id
         const idNodo = req.params.id
         //console.log('El ID es: ',idNodo)
-        const network_get = await NetworkNode.findById(idNodo)
+        const network_node = await NetworkNode.findById(idNodo)
         //console.log('El nodo es: ',network_get)
-        if (!network_get){
+        if (!network_node){
             console.log("No existe el nodo de red");
             return res.status(404).send("No existe el nodo de red")
         }
+        // aca va la consulta telnet
+        let network_get = network_node.toObject()
+        network_get.status = 
+        
+            [
+                {
+                    interface: "GigabitEthernet1/0/1",
+                    description: "FTE Community Crossover",
+                    state: "up",
+                    vlan: "6",
+                    speed: "1000",
+                    duplex: "full-duplex",
+                    type: "1000BaseTX"
+                },
+                {
+                    interface: "GigabitEthernet1/0/2",
+                    description: "UPLINK - PMSWSY011A",
+                    state: "up",
+                    vlan: "6",
+                    speed: "1000",
+                    duplex: "full-duplex",
+                    type: "1000BaseTX"
+                },
+                {
+                    interface: "GigabitEthernet1/0/3",
+                    description: "UPLINK - PMSWSY021A",
+                    state: "up",
+                    vlan: "6",
+                    speed: "1000",
+                    duplex: "full-duplex",
+                    type: "1000BaseTX"
+                },
+                {
+                    interface: "GigabitEthernet1/0/4",
+                    description: "UPLINK - PMSWSY031A",
+                    state: "up",
+                    vlan: "6",
+                    speed: "1000",
+                    duplex: "full-duplex",
+                    type: "1000BaseTX"
+                },
+                {
+                    interface: "GigabitEthernet1/0/5",
+                    description: "UPLINK - PMSWSY111A",
+                    state: "up",
+                    vlan: "6",
+                    speed: "1000",
+                    duplex: "full-duplex",
+                    type: "1000BaseTX"
+                },
+                {
+                    interface: "GigabitEthernet1/0/6",
+                    description: "UPLINK - PMSWSY211A",
+                    state: "up",
+                    vlan: "6",
+                    speed: "1000",
+                    duplex: "full-duplex",
+                    type: "1000BaseTX"
+                },
+                {
+                    interface: "GigabitEthernet1/0/7",
+                    description: "UPLINK - PMSWSY121A",
+                    state: "up",
+                    vlan: "6",
+                    speed: "1000",
+                    duplex: "full-duplex",
+                    type: "1000BaseTX"
+                },
+                {
+                    interface: "GigabitEthernet1/0/8",
+                    description: "UPLINK - PMSWSY221A",
+                    state: "up",
+                    vlan: "6",
+                    speed: "1000",
+                    duplex: "full-duplex",
+                    type: "1000BaseTX"
+                },
+                {
+                    interface: "GigabitEthernet1/0/9",
+                    description: "UPLINK - PMSWSY251A",
+                    state: "up",
+                    vlan: "6",
+                    speed: "1000",
+                    duplex: "full-duplex",
+                    type: "1000BaseTX"
+                },
+                {
+                    interface: "GigabitEthernet1/0/10",
+                    description: "UPLINK - PMSWSY402A",
+                    state: "up",
+                    vlan: "6",
+                    speed: "1000",
+                    duplex: "full-duplex",
+                    type: "1000BaseTX"
+                },
+                {
+                    interface: "GigabitEthernet1/0/11",
+                    description: "UPLINK - Spare",
+                    state: "down",
+                    vlan: "6",
+                    speed: "1000",
+                    duplex: "full-duplex",
+                    type: "1000BaseTX"
+                },
+                {
+                    interface: "GigabitEthernet1/0/12",
+                    description: "PIMS Firewall",
+                    state: "up",
+                    vlan: "6",
+                    speed: "1000",
+                    duplex: "full-duplex",
+                    type: "1000BaseTX"
+                }
+            ]
+        
         
         //envío el nodo
         res.json({network_get})

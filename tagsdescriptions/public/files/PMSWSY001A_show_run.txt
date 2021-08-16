@@ -1,0 +1,347 @@
+=~=~=~=~=~=~=~=~=~=~=~= PuTTY log 2021.08.05 08:19:38 =~=~=~=~=~=~=~=~=~=~=~=
+CHoneywell FTE Switch
+
+User Access Verification
+
+Username: epksadmin
+Password: 
+PMSWSY001A#terminal length 0
+PMSWSY001A#show unr
+PMSWSY001A#show unr   run
+PMSWSY001A#show running-config 
+Building configuration...
+
+Current configuration : 9078 bytes
+!
+! Last configuration change at 11:27:59 uruguay Thu Jun 24 2021 by epksadmin
+! NVRAM config last updated at 10:09:35 uruguay Thu Feb 20 2020 by epksadmin
+!
+version 12.2
+no service pad
+service tcp-keepalives-in
+service tcp-keepalives-out
+service timestamps debug uptime
+service timestamps log datetime localtime
+service password-encryption
+service sequence-numbers
+no service dhcp
+!
+hostname PMSWSY001A
+!
+boot-start-marker
+boot-end-marker
+!
+logging buffered 10240
+no logging console
+enable secret 5 $1$WfkG$L4TGCbRzNJOFTtY3dWDIW/
+enable password 7 141A1C0C1E55
+!
+username operador privilege 7 password 7 011C1601490A020033
+username epksadmin privilege 15 password 7 011B114A560F1641731C1F5D
+no aaa new-model
+clock timezone uruguay -3
+switch 1 provision ws-c3750g-12s
+system mtu routing 1500
+vtp mode transparent
+ip subnet-zero
+no ip source-route
+no ip gratuitous-arps
+no ip domain-lookup
+ip domain-name PMEPKS
+ip name-server 10.11.2.107
+!
+!
+ip igmp snooping querier
+!
+mls qos srr-queue output dscp-map queue 4 threshold 3 32
+mls qos
+!
+!
+!
+no errdisable detect cause loopback
+errdisable recovery cause udld
+errdisable recovery cause bpduguard
+errdisable recovery cause security-violation
+errdisable recovery cause channel-misconfig
+errdisable recovery cause pagp-flap
+errdisable recovery cause dtp-flap
+errdisable recovery cause link-flap
+errdisable recovery cause sfp-config-mismatch
+errdisable recovery cause gbic-invalid
+errdisable recovery cause l2ptguard
+errdisable recovery cause psecure-violation
+errdisable recovery cause port-mode-failure
+errdisable recovery cause dhcp-rate-limit
+errdisable recovery cause mac-limit
+errdisable recovery cause vmps
+errdisable recovery cause storm-control
+errdisable recovery cause inline-power
+errdisable recovery cause arp-inspection
+errdisable recovery cause loopback
+errdisable recovery cause small-frame
+errdisable recovery interval 180
+!
+!
+!
+spanning-tree mode mst
+no spanning-tree optimize bpdu transmission
+spanning-tree extend system-id
+spanning-tree mst hello-time 1
+spanning-tree mst 0 priority 4096
+!
+vlan internal allocation policy ascending
+!
+vlan 2
+ name NULL
+!
+!
+class-map match-all cda_urgent
+ match access-group 102
+class-map match-all cda_high
+ match access-group 103
+!
+!
+policy-map cda_policy
+ class cda_urgent
+  set ip dscp ef
+ class cda_high
+  set ip dscp cs4
+!
+!
+!
+interface Loopback0
+ no ip address
+!
+interface GigabitEthernet1/0/1
+ description UPLINK - FTE COMMUNITY CROSSOVER
+ switchport mode access
+ srr-queue bandwidth share 1 2 3 4
+ priority-queue out 
+ mls qos trust dscp
+ storm-control broadcast level bps 20m 18m
+ storm-control multicast level bps 20m 18m
+ service-policy input cda_policy
+!
+interface GigabitEthernet1/0/2
+ description UPLINK - PMSWSY011A
+ switchport mode access
+ srr-queue bandwidth share 1 2 3 4
+ priority-queue out 
+ mls qos trust dscp
+ storm-control broadcast level bps 20m 18m
+ storm-control multicast level bps 20m 18m
+ service-policy input cda_policy
+!
+interface GigabitEthernet1/0/3
+ description UPLINK - PMSWSY021A
+ switchport mode access
+ srr-queue bandwidth share 1 2 3 4
+ priority-queue out 
+ mls qos trust dscp
+ storm-control broadcast level bps 20m 18m
+ storm-control multicast level bps 20m 18m
+ service-policy input cda_policy
+!
+interface GigabitEthernet1/0/4
+ description UPLINK - PMSWSY031A
+ switchport mode access
+ srr-queue bandwidth share 1 2 3 4
+ priority-queue out 
+ mls qos trust dscp
+ storm-control broadcast level bps 20m 18m
+ storm-control multicast level bps 20m 18m
+ service-policy input cda_policy
+!
+interface GigabitEthernet1/0/5
+ description UPLINK - PMSWSY111A
+ switchport mode access
+ srr-queue bandwidth share 1 2 3 4
+ priority-queue out 
+ mls qos trust dscp
+ storm-control broadcast level bps 20m 18m
+ storm-control multicast level bps 20m 18m
+ service-policy input cda_policy
+!
+interface GigabitEthernet1/0/6
+ description UPLINK - PMSWSY211A
+ switchport mode access
+ srr-queue bandwidth share 1 2 3 4
+ priority-queue out 
+ mls qos trust dscp
+ storm-control broadcast level bps 20m 18m
+ storm-control multicast level bps 20m 18m
+ service-policy input cda_policy
+!
+interface GigabitEthernet1/0/7
+ description UPLINK - PMSWSY121A
+ switchport mode access
+ srr-queue bandwidth share 1 2 3 4
+ priority-queue out 
+ mls qos trust dscp
+ storm-control broadcast level bps 20m 18m
+ storm-control multicast level bps 20m 18m
+ service-policy input cda_policy
+!
+interface GigabitEthernet1/0/8
+ description UPLINK - PMSWSY221A
+ switchport mode access
+ srr-queue bandwidth share 1 2 3 4
+ priority-queue out 
+ mls qos trust dscp
+ storm-control broadcast level bps 20m 18m
+ storm-control multicast level bps 20m 18m
+ service-policy input cda_policy
+!
+interface GigabitEthernet1/0/9
+ description UPLINK - PMSWSE251A
+ switchport mode access
+ srr-queue bandwidth share 1 2 3 4
+ priority-queue out 
+ mls qos trust dscp
+ storm-control broadcast level bps 20m 18m
+ storm-control multicast level bps 20m 18m
+ service-policy input cda_policy
+!
+interface GigabitEthernet1/0/10
+ description UPLINK - PMSWSE402A
+ switchport mode access
+ srr-queue bandwidth share 1 2 3 4
+ priority-queue out 
+ mls qos trust dscp
+ storm-control broadcast level bps 20m 18m
+ storm-control multicast level bps 20m 18m
+ service-policy input cda_policy
+!
+interface GigabitEthernet1/0/11
+ description UPLINK - SPARE
+ switchport access vlan 2
+ switchport mode access
+ shutdown
+ srr-queue bandwidth share 1 2 3 4
+ priority-queue out 
+ mls qos trust dscp
+ storm-control broadcast level bps 20m 18m
+ storm-control multicast level bps 20m 18m
+ service-policy input cda_policy
+!
+interface GigabitEthernet1/0/12
+ description UPLINK - PIMS FIREWALL
+ switchport mode access
+ srr-queue bandwidth share 1 2 3 4
+ priority-queue out 
+ mls qos trust dscp
+ storm-control broadcast level bps 20m 18m
+ storm-control multicast level bps 20m 18m
+ service-policy input cda_policy
+!
+interface Vlan1
+ description MANAGEMENT
+ ip address 10.11.2.1 255.255.0.0
+ no ip route-cache
+ no ip mroute-cache
+!
+no ip classless
+no ip http server
+!
+ip access-list standard SNMP_RO
+ permit 10.11.2.102
+ permit 10.11.2.101
+ permit 10.11.2.110
+ permit 10.11.2.109
+ permit 10.11.2.115
+ permit 10.11.2.114
+ deny   any
+ip access-list standard TELNET
+ permit 10.11.2.20
+ permit 10.11.2.102
+ permit 10.11.2.101
+ permit 10.11.2.110
+ permit 10.11.2.109
+ permit 10.11.2.115
+ permit 10.11.2.114
+ permit 10.11.2.130
+ permit 10.11.3.253
+ permit 10.11.2.0 0.0.0.15
+ permit 10.11.2.16 0.0.0.3
+!
+logging trap notifications
+logging source-interface Loopback0
+access-list 102 permit tcp any any eq 55554
+access-list 102 permit tcp any eq 55554 any
+access-list 102 permit tcp any any eq 55555
+access-list 102 permit tcp any eq 55555 any
+access-list 102 permit udp any any eq 51914
+access-list 102 permit udp any eq 51914 any
+access-list 102 permit udp any any eq 61453
+access-list 102 permit udp any eq 61453 any
+access-list 102 permit udp any any eq 60665
+access-list 102 permit udp any eq 60665 any
+access-list 103 permit tcp any any eq 55550
+access-list 103 permit tcp any eq 55550 any
+access-list 103 permit tcp any any eq 55551
+access-list 103 permit tcp any eq 55551 any
+access-list 103 permit tcp any any eq 55553
+access-list 103 permit tcp any eq 55553 any
+access-list 103 permit tcp any any eq 55552
+access-list 103 permit tcp any eq 55552 any
+access-list 103 permit tcp any any eq 55556
+access-list 103 permit tcp any eq 55556 any
+access-list 103 permit tcp any eq 502 any
+access-list 103 permit tcp any any eq 502
+access-list 103 permit udp any any eq 2222
+access-list 103 permit udp any eq 2222 any
+access-list 103 permit tcp any eq 40005 any
+access-list 103 permit tcp any any eq 40005
+access-list 103 permit tcp any eq 40006 any
+access-list 103 permit tcp any any eq 40006
+access-list 103 permit tcp any eq 40007 any
+access-list 103 permit tcp any any eq 40007
+access-list 103 permit udp any any eq 44818
+access-list 103 permit udp any eq 44818 any
+access-list 103 permit tcp any any eq 44818
+access-list 103 permit tcp any eq 44818 any
+no cdp run
+snmp-server engineID local 0000000001
+snmp-server community PM RO SNMP_RO
+snmp-server enable traps snmp coldstart warmstart
+snmp-server enable traps envmon fan shutdown supply temperature
+snmp-server host 10.11.2.101 version 2c PM 
+snmp-server host 10.11.2.102 version 2c PM 
+!
+control-plane
+!
+banner login ^CCHoneywell FTE Switch^C
+privilege exec level 15 access-enable
+privilege exec level 15 clear
+privilege exec level 15 connect
+privilege exec level 15 login
+privilege exec level 15 name-connection
+privilege exec level 15 ping
+privilege exec level 15 rcommand
+privilege exec level 15 resume
+privilege exec level 15 rlogin
+privilege exec level 15 systat
+privilege exec level 15 telnet
+privilege exec level 15 terminal
+privilege exec level 15 traceroute
+privilege exec level 15 tunnel
+privilege exec level 15 where
+!
+line con 0
+ exec-timeout 30 0
+ transport preferred telnet
+line vty 0 4
+ access-class TELNET in
+ exec-timeout 5 0
+ login local
+ transport preferred telnet
+ transport input telnet
+line vty 5 15
+ no login
+ transport input none
+!
+ntp clock-period 36025318
+ntp server 10.11.2.107
+end
+
+PMSWSY001A#
