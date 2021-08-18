@@ -4,6 +4,7 @@ const TagDescriptor = require('../models/TagDescriptor')
 const {validationResult} = require('express-validator');
 const NetworkNode = require('../models/NetworkNode');
 const NetworkModel = require ('../models/NetworkNodeModel')
+const {getSNMP,getSNPM_Sync, connectExpectTelnet} = require ('./commController')
 
 exports.addNetworkNode = async (req,res)=>{
     const errors = validationResult(req);
@@ -179,123 +180,82 @@ exports.getNetworkNode = async (req,res)=>{
             console.log("No existe el nodo de red");
             return res.status(404).send("No existe el nodo de red")
         }
-        // aca va la consulta telnet
+       
+       
+        
+        
+        // const getHostname = (pHostname) =>{
+        //     hostname = pHostname
+        // }
+        //console.log(getHostname(pHostname))
+       
+        const hostname = await getSNPM_Sync("192.168.0.15","public",['1.3.6.1.2.1.1.5.0'])
+        console.log(hostname)
+        
         let network_get = network_node.toObject()
-        network_get.status = 
+        network_get.status = []
+        cant_puertos=12
+        let item = {
+            interface: "",
+            description: "",
+            state: "",
+            vlan: "",
+            speed: "",
+            duplex: "full-duplex",
+            type: "1000BaseTX"
+        }
+        let oid_name;
+        let oid_desc;
+        let oid_state;
+        let oid_speed;
+        let oid_vlan;
+        let oid_alias;
+        let x = 1
+        while (x<=cant_puertos){
+            if (x > 9){
+                oid_name="1.3.6.1.2.1.31.1.1.1.1.101"
+                oid_desc="1.3.6.1.2.1.31.1.1.1.18.101"
+                oid_state="1.3.6.1.2.1.2.2.1.8.101"
+                oid_speed="1.3.6.1.2.1.2.2.1.5.101"
+                oid_vlan="1.3.6.1.4.1.9.9.68.1.2.2.1.2.101"
+                oid_alias="1.3.6.1.2.1.31.1.1.1.18.101"
+            }else{
+                oid_name="1.3.6.1.2.1.31.1.1.1.1.1010"
+                oid_desc="1.3.6.1.2.1.31.1.1.1.18.1010"
+                oid_state="1.3.6.1.2.1.2.2.1.8.1010"
+                oid_speed="1.3.6.1.2.1.2.2.1.5.1010"
+                oid_vlan="1.3.6.1.4.1.9.9.68.1.2.2.1.2.1010"
+                oid_alias="1.3.6.1.2.1.31.1.1.1.18.1010"
+            }
+            
+            oid_name=oid_name+x
+            item.interface = await getSNPM_Sync(network_get.nodeIP,"public",[oid_name])
+            oid_desc=oid_desc+x
+            item.description = await getSNPM_Sync(network_get.nodeIP,"public",[oid_desc])
+            oid_state=oid_state+x
+            item.state = await getSNPM_Sync(network_get.nodeIP,"public",[oid_state])
+            item.state === "1" ? item.state = "up" : item.state = "down"
+            oid_speed=oid_speed+x
+            item.speed = await getSNPM_Sync(network_get.nodeIP,"public",[oid_speed])
+            item.speed = parseInt(item.speed)/1000000
+
+            oid_vlan=oid_vlan+x
+            item.vlan = await getSNPM_Sync(network_get.nodeIP,"public",[oid_vlan])
+            
+            x+=1
+            network_get.status.push(item);
+            item = {
+                interface: "",
+                description: "",
+                state: "",
+                vlan: "",
+                speed: "",
+                duplex: "full-duplex",
+                type: "1000BaseTX"
+            }
+            
+        }
         
-            [
-                {
-                    interface: "GigabitEthernet1/0/1",
-                    description: "FTE Community Crossover",
-                    state: "up",
-                    vlan: "6",
-                    speed: "1000",
-                    duplex: "full-duplex",
-                    type: "1000BaseTX"
-                },
-                {
-                    interface: "GigabitEthernet1/0/2",
-                    description: "UPLINK - PMSWSY011A",
-                    state: "up",
-                    vlan: "6",
-                    speed: "1000",
-                    duplex: "full-duplex",
-                    type: "1000BaseTX"
-                },
-                {
-                    interface: "GigabitEthernet1/0/3",
-                    description: "UPLINK - PMSWSY021A",
-                    state: "up",
-                    vlan: "6",
-                    speed: "1000",
-                    duplex: "full-duplex",
-                    type: "1000BaseTX"
-                },
-                {
-                    interface: "GigabitEthernet1/0/4",
-                    description: "UPLINK - PMSWSY031A",
-                    state: "up",
-                    vlan: "6",
-                    speed: "1000",
-                    duplex: "full-duplex",
-                    type: "1000BaseTX"
-                },
-                {
-                    interface: "GigabitEthernet1/0/5",
-                    description: "UPLINK - PMSWSY111A",
-                    state: "up",
-                    vlan: "6",
-                    speed: "1000",
-                    duplex: "full-duplex",
-                    type: "1000BaseTX"
-                },
-                {
-                    interface: "GigabitEthernet1/0/6",
-                    description: "UPLINK - PMSWSY211A",
-                    state: "up",
-                    vlan: "6",
-                    speed: "1000",
-                    duplex: "full-duplex",
-                    type: "1000BaseTX"
-                },
-                {
-                    interface: "GigabitEthernet1/0/7",
-                    description: "UPLINK - PMSWSY121A",
-                    state: "up",
-                    vlan: "6",
-                    speed: "1000",
-                    duplex: "full-duplex",
-                    type: "1000BaseTX"
-                },
-                {
-                    interface: "GigabitEthernet1/0/8",
-                    description: "UPLINK - PMSWSY221A",
-                    state: "up",
-                    vlan: "6",
-                    speed: "1000",
-                    duplex: "full-duplex",
-                    type: "1000BaseTX"
-                },
-                {
-                    interface: "GigabitEthernet1/0/9",
-                    description: "UPLINK - PMSWSY251A",
-                    state: "up",
-                    vlan: "6",
-                    speed: "1000",
-                    duplex: "full-duplex",
-                    type: "1000BaseTX"
-                },
-                {
-                    interface: "GigabitEthernet1/0/10",
-                    description: "UPLINK - PMSWSY402A",
-                    state: "up",
-                    vlan: "6",
-                    speed: "1000",
-                    duplex: "full-duplex",
-                    type: "1000BaseTX"
-                },
-                {
-                    interface: "GigabitEthernet1/0/11",
-                    description: "UPLINK - Spare",
-                    state: "down",
-                    vlan: "6",
-                    speed: "1000",
-                    duplex: "full-duplex",
-                    type: "1000BaseTX"
-                },
-                {
-                    interface: "GigabitEthernet1/0/12",
-                    description: "PIMS Firewall",
-                    state: "up",
-                    vlan: "6",
-                    speed: "1000",
-                    duplex: "full-duplex",
-                    type: "1000BaseTX"
-                }
-            ]
-        
-        
-        //envío el nodo
         res.json({network_get})
 
 
