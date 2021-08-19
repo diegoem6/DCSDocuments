@@ -78,10 +78,16 @@ exports.getSNMP = async (ip, commmunity, oids, res)=>{
       });
   }
 
-exports.connectTelnetShowRun = (hostname, ip)=>{
+exports.connectTelnetShow = (hostname, ip, tipo)=>{
 
   console.log('El hostname es:', hostname, ' y la ip es ', ip)
-//  et(`${ip}#:23`, [  
+  let comando=""
+  if (tipo==="RUN"){
+    comando="show run\r"
+  }else if(tipo==="TECH"){
+    comando="show tech\r"
+  }
+  //  et(`${ip}#:23`, [  
   et(`${ip}:23`, [
       //{expect: "Password", send: "hw.mdp.2014\r"},
       {expect: "Password", send: "Honeywell1\r"},
@@ -89,11 +95,13 @@ exports.connectTelnetShowRun = (hostname, ip)=>{
       //{expect: "Password", send: "hw.mdp.2014\r"},
       {expect: "Password", send: "Honeywell1\r"},
       {expect: "#" , send: "terminal length 0\r"}, //para que no compagine y no aparezca el --More--
-      {expect: "#" , send: "show run\r"},
+      {expect: "#" , send: comando},
+      //{expect: "#" , send: "show run\r"},
       {expect: `${hostname}#`, out: function(output) {
-        fs.writeFile(`../tagsdescriptions/public/files/${hostname}-show_run.txt`, output, function (err) {
+        fs.writeFile(`../tagsdescriptions/public/files/${hostname}-show_${tipo}.txt`, output, function (err) {
           if (err) return console.log(err);
-          console.log('Terminó SHOW RUN...');
+          console.log('Terminó SHOW ', comando, '---');
+          return(`${hostname}-show_${tipo}.txt`) // devuelvo el nombre del archivo
         });
         //console.log(output);
       }, send: "\r"},

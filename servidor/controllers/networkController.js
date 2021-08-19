@@ -4,7 +4,7 @@ const TagDescriptor = require('../models/TagDescriptor')
 const {validationResult} = require('express-validator');
 const NetworkNode = require('../models/NetworkNode');
 const NetworkModel = require ('../models/NetworkNodeModel')
-const {getSNMP,getSNPM_Sync, connectTelnetShowRun, connectTelnetShowTech} = require ('./commController');
+const {getSNMP,getSNPM_Sync, connectTelnetShow} = require ('./commController');
 const NetworkNodeModel = require('../models/NetworkNodeModel');
 
 exports.addNetworkNode = async (req,res)=>{
@@ -348,8 +348,11 @@ exports.createNetworkNodeShowRun = async (req, res)=>{
 
     try {
 
-        const {ip, tipo} = req.query.data
-        console.log('(servidor)El IP es: ', ip, ' y el tipo es: ', tipo)
+        const {data} = req.query
+        //console.log("----", JSON.parse(data))
+        const {ip, tipo} = JSON.parse(data)
+        //console.log(ip, "-",tipo)
+        //console.log('(servidor)El IP es: ', ip, ' y el tipo es: ', tipo)
         //const tipo = req.params.tipo
         //console.log('El tipo es: ', tipo)
         const hostname = await getSNPM_Sync(ip,"public",['1.3.6.1.2.1.1.5.0'])
@@ -359,8 +362,11 @@ exports.createNetworkNodeShowRun = async (req, res)=>{
             return res.status(404).send("No existe el nodo de red solicitado")
         }
 
-        const show_run = await connectTelnetShowRun(hostname, ip) //aca guardo el archivo, ver como aviso con urlDoc
-        console.log(show_run)
+        console.log("Antes de llamar TELNET")
+        const filename = await connectTelnetShow(hostname, ip, tipo) //aca guardo el archivo, ver como aviso con urlDoc
+        filename="Switch-show_TECH.txt"
+        console.log("NOMBRE", filename)
+        res.json({filename})
 
     } catch ({error}) {
         console.log(error);

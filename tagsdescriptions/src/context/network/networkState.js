@@ -209,10 +209,11 @@ const NetworkState = props=>{
             //const res = await axiosClient.get('/api/networkShow', {params:{ip}});
             //funciona:
             const res = await axiosClient.get('/api/networkShow',{params:{data}});
+            console.log(res.data.filename)
             //const res = await axiosClient.get(`/api/networkShow/${data}`);
             dispatch({
                 type: CREATE_NETWORK_SHOW_RUN,
-                payload: res.data
+                payload: res.data.filename
             })
             
         } catch (error) {

@@ -81,8 +81,10 @@ const NetworkStatus = () => {
         
         //console.log("LLEGO")
         //console.log(tipo)
-        //if(networkNodeSelected)
-            createNetworkNodeShowRun('192.168.0.254', tipo)
+        if(networkNodeSelected)
+            {createNetworkNodeShowRun(networkNodeSelected.nodeIP, tipo)
+            //console.log("Llamo ", tipo)
+            }
         //createDocument(systemSelected._id)
     }
 
@@ -91,8 +93,8 @@ const NetworkStatus = () => {
             <h1>{nodeName}</h1>
             <h2>{nodeDescription} : {nodeIP}</h2>
             <div className = "download">
-                <p>show run <a onClick={onClickCreateShowRun("Run")} target="_blank"><img className="download_icon" src="/img/download.png"/></a></p>
-                <p>show tech <a onClick={onClickCreateShowRun("Tech")} target="_blank"><img className="download_icon" src="/img/download.png"/></a></p>
+                <p>show run <a onClick={()=>onClickCreateShowRun("RUN")} target="_blank"><img className="download_icon" src="/img/download.png"/></a></p>
+                <p>show tech <a onClick={()=>onClickCreateShowRun("TECH")} target="_blank"><img className="download_icon" src="/img/download.png"/></a></p>
             </div>
             
             {networkmodelo?
