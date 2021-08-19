@@ -6,7 +6,7 @@ const NetworkStatus = () => {
 
     const networkstatusID=localStorage.getItem('networkstatusID');
     const tContext = useContext(networkContext)
-    const {getNetworkNode, networkNodeSelected, getNetworkModel, networkmodelo} = tContext
+    const {getNetworkNode, networkNodeSelected, getNetworkModel, networkmodelo, urlDoc, createNetworkNodeShowRun} = tContext
     //let {nodeName, nodeDescription, nodeModel, nodeIP}="sss"
     const [nodeName, setnodeName]=useState("")
     const [nodeDescription, setnodeDescription]=useState("")
@@ -21,7 +21,12 @@ const NetworkStatus = () => {
             pageCount:0,
             data:[]
         })
-
+    
+    useEffect(() => {
+        if(urlDoc){
+            window.open(`../../../files/${urlDoc}`,'_blank') //poner la ruta
+        }    
+    }, [urlDoc])
 
     useEffect(() => {
             if (networkstatusID){
@@ -72,13 +77,22 @@ const NetworkStatus = () => {
 
     };
 
+    const onClickCreateShowRun = async (tipo)=>{
+        
+        //console.log("LLEGO")
+        //console.log(tipo)
+        //if(networkNodeSelected)
+            createNetworkNodeShowRun('192.168.0.254', tipo)
+        //createDocument(systemSelected._id)
+    }
+
     return ( 
         <Fragment>
             <h1>{nodeName}</h1>
             <h2>{nodeDescription} : {nodeIP}</h2>
             <div className = "download">
-                <p>show tech <a href="/files/PMSWSY001A_show_tech.txt" target="_blank"><img className="download_icon" src="/img/download.png"/></a></p>
-                <p>show run <a href="/files/PMSWSY001A_show_run.txt" target="_blank"><img className="download_icon" src="/img/download.png"/></a></p>
+                <p>show run <a onClick={onClickCreateShowRun("Run")} target="_blank"><img className="download_icon" src="/img/download.png"/></a></p>
+                <p>show tech <a onClick={onClickCreateShowRun("Tech")} target="_blank"><img className="download_icon" src="/img/download.png"/></a></p>
             </div>
             
             {networkmodelo?
@@ -88,31 +102,39 @@ const NetworkStatus = () => {
             }
             <h2></h2>
                 <table>
-                <tr>
-                    <th width="15%">Interface</th>
-                    <th width="45%">Descripcion</th>
-                    <th width="10%">Estado</th>
-                    <th width="5%" >Vlan</th>
-                    <th width="5%">Speed</th>
-                    <th width="10%">Duplex</th>
-                    <th width="10%">Type</th>
-                </tr>
+                    <tr>
+                        <th width="15%">Interface</th>
+                        <th width="55%">Descripcion</th>
+                        <th width="10%">Estado</th>
+                        <th width="5%" >Vlan</th>
+                        <th width="5%">Speed</th>
+                        <th width="10%">Duplex</th>
+                    </tr>
                 {pag.data.slice(pag.offset,pag.offset+pag.perPage).map(inter =>(
                     <tr>
-                    <td width="15%" key={inter._id}>{inter.interface}</td>
-                    <td width="45%">{inter.description}</td>
-                    <td width="10%">
-                        {
-                            inter.state === "up" ?
-                                (<img src = "/img/icon_green.svg.png" className="img_status_interface"/>)
+                        <td width="15%" key={inter._id}>{inter.interface}</td>
+                        <td width="55%">{inter.description}</td>
+                        <td width="10%">
+                            {
+                                inter.state === "up" ?
+                                    (<img src = "/img/icon_green.svg.png" className="img_status_interface"/>)
+                                    :
+                                    (<img src = "/img/icon_red.svg.png" className="img_status_interface"/>)
+                            }
+                        </td>
+                        <td width="5%">{inter.vlan}</td>
+                        <td width="5%">{inter.speed}</td>
+                        <td width="10%">
+                            {inter.duplex === "1"?
+                                "Unknown"
+                            :
+                                (inter.duplex === "2"?
+                                    "Half-Duplex"
                                 :
-                                (<img src = "/img/icon_red.svg.png" className="img_status_interface"/>)
-                        }
-                    </td>
-                    <td width="5%">{inter.vlan}</td>
-                    <td width="5%">{inter.speed}</td>
-                    <td width="10%">{inter.duplex}</td>
-                    <td width="10%">{inter.type}</td>
+                                    "Full Duplex"
+                                )
+                            }
+                        </td>
                     </tr>
                 ))}
                 

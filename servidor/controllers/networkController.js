@@ -4,7 +4,8 @@ const TagDescriptor = require('../models/TagDescriptor')
 const {validationResult} = require('express-validator');
 const NetworkNode = require('../models/NetworkNode');
 const NetworkModel = require ('../models/NetworkNodeModel')
-const {getSNMP,getSNPM_Sync, connectExpectTelnet} = require ('./commController')
+const {getSNMP,getSNPM_Sync, connectTelnetShowRun, connectTelnetShowTech} = require ('./commController');
+const NetworkNodeModel = require('../models/NetworkNodeModel');
 
 exports.addNetworkNode = async (req,res)=>{
     const errors = validationResult(req);
@@ -175,26 +176,26 @@ exports.getNetworkNode = async (req,res)=>{
         const idNodo = req.params.id
         //console.log('El ID es: ',idNodo)
         const network_node = await NetworkNode.findById(idNodo)
+        const network_model = await NetworkNodeModel.findById(network_node.nodeModel)
+        //console.log(network_model.port_fast, " y ", network_model.port_giga)
         //console.log('El nodo es: ',network_get)
         if (!network_node){
             console.log("No existe el nodo de red");
             return res.status(404).send("No existe el nodo de red")
         }
        
-       
-        
-        
-        // const getHostname = (pHostname) =>{
+               // const getHostname = (pHostname) =>{
         //     hostname = pHostname
         // }
         //console.log(getHostname(pHostname))
        
-        const hostname = await getSNPM_Sync("192.168.0.15","public",['1.3.6.1.2.1.1.5.0'])
-        console.log(hostname)
+        //const hostname = await getSNPM_Sync(network_get.nodeIP,"public",['1.3.6.1.2.1.1.5.0'])
+        //console.log(hostname)
+        
+        //const cant_int = await getSNPM_Sync("192.168.0.254","public",['1.3.6.1.2.1.2.1.0'])
         
         let network_get = network_node.toObject()
         network_get.status = []
-        cant_puertos=12
         let item = {
             interface: "",
             description: "",
@@ -210,37 +211,79 @@ exports.getNetworkNode = async (req,res)=>{
         let oid_speed;
         let oid_vlan;
         let oid_alias;
+        let oid_duplex;
         let x = 1
-        while (x<=cant_puertos){
+        while (x<=network_model.port_fast){
             if (x > 9){
-                oid_name="1.3.6.1.2.1.31.1.1.1.1.101"
-                oid_desc="1.3.6.1.2.1.31.1.1.1.18.101"
-                oid_state="1.3.6.1.2.1.2.2.1.8.101"
-                oid_speed="1.3.6.1.2.1.2.2.1.5.101"
-                oid_vlan="1.3.6.1.4.1.9.9.68.1.2.2.1.2.101"
-                oid_alias="1.3.6.1.2.1.31.1.1.1.18.101"
+                oid_name="1.3.6.1.2.1.31.1.1.1.1.100" + x
+                oid_desc="1.3.6.1.2.1.31.1.1.1.18.100" + x
+                oid_state="1.3.6.1.2.1.2.2.1.8.100" + x
+                oid_speed="1.3.6.1.2.1.2.2.1.5.100" + x
+                oid_vlan="1.3.6.1.4.1.9.9.68.1.2.2.1.2.100" + x
+                oid_alias="1.3.6.1.2.1.31.1.1.1.18.100" + x
+                oid_duplex="1.3.6.1.2.1.10.7.2.1.19.100" + x
             }else{
-                oid_name="1.3.6.1.2.1.31.1.1.1.1.1010"
-                oid_desc="1.3.6.1.2.1.31.1.1.1.18.1010"
-                oid_state="1.3.6.1.2.1.2.2.1.8.1010"
-                oid_speed="1.3.6.1.2.1.2.2.1.5.1010"
-                oid_vlan="1.3.6.1.4.1.9.9.68.1.2.2.1.2.1010"
-                oid_alias="1.3.6.1.2.1.31.1.1.1.18.1010"
+                oid_name="1.3.6.1.2.1.31.1.1.1.1.1000"  + x
+                oid_desc="1.3.6.1.2.1.31.1.1.1.18.1000" + x
+                oid_state="1.3.6.1.2.1.2.2.1.8.1000" + x
+                oid_speed="1.3.6.1.2.1.2.2.1.5.1000" + x
+                oid_vlan="1.3.6.1.4.1.9.9.68.1.2.2.1.2.1000" + x
+                oid_alias="1.3.6.1.2.1.31.1.1.1.18.1000" + x
+                oid_duplex="1.3.6.1.2.1.10.7.2.1.19.1000" + x
             }
             
-            oid_name=oid_name+x
             item.interface = await getSNPM_Sync(network_get.nodeIP,"public",[oid_name])
-            oid_desc=oid_desc+x
             item.description = await getSNPM_Sync(network_get.nodeIP,"public",[oid_desc])
-            oid_state=oid_state+x
             item.state = await getSNPM_Sync(network_get.nodeIP,"public",[oid_state])
             item.state === "1" ? item.state = "up" : item.state = "down"
-            oid_speed=oid_speed+x
             item.speed = await getSNPM_Sync(network_get.nodeIP,"public",[oid_speed])
             item.speed = parseInt(item.speed)/1000000
 
-            oid_vlan=oid_vlan+x
             item.vlan = await getSNPM_Sync(network_get.nodeIP,"public",[oid_vlan])
+            item.duplex = await getSNPM_Sync(network_get.nodeIP,"public",[oid_duplex])
+
+            x+=1
+            network_get.status.push(item);
+            item = {
+                interface: "",
+                description: "",
+                state: "",
+                vlan: "",
+                speed: "",
+                duplex: ""
+            }
+            
+        }
+        
+        x = 1
+        while (x<=network_model.port_giga){
+            if (x > 9){
+                oid_name="1.3.6.1.2.1.31.1.1.1.1.101" + x
+                oid_desc="1.3.6.1.2.1.31.1.1.1.18.101" + x
+                oid_state="1.3.6.1.2.1.2.2.1.8.101" + x
+                oid_speed="1.3.6.1.2.1.2.2.1.5.101" + x
+                oid_vlan="1.3.6.1.4.1.9.9.68.1.2.2.1.2.101" + x
+                oid_alias="1.3.6.1.2.1.31.1.1.1.18.101" + x
+                oid_duplex="1.3.6.1.2.1.10.7.2.1.19.101" + x
+            }else{
+                oid_name="1.3.6.1.2.1.31.1.1.1.1.1010"  + x
+                oid_desc="1.3.6.1.2.1.31.1.1.1.18.1010" + x
+                oid_state="1.3.6.1.2.1.2.2.1.8.1010" + x
+                oid_speed="1.3.6.1.2.1.2.2.1.5.1010" + x
+                oid_vlan="1.3.6.1.4.1.9.9.68.1.2.2.1.2.1010" + x
+                oid_alias="1.3.6.1.2.1.31.1.1.1.18.1010" + x
+                oid_duplex="1.3.6.1.2.1.10.7.2.1.19.1010" + x
+            }
+
+            item.interface = await getSNPM_Sync(network_get.nodeIP,"public",[oid_name])
+            item.description = await getSNPM_Sync(network_get.nodeIP,"public",[oid_desc])
+            item.state = await getSNPM_Sync(network_get.nodeIP,"public",[oid_state])
+            item.state === "1" ? item.state = "up" : item.state = "down"
+            item.speed = await getSNPM_Sync(network_get.nodeIP,"public",[oid_speed])
+            item.speed = parseInt(item.speed)/1000000
+
+            item.vlan = await getSNPM_Sync(network_get.nodeIP,"public",[oid_vlan])
+            item.duplex = await getSNPM_Sync(network_get.nodeIP,"public",[oid_duplex])
             
             x+=1
             network_get.status.push(item);
@@ -250,12 +293,10 @@ exports.getNetworkNode = async (req,res)=>{
                 state: "",
                 vlan: "",
                 speed: "",
-                duplex: "full-duplex",
-                type: "1000BaseTX"
+                duplex: ""
             }
-            
         }
-        
+
         res.json({network_get})
 
 
@@ -265,6 +306,10 @@ exports.getNetworkNode = async (req,res)=>{
         
     }
 }
+
+
+
+
 
 exports.deleteNetworkNode = async (req,res)=>{
     const errors = validationResult(req);
@@ -292,4 +337,35 @@ exports.deleteNetworkNode = async (req,res)=>{
         res.status(500).send({msg:"No se pudo eliminar el nodo de red, contacte a un administrador"})
         
     }
+}
+
+exports.createNetworkNodeShowRun = async (req, res)=>{
+    console.log("LLEGUE servidor")
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+
+    try {
+
+        const {ip, tipo} = req.query.data
+        console.log('(servidor)El IP es: ', ip, ' y el tipo es: ', tipo)
+        //const tipo = req.params.tipo
+        //console.log('El tipo es: ', tipo)
+        const hostname = await getSNPM_Sync(ip,"public",['1.3.6.1.2.1.1.5.0'])
+        console.log(hostname)
+        if (!hostname){
+            console.log("No existe el nodo de red solicitado");
+            return res.status(404).send("No existe el nodo de red solicitado")
+        }
+
+        const show_run = await connectTelnetShowRun(hostname, ip) //aca guardo el archivo, ver como aviso con urlDoc
+        console.log(show_run)
+
+    } catch ({error}) {
+        console.log(error);
+        res.status(500).send({msg:"No se pudo eliminar el nodo de red, contacte a un administrador"})
+        
+    }
+
 }

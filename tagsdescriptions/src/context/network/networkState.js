@@ -12,7 +12,8 @@ import {
     GET_NETWORK_NODE,
     GET_NETWORK_MODELS,
     GET_NETWORK_MODEL,
-    RESET_MESSAGE
+    RESET_MESSAGE,
+    CREATE_NETWORK_SHOW_RUN
     } from '../../types/index'
 
 import axiosClient from '../../config/axios'
@@ -27,7 +28,8 @@ const NetworkState = props=>{
         networkNodeSelected:null,
         message:null,
         networkmodelos:[],
-        networkmodelo:null
+        networkmodelo:null,
+        urlDoc:null
     }
 
     //Dispatch para ejecutar las acciones
@@ -193,6 +195,40 @@ const NetworkState = props=>{
         }
     }
 
+    const createNetworkNodeShowRun = async (ip, tipo) =>{
+    //const createNetworkNodeShowRun = async (nodeIP, tipo) =>{
+        //console.log("El IP del nodo es: ", nodeIP)
+        const data = {
+            ip: ip,
+            tipo: tipo
+        }
+        console.log('El IP es (createNetworkNodeShowRun): ',data.ip, " y ", data.tipo)
+        //console.log(ip)
+        //console.log(data.tipo)
+        try {
+            //const res = await axiosClient.get('/api/networkShow', {params:{ip}});
+            //funciona:
+            const res = await axiosClient.get('/api/networkShow',{params:{data}});
+            //const res = await axiosClient.get(`/api/networkShow/${data}`);
+            dispatch({
+                type: CREATE_NETWORK_SHOW_RUN,
+                payload: res.data
+            })
+            
+        } catch (error) {
+            console.log(error)
+            /*
+            const alert = {
+                msg:error.response.data.msg,
+                category:"alerta-error"
+            }
+            dispatch({
+                type:SHOW_ERROR,
+                payload: alert
+            })*/
+        }
+    }
+
     return (
         <networkContext.Provider
             value={{
@@ -202,6 +238,7 @@ const NetworkState = props=>{
                 error: state.error,
                 networkmodelos: state.networkmodelos,
                 networkmodelo: state.networkmodelo,
+                urlDoc:state.urlDoc,
                 showForm, 
                 createNetworkNode,
                 getNetworkNodes,
@@ -212,7 +249,8 @@ const NetworkState = props=>{
                 deleteNetworkNode,
                 getNetworkModels,
                 getNetworkModel,
-                resetMessage
+                resetMessage,
+                createNetworkNodeShowRun
             }}
         >
 

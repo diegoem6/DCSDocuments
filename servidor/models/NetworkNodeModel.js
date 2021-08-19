@@ -9,6 +9,14 @@ const NetworkNodeModelSchema = mongoose.Schema({
         type:String,
         require:true,
         trim:true
+    },
+    port_fast:{
+        type: Number,
+        require:true
+    },
+    port_giga:{
+        type: Number,
+        require:true
     }
 })
 

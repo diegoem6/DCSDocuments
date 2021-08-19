@@ -27,5 +27,7 @@ router.put('/:id',
 router.delete('/:id',
     auth,
     networkController.deleteNetworkNode) ;
-    
+
+
+
 module.exports = router

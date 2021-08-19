@@ -78,24 +78,34 @@ exports.getSNMP = async (ip, commmunity, oids, res)=>{
       });
   }
 
-exports.connectExpectTelnet = (hostname, ip)=>{
- 
+exports.connectTelnetShowRun = (hostname, ip)=>{
 
-  et(`${ip}#:23`, [
-      {expect: "Password", send: "hw.mdp.2014\r"},
+  console.log('El hostname es:', hostname, ' y la ip es ', ip)
+//  et(`${ip}#:23`, [  
+  et(`${ip}:23`, [
+      //{expect: "Password", send: "hw.mdp.2014\r"},
+      {expect: "Password", send: "Honeywell1\r"},
       {expect: ">", send: "enable\r"},
-      {expect: "Password", send: "hw.mdp.2014\r"},
-      {expect: "#" , send: "terminal length 0\r"}, //para que no compagine y aparezca el --More--
+      //{expect: "Password", send: "hw.mdp.2014\r"},
+      {expect: "Password", send: "Honeywell1\r"},
+      {expect: "#" , send: "terminal length 0\r"}, //para que no compagine y no aparezca el --More--
       {expect: "#" , send: "show run\r"},
       {expect: `${hostname}#`, out: function(output) {
-        fs.writeFile('../tagsdescriptions/public/files/show_run.txt', output, function (err) {
+        fs.writeFile(`../tagsdescriptions/public/files/${hostname}-show_run.txt`, output, function (err) {
           if (err) return console.log(err);
           console.log('Terminó SHOW RUN...');
         });
-        console.log(output);
+        //console.log(output);
       }, send: "\r"},
-
-
+      
+    ], function(err) {
+      if (err) console.error(err);
+    });
+  
+}
+exports.connectTelnetShowTech = (hostname, ip)=>{
+ 
+  et(`${ip}:23`, [
       {expect: "#" , send: "show tech\r"},
       {expect: `${hostname}#`, out: function(output) {
         fs.writeFile('../tagsdescriptions/public/files/show_tech.txt', output, function (err) {

@@ -9,7 +9,8 @@ import {
     UPDATE_NETWORK_NODE,
     GET_NETWORK_MODELS,
     GET_NETWORK_MODEL,
-    RESET_MESSAGE
+    RESET_MESSAGE,
+    CREATE_NETWORK_SHOW_RUN
     } from '../../types/index'
 
 export default (state,action)=>{
@@ -86,6 +87,12 @@ export default (state,action)=>{
             return({
                 ...state,
                 networkmodelo: action.payload
+            })
+        case CREATE_NETWORK_SHOW_RUN:
+            return ({
+                ...state,
+                error:false, 
+                urlDoc: action.payload
             })
         default:
             return state;
