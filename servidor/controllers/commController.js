@@ -80,36 +80,33 @@ exports.getSNMP = async (ip, commmunity, oids, res)=>{
 
 exports.connectTelnetShow = (hostname, ip, tipo)=>{
 
-  console.log('El hostname es:', hostname, ' y la ip es ', ip)
   let comando=""
   if (tipo==="RUN"){
     comando="show run\r"
   }else if(tipo==="TECH"){
     comando="show tech\r"
   }
+  
   //  et(`${ip}#:23`, [  
   et(`${ip}:23`, [
       //{expect: "Password", send: "hw.mdp.2014\r"},
-      {expect: "Password", send: "Honeywell1\r"},
-      {expect: ">", send: "enable\r"},
+      //{expect: "Username:", send: "epksadmin\r"},
+      {expect: "Password:", send: "hw.mdp.2014\r"},
+      {expect: `>`, send: "enable\r"},
       //{expect: "Password", send: "hw.mdp.2014\r"},
-      {expect: "Password", send: "Honeywell1\r"},
-      {expect: "#" , send: "terminal length 0\r"}, //para que no compagine y no aparezca el --More--
-      {expect: "#" , send: comando},
+      {expect: "Password:", send: "hw.mdp.2014\r"},
+      {expect: `${hostname}#` , send: "terminal length 0\r"}, //para que no compagine y no aparezca el --More--
+      {expect: `${hostname}#` , send: comando},
       //{expect: "#" , send: "show run\r"},
       {expect: `${hostname}#`, out: function(output) {
         fs.writeFile(`../tagsdescriptions/public/files/${hostname}-show_${tipo}.txt`, output, function (err) {
-          if (err) return console.log(err);
-          console.log('Terminó SHOW ', comando, '---');
-          return(`${hostname}-show_${tipo}.txt`) // devuelvo el nombre del archivo
+          if (err) return console.log("ERROR: ", err);
         });
-        //console.log(output);
       }, send: "\r"},
       
     ], function(err) {
       if (err) console.error(err);
     });
-  
 }
 exports.connectTelnetShowTech = (hostname, ip)=>{
  
@@ -118,9 +115,9 @@ exports.connectTelnetShowTech = (hostname, ip)=>{
       {expect: `${hostname}#`, out: function(output) {
         fs.writeFile('../tagsdescriptions/public/files/show_tech.txt', output, function (err) {
           if (err) return console.log(err);
-          console.log('Terminó SHOW TECH...');
+        
         });
-        console.log(output);
+        
       }, send: "exit\r"},
 
     ], function(err) {

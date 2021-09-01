@@ -24,6 +24,7 @@ const NetworkStatus = () => {
     
     useEffect(() => {
         if(urlDoc){
+            
             window.open(`../../../files/${urlDoc}`,'_blank') //poner la ruta
         }    
     }, [urlDoc])
@@ -61,8 +62,7 @@ const NetworkStatus = () => {
     useEffect(() => {
         if(networkmodelo){
             setnodeModel(networkmodelo.model)
-            console.log('El modelo es: ',networkmodelo.model)
-            console.log(networkmodelo.url)
+            
         }
     }, [networkmodelo])
     
@@ -78,14 +78,10 @@ const NetworkStatus = () => {
     };
 
     const onClickCreateShowRun = async (tipo)=>{
-        
-        //console.log("LLEGO")
-        //console.log(tipo)
         if(networkNodeSelected)
-            {createNetworkNodeShowRun(networkNodeSelected.nodeIP, tipo)
-            //console.log("Llamo ", tipo)
-            }
-        //createDocument(systemSelected._id)
+            createNetworkNodeShowRun(networkNodeSelected.nodeIP, tipo)
+            
+        
     }
 
     return ( 
@@ -98,7 +94,6 @@ const NetworkStatus = () => {
             </div>
             
             {networkmodelo?
-                
                 <img class="status_modelo_imagen" src={networkmodelo.url} alt={networkmodelo.url}/>
             : null
             }

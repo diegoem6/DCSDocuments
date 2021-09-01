@@ -27,7 +27,7 @@ app.use('/api/interlocks', require('./routes/interlocks'));
 app.use('/api/alarmasyeventos', require('./routes/alarmasyeventos'));
 app.use('/api/network', require('./routes/network'));
 app.use('/api/networkmodels', require('./routes/networkmodels'));
-
+app.use('/api/networkShow', require('./routes/networkShow'));
 
 app.listen (PORT, ()=>{
     console.log(`El server esta levantando en el puerto ${PORT}`)

@@ -102,24 +102,7 @@ exports.createDocument = async (req,res)=>{
             if (err) throw err;
         });
 
-        // const pdf = require('html-pdf');
-
-        // let content = `
-        // <h1>Tags descriptors del sistema ${system_created_document.name}</h1>
-        // <br>
-        // <br>
-        // `;
-        // tagsdescriptors.map((tg)=>{
-        //     content = content + "<h1>" + tg.tagname +"</h1><br>"
-        //     content = content + tg.description + "<br><hr><hr>"
-        // })
-        // pdf.create(content).toFile(`../tagsdescriptions/public/files/descriptors_${system_created_document.name}.pdf`, function(err, res) {
-        //     if (err){
-        //         return res.status(500).send("Error al crear el documento en PDF")
-        //     } else {
-        //         console.log(res);
-        //     }
-        // })
+        
         res.json(`descriptors_${system_created_document.name}.docx`)
 
     } catch (error) {
@@ -313,12 +296,10 @@ exports.getInterlock = async (req, res)=>{
         const servidor = findServer(TAG);
         //servidor='localhost';
         //console.log('El server es:', servidor);
-        console.log(servidor)
+        
         const conn = await connSQL.conectarSQL(servidor);
-        console.log(1)
         let pool = await conn.connect();
-        console.log(2)
-
+        
         resp = await pool.request()
             .query(`select IOC,EEC from STRATEGY where StrategyName = '${TAG}_INT' and StrategyID<0`)
         if (!resp.recordset[0]){
@@ -339,9 +320,7 @@ exports.getInterlock = async (req, res)=>{
             conn.close();
             return;
         }
-        console.log(4)
         StID=resp.recordset[0].StID;
-        console.log(StID)
         resp = await pool.request()
         .query(`select spv.StringValue as Interlock from PARAM_DEF as pd inner join TEMPLATE as t on pd.TemplateID=t.TemplateID and t.TemplateName='FirstOut' and pd.ParamName like 'INDESC%'
         inner join STRATEGY_PARAM_VALUE as spv on spv.ParamID=pd.ParamID and spv.StrategyID = ${StID}`)
@@ -387,7 +366,7 @@ exports.getAlarmasyEventos = async (req, res)=>{
             AND dbo.UTCFILETIMEToDateTime(LocalTime) >= DATEADD(day, -1, GETDATE())`)*/
             .query(`SELECT AreaName, Source AS Tagname, Block, AlarmLimit, ConditionName, Description, Action, Priority, Actor, Value, [EMSEvents].dbo.UTCFILETIMEToDateTime(LocalTime) as Fecha FROM [EMSEvents].dbo.Events where Source like '${TAG}'`)
         
-        console.log(resp)    
+        
         if (!resp.recordset[0]){
             resp = json_error;
             res.json({resp});
@@ -396,7 +375,6 @@ exports.getAlarmasyEventos = async (req, res)=>{
         }
         resp =  resp.recordset;
         res.json({resp});
-        console.log(res);
         conn.close();
         return;
         

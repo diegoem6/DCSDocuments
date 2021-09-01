@@ -45,7 +45,7 @@ const NetworkState = props=>{
 
     const createNetworkNode = async (network_node)=>{
         try {
-            console.log(network_node)
+            
             const res = await axiosClient.post('/api/network', network_node)
             dispatch({
                 type:CREATE_NETWORK_NODE,
@@ -178,7 +178,7 @@ const NetworkState = props=>{
     }
 
     const updateNetworkNode = async (network_node) =>{
-        console.log("El nodo a modificar es: ",network_node)
+        
         try {
             const id = network_node._id
             const res = await axiosClient.put(`/api/network/${id}`,network_node)
@@ -196,20 +196,15 @@ const NetworkState = props=>{
     }
 
     const createNetworkNodeShowRun = async (ip, tipo) =>{
-    //const createNetworkNodeShowRun = async (nodeIP, tipo) =>{
-        //console.log("El IP del nodo es: ", nodeIP)
         const data = {
             ip: ip,
             tipo: tipo
         }
-        console.log('El IP es (createNetworkNodeShowRun): ',data.ip, " y ", data.tipo)
-        //console.log(ip)
-        //console.log(data.tipo)
+        
         try {
             //const res = await axiosClient.get('/api/networkShow', {params:{ip}});
             //funciona:
             const res = await axiosClient.get('/api/networkShow',{params:{data}});
-            console.log(res.data.filename)
             //const res = await axiosClient.get(`/api/networkShow/${data}`);
             dispatch({
                 type: CREATE_NETWORK_SHOW_RUN,
@@ -218,15 +213,6 @@ const NetworkState = props=>{
             
         } catch (error) {
             console.log(error)
-            /*
-            const alert = {
-                msg:error.response.data.msg,
-                category:"alerta-error"
-            }
-            dispatch({
-                type:SHOW_ERROR,
-                payload: alert
-            })*/
         }
     }
 
