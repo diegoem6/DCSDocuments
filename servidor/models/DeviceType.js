@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const DeviceTypeSchema = mongoose.Schema({
-    Model:{
+    type:{
         type:String,
         require:true
     },
-    URL:{
+    url:{
         type:String,
         require:true,
         trim:true

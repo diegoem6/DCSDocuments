@@ -4,21 +4,7 @@ import Header from './header';
 
 const Menu = () => {
     return ( 
-        // <Fragment>
-        //     <Link 
-        //     to={'/assets'}
-        //     className="enlace-cuenta">
-        // >
-        //     Assets MdP
-        //     </Link>
-        //     <Link 
-        //     to={'/tagsdescriptors'}
-        //     className="enlace-cuenta">
-        // >
-        //     Tags descriptors
-        //     </Link>
-        // </Fragment>
-      
+
             <Fragment>
             <Header />
                 <div className="form-menu">
@@ -46,6 +32,14 @@ const Menu = () => {
                                 className="btn btn-block btn-primario"
                             >
                                 Network DCS
+                            </Link>
+                        </div>
+                        <div className="campo-form">
+                            <Link 
+                                to={'/devices'}
+                                className="btn btn-block btn-primario"
+                            >
+                                Dispositivos DCS
                             </Link>
                         </div>
                     </div>

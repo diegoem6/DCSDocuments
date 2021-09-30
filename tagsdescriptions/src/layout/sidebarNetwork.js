@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom'
 import assetContext from '../context/asset/assetContext'
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import tagDescriptorContext from '../context/tagdescriptor/tagDescriptorContext';
-import systemContext from '../context/system/systemContext';
+//import systemContext from '../context/system/systemContext';
 import Asset from '../components/assets/asset'
 
 
 
-const SidebarNetwork = () => {
+const SidebarNetwork = ({tipo}) => {
     
 
     const aContext = useContext(assetContext)
@@ -17,11 +17,11 @@ const SidebarNetwork = () => {
     const tContext = useContext(tagDescriptorContext)
     const {deselectTagDescriptor} = tContext
 
-    const sContext = useContext(systemContext)
-    const {selectSystem, deselectSystem} = sContext
+    //const sContext = useContext(systemContext)
+    //const {selectSystem, deselectSystem} = sContext
 
     
-    useEffect(() => {
+    useEffect(() => { //cuando carga levanto los assets
         const initAssetTree = () =>{
             getAssets();
         }
@@ -29,15 +29,16 @@ const SidebarNetwork = () => {
         // eslint-disable-next-line
     }, [])
 
+    /*
     const selectSystemOnClick = (system)=>{
         selectSystem(system);
         deselectTagDescriptor();
 
-    }
+    }*/
 
     return ( 
         <aside>
-            <h1>Network<span>DCS</span></h1>
+            <h1>{tipo}<span>DCS</span></h1>
            
             <div className="proyectos">
                 

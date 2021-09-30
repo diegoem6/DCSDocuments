@@ -20,6 +20,10 @@ const DeviceSchema = mongoose.Schema({
         require:true,
         trim:true
     },
+    deviceURLOPC:{
+        type: String,
+        require:true
+    },
     createddate:{
         type:Date,
         default:Date.now()

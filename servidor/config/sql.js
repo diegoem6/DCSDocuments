@@ -4,7 +4,7 @@ exports.conectarSQL = async (servidor)=>{
     const sql = require('mssql');
     //console.log('El servidor desde SQL es',servidor);
     const config = {
-        server: servidor, //'localhost',
+        /*server: servidor, //'localhost',
         database: 'ps_erdb',
         domain: 'DESKTOP-O5VJAUN',
         connectionTimeout: 6000,
@@ -18,6 +18,14 @@ exports.conectarSQL = async (servidor)=>{
             max: 16,
             min: 0,
             idleTimeoutMillis: 6000
+        }*/
+        server: 'localhost',
+        database: 'ps_erdb',
+        domain: 'NAMERICA1',
+        user: 'E552770',
+        password: 'Honeywell36',
+        options:{
+            instanceName: 'SQLEXPRESS'
         }
     }
     try{

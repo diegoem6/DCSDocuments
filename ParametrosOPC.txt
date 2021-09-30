@@ -1,0 +1,29 @@
+Status Controller: C300STATE
+FTE A Status: LANAFAILED
+FTE B Status: LANBFAILED
+
+CPU Free (%): CPUFREEAVG
+Temp (°C): CTEMP
+Redundancy: RDNROLESTATE
+FTE InterLAN comm. failed: INTERLANFAILED
+FTE crossover cable field: XOVERFAILED
+
+
+SOFT FAILURES
+Battery State Warning: BATTERYNOTOKSFTAB
+Device Index Switches Changed: BCDSWSTS
+Factory Data Error: FACTDATAERR
+ROM Application Image Checksum Failure: ROMAPPIMGCHKSMFAIL
+ROM Boot Image Checksum Failure: ROMBOOTIMGCHKSMFAIL
+WDT Hardware Failure: WDTHWFAIL
+WDT Refresh Warning: WDTSWFAIL
+Critical Task Watchdog Warning: TASKHLTHMON
+Uncorrectable Internal RAM Sweep Error: RAMSWEEPERR
+Corrected Internal RAM Sweep Error: RAMSCRUBERRS
+Uncorrected User RAM Sweep Error: BACKUPRAMSWEEPERR
+Corrected User RAM Sweep Error: BACKUPRAMSCRUBERRS
+IOLINK(1) Soft Fail Error: IOL1SOFTFAIL
+IOLINK(2) Soft Fail Error: IOL2SOFTFAIL
+Debug Flag Enabled: DEBUGFLAGSET
+Minimum HW Revision: MINHWREVSF
+Partner Not Visible on FTE: PARTNERNOTVISFTE

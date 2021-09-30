@@ -5,7 +5,6 @@ import NewNodeNetwork from '../network/newNodeNetwork';
 import NodesList from'../network/NodesList'
 import HeaderNodeNetwork from '../network/headerNodeNetwork';
 import SidebarNetwork from '../../layout/sidebarNetwork';
-import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext';
 import alertContext from '../../context/alerts/alertContext';
 import assetContext from '../../context/asset/assetContext';
 import networkContext from '../../context/network/networkContext';
@@ -38,7 +37,9 @@ const Netowrk = () => {
           <div className="contenedor-app">
               {alert? (<div className={`alerta ${alert.category}`}>{alert.msg} </div>)
                     :null}
-              <SidebarNetwork/>
+              <SidebarNetwork
+                tipo="Network"
+              />
               
               <div className="seccion-principal">
                   <Header/>
@@ -48,7 +49,7 @@ const Netowrk = () => {
                       
                       <div className="contenedor-tareas">
                           
-                            {form ?
+                            { form ?
                                 (<NewNodeNetwork/>)
                                 :
                                 (<NodesList/>)
