@@ -9,7 +9,8 @@ import {
     UPDATE_DEVICE,
     GET_DEVICE_TYPES,
     GET_DEVICE_TYPE,
-    RESET_MESSAGE
+    RESET_MESSAGE,
+    PROCESS_IMPORT_FILE
     } from '../../types/index'
 
 export default (state,action)=>{
@@ -58,11 +59,11 @@ export default (state,action)=>{
                 })
             
         case RESET_MESSAGE:
+        case PROCESS_IMPORT_FILE:
             return ({
                 ...state,
                 message:null
             })
-
         case SELECT_DEVICE:
             return ({
                 ...state,

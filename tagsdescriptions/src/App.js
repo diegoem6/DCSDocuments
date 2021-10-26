@@ -6,7 +6,7 @@ import Newuser from './components/auth/newUser'
 import Tagsdescriptors from './components/tagsdescriptors/tagsDescriptors'
 import Network from './components/network/network'
 import NetworkStatus from './components/network/networkStatus'
-
+import ImportDevices from './components/files/importDevices'
 import devices from './components/devices/devices'
 import deviceStatus from './components/devices/deviceStatus'
 
@@ -54,6 +54,7 @@ function App() {
                       <PrivateRoute exact path="/networkstatus" component={NetworkStatus}/>
                       <PrivateRoute exact path="/devices" component={devices}/>
                       <PrivateRoute exact path="/devicestatus" component={deviceStatus}/>
+                      <PrivateRoute exact path="/importDevices" component={ImportDevices}/>
                     </Switch>
                   </Router>
                 </DeviceState>

@@ -12,7 +12,8 @@ import {
     GET_DEVICE,
     GET_DEVICE_TYPES,
     GET_DEVICE_TYPE,
-    RESET_MESSAGE
+    RESET_MESSAGE,
+    PROCESS_IMPORT_FILE
     } from '../../types/index'
 
 import axiosClient from '../../config/axios'
@@ -195,6 +196,33 @@ const DevicesState = props=>{
         }
     }
 
+    const processImportFile = async (file) =>{
+        try {
+            const formData = new FormData();
+            formData.append("fileToProcess", file);
+            const res = await axiosClient.post('/api/files', formData
+                , {
+                    headers: {
+                    'Content-Type': 'multipart/form-data'
+                    }
+                }
+            )
+            dispatch({
+                type:CREATE_DEVICE,
+                payload: res.data
+             })
+        } catch (error) {
+            const alert = {
+                msg:"hubo un error con el nooe de red",
+                category:"alerta-error"
+            }
+            dispatch({
+                type:SHOW_ERROR,
+                payload: alert
+            })
+        }      
+    }
+
     return (
         <devicesContext.Provider
             value={{
@@ -215,7 +243,8 @@ const DevicesState = props=>{
                 deleteDevice,
                 getDeviceTypes,
                 getDeviceType,
-                resetMessage
+                resetMessage,
+                processImportFile
                 
             }}
         >

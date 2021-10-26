@@ -10,6 +10,9 @@ conectarDB()
 
 app.use (express.json({extended:true}));
 app.use (cors());
+
+
+app.use(express.static('public'));
 // seteo el puerto donde levanta el server != de 3000
 const PORT = process.env.PORT || 4000;
 
@@ -31,6 +34,7 @@ app.use('/api/networkShow', require('./routes/networkShow'));
 app.use('/api/devices', require('./routes/devices'));
 app.use('/api/devicestypes', require('./routes/devicestypes'));
 app.use('/api/deviceopc', require('./routes/deviceopc'));
+app.use('/api/files', require('./routes/files'));
 
 app.listen (PORT, ()=>{
     console.log(`El server esta levantando en el puerto ${PORT}`)
