@@ -16,6 +16,7 @@ import AssetState from './context/asset/assetState';
 import SystemState from './context/system/systemState';
 import NetworkState from './context/network/networkState';
 import DeviceState from './context/devices/devicesState';
+import ImportState from './context/import/importState';
 import Menu from './layout/menu';
 import TagDescriptorState from './context/tagdescriptor/tagDescriptorState';
 //import Docpdf from './components/tagsdescriptors/docpdf'
@@ -42,21 +43,23 @@ function App() {
             <AlertState>
               <NetworkState>
                 <DeviceState>
-                  <Router>
-                    <Switch>
-                      <Route exact path="/" component={Login}/>
-                      <Route exact path="/newuser" component={Newuser}/>
-                      <PrivateRoute exact path="/tagsdescriptors" component={Tagsdescriptors}/>
-                      <PrivateRoute exact path="/assets" component={Assets}/>
-                      <PrivateRoute exact path="/menu" component={Menu}/>
-                      <PrivateRoute exact path="/events" component={Eventlist}/>
-                      <PrivateRoute exact path="/network" component={Network}/>
-                      <PrivateRoute exact path="/networkstatus" component={NetworkStatus}/>
-                      <PrivateRoute exact path="/devices" component={devices}/>
-                      <PrivateRoute exact path="/devicestatus" component={deviceStatus}/>
-                      <PrivateRoute exact path="/importDevices" component={ImportDevices}/>
-                    </Switch>
-                  </Router>
+                  <ImportState>
+                    <Router>
+                      <Switch>
+                        <Route exact path="/" component={Login}/>
+                        <Route exact path="/newuser" component={Newuser}/>
+                        <PrivateRoute exact path="/tagsdescriptors" component={Tagsdescriptors}/>
+                        <PrivateRoute exact path="/assets" component={Assets}/>
+                        <PrivateRoute exact path="/menu" component={Menu}/>
+                        <PrivateRoute exact path="/events" component={Eventlist}/>
+                        <PrivateRoute exact path="/network" component={Network}/>
+                        <PrivateRoute exact path="/networkstatus" component={NetworkStatus}/>
+                        <PrivateRoute exact path="/devices" component={devices}/>
+                        <PrivateRoute exact path="/devicestatus" component={deviceStatus}/>
+                        <PrivateRoute exact path="/importDevices" component={ImportDevices}/>
+                      </Switch>
+                    </Router>
+                  </ImportState>
                 </DeviceState>
               </NetworkState>
             </AlertState>

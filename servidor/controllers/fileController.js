@@ -21,66 +21,63 @@ const multerConfiguration = {
 }
 const upload = multer(multerConfiguration).single('fileToProcess');
 
-exports.processFile = async(req, res, next)=>{
+exports.processFile = async(req, res)=>{
     try {
         upload(req, res, async(error)=>{
-            //console.log(req.file)
             if(!error){
-                console.log(req.file.filename)
-                readXlsxFile('../servidor/files/file_to_process.xls', { sheet: 1 }).then((data) => {
-                    const model = data[0][1]
-                    const fields = data[1][1]
-                    readXlsxFile('../servidor/files/file_to_process.xls', { sheet: 2 }).then((data) => {
-                        let headers = true
-                        for (const row in data) {  
-                            if (headers){
-                                headers = false;
-                            } else{
-                                processRow (model, data[0], data[row])
-                            }
-                            
+                const dataSheet1 = await readXlsxFile('../servidor/files/file_to_process.xls', { sheet: 1 })
+                const model = dataSheet1[0][1]
+                const dataSheet2 = await readXlsxFile('../servidor/files/file_to_process.xls', { sheet: 2 })
+                let headers = true;
+                for (const row in dataSheet2) {  
+                    if (headers){
+                        headers = false;
+                    } else{
+                        try{
+                            await processRow (model, dataSheet2[0], dataSheet2[row])
+                        }catch (error) {
+                            const errorMsg = `${error.message} (fila ${row})`
+                            console.log(errorMsg)
+                            res.status(500).send({msg:errorMsg})
+                            return;
                         }
-                    })
-
-                })
-                
-            }else{
-                console.log(error);
-                return next();
+                        
+                    }
+                    
+                }
+                res.json({msg:"se procesó el archivo correctamente"})
+                return;
             }
         })
-        
-
-
-        
     } 
     catch (error) {
-        console.log(error)
-        res.status(500).send({msg:"Hubo un error al subir el archivo"})
+        res.status(500).send({msg:error.message})
     }
 }
-
 const processRow = async (model, headers, values)  => {
-    var obj = {};
-    headers.forEach((header, i) => obj[header] = values[i]);
-    console.log(obj);
-    
-    if (model = "NetworkNode"){
+  
+        var obj = {};
+        headers.forEach((header, i) => obj[header] = values[i]);
         
-        const new_networkNode = new NetworkNode(obj);
-        await new_networkNode.save()
-    }
-    if (model = "TagDescriptor"){
-        
-        let tagdescriptor = new TagDescriptor(obj);
-        if (tagdescriptor.tagname){
-            tagdescriptor.tagname = tagdescriptor.tagname.toUpperCase()
+        if (model = "NetworkNode"){
+            
+            const new_networkNode = new NetworkNode(obj);
+            await new_networkNode.save()
         }
-        const tagdescriptor_validation = await TagDescriptor.find({tagname:tagdescriptor.tagname}).sort({creado:-1})
-        if (tagdescriptor_validation.length > 0){
-            res.status(500).send({msg:'Ya existe un descriptor con ese tagname'})
-        }
+        if (model = "TagDescriptor"){
+            
+            let tagdescriptor = new TagDescriptor(obj);
+            if (tagdescriptor.tagname){
+                tagdescriptor.tagname = tagdescriptor.tagname.toUpperCase()
+            }
+            const tagdescriptor_validation = await TagDescriptor.find({tagname:tagdescriptor.tagname}).sort({creado:-1})
+            if (tagdescriptor_validation.length > 0){
+                throw new Error('Ya existe un descriptor con ese tagname'); 
+            }
 
-        await tagdescriptor.save();
-    }
+            await tagdescriptor.save();
+            
+        }
+    
 }
+

@@ -68,7 +68,7 @@ exports.updateDevice = async (req,res)=>{
         }
 
         //existe el tipo de dispositivo?
-        console.log(req.body.deviceType)
+        //console.log(req.body.deviceType)
         const deviceType_updated = await DeviceType.findById(req.body.deviceType)
         //console.log(deviceType_updated)
         if (!deviceType_updated){

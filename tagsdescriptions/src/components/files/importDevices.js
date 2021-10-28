@@ -1,6 +1,6 @@
 import React, {useContext, useState, useEffect, Fragment} from 'react';
 import authContext from '../../context/auth/authContext'
-import deviceContext from '../../context/devices/devicesContext'
+import importContext from '../../context/import/importContext'
 import alertContext from '../../context/alerts/alertContext';
 import Header from '../../layout/header';
 
@@ -10,14 +10,24 @@ const ImportDevices = () => {
     const auContext = useContext(authContext)
     const {getUser} = auContext;
 
-    const dContext = useContext(deviceContext)
-    const {processImportFile} = dContext
+    const iContext = useContext(importContext)
+    const {processImportFile, message, resetMessage} = iContext
 
     
     const aContext = useContext(alertContext)
-    const {alert} = aContext
+    const {alert, showAlert} = aContext
 
     const [file, setFile] = useState()
+
+    useEffect(() => {
+        if (message){
+            console.log(message.msg)
+            console.log(message.category)
+            showAlert(message.msg,message.category)
+            resetMessage();
+        }
+        // eslint-disable-next-line
+    }, [message])
 
     useEffect(() => {
         getUser();
@@ -36,6 +46,8 @@ const ImportDevices = () => {
         <Fragment>
             <Header />
             <div className="form-menu">
+                {alert? (<div className={`alerta ${alert.category}`}>{alert.msg} </div>)
+                    :null}
                 <div className="contenedor-form sombra-dark">
                     
                     <div className="campo-form"> 
