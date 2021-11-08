@@ -28,6 +28,9 @@ router.delete('/:id',
     auth,
     deviceController.deleteDevice) ;
 
+router.get('/pgm/:ip',
+    auth,
+    deviceController.getPGMpblink) ;
 
 
 module.exports = router

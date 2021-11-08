@@ -3,6 +3,7 @@ const {validationResult} = require('express-validator');
 const Device = require('../models/Device');
 const DeviceType = require ('../models/DeviceType');
 const { getOPC } = require('./commController');
+const connSQL = require('../config/sql');
 
 exports.addDevice = async (req,res)=>{
     const errors = validationResult(req);
@@ -188,6 +189,7 @@ exports.getDeviceTypes = async (req,res)=>{
 }
 
 exports.getDevice = async (req,res)=>{
+    console.log("ACA")
     const errors = validationResult(req);
     if (!errors.isEmpty()){
         return res.status(400).json({errors:errors.array()});
@@ -243,6 +245,117 @@ exports.deleteDevice = async (req,res)=>{
         
     }
 }
+
+
+exports.getPGMpblink = async(req, res) =>{
+    //console.log('Desde PBLINK del servidor')
+    let resp=""//, StID;
+    const json_error = [{"PBLINK": "No existe ningún PBLINK asociado con esa IP"}]
+    //resp = json_error;
+    pgm=[];
+    pgm_item={};
+    pblink=[];
+    slaves = [];
+    item = {}
+    let i=1
+
+    try {
+        
+        const ip = req.params.ip
+//        console.log(req.params.ip)
+        servidor='localhost'; //POR PARAMETRO
+        //console.log('El server es:', servidor);
+        
+        const conn = await connSQL.conectarSQL('localhost');
+        let pool = await conn.connect();
+        //StrategyID de los 2 pblinks:********************
+        resp = await pool.request()
+            /*.query(`SELECT AreaName, Source AS Tagname, Block, AlarmLimit, ConditionName, Description, Action, Priority, Actor, Value, [EMSEvents].dbo.UTCFILETIMEToDateTime(LocalTime) as Fecha FROM [EMSEvents].dbo.Events where Source like '${TAG}'
+            AND dbo.UTCFILETIMEToDateTime(LocalTime) >= DATEADD(day, -1, GETDATE())`)*/
+            .query(`select spv.StrategyID from (STRATEGY_PARAM_VALUE spv inner join PARAM_DEF pd on spv.ParamID=pd.ParamID inner join TEMPLATE as t on t.TemplateID=pd.TemplateID) where (spv.StringValue='${ip}' and pd.paramname='NETIP' and t.templatename='PBLINK')`)
+        
+        if (!resp.recordset[0]){
+            resp = json_error;
+            res.json({resp});
+            conn.close();
+            return;
+        }
+        //********************************************* */
+        //Obtengo los nombres de los 2 pblinks:********************
+        //var index_pblink=-1
+        //var index_pblname=-1
+        for (pblink_id of resp.recordset){
+            //console.log(pblink_id.StrategyID)
+            respPBL = await pool.request()
+                .query(`select spv.StringValue from (STRATEGY_PARAM_VALUE spv inner join PARAM_DEF pd on spv.ParamID=pd.ParamID inner join TEMPLATE as t on t.TemplateID=pd.TemplateID) where (spv.StrategyID=${pblink_id.StrategyID} and pd.ParamName='NETBLOCKNAME' and t.templatename='PBLINK')`)
+                if (!respPBL.recordset[0]){
+                    resp = json_error;
+                    res.json({resp});
+                    conn.close();
+                    return;
+                }
+                
+                //console.log(respPBL.recordset[0].StringValue)
+                //Obtengo los nombres de los esclavos con sus id's, a partir de los nombres de los pblinks:
+                respName_DSB = await pool.request()
+                    .query(`select s.StrategyID, s.StrategyName from (strategy s inner join TEMPLATE t on s.TemplateID=t.TemplateID) where EEC=(select EEC from STRATEGY where StrategyName='${respPBL.recordset[0].StringValue}') and t.templatename='GENDSBDP'`)
+                    
+                    for(DSB of respName_DSB.recordset){
+                        //console.log(respPBL.recordset[0].StringValue, ': ', DSB.StrategyName, DSB.StrategyID)
+                
+                        //a partir de cada StrategyID de los DSB, obtengo el numero de esclavo:
+                        respNum_DSB = await pool.request()
+                            .query(`select spv.IntegerValue from (STRATEGY_PARAM_VALUE spv  inner join PARAM_DEF p on p.ParamID=spv.ParamID inner join TEMPLATE t on p.TemplateID=t.TemplateID) where (spv.StrategyID=${DSB.StrategyID} and p.ParamName='SLAVEADDRESS' and t.templatename='GENDSBDP')`)
+                        
+                        //a partir de cada StrategyID de los DSB, obtengo el tipo de esclavo:
+                        respTipo_DSB = await pool.request()
+                            .query(`select spv.StringValue from (STRATEGY_PARAM_VALUE spv  inner join PARAM_DEF p on p.ParamID=spv.ParamID inner join TEMPLATE t on p.TemplateID=t.TemplateID) where (StrategyID=${DSB.StrategyID} and p.ParamName='DESC' and t.templatename='GENDSBDP')`)
+
+                            item={
+                                DSB_Name: DSB.StrategyName,
+                                Slave_Num: respNum_DSB.recordset[0].IntegerValue, 
+                                Slave_Tipo: respTipo_DSB.recordset[0].StringValue
+                            }
+                            slaves.push(item);
+                            console.log(respPBL.recordset[0].StringValue, ': ', DSB.StrategyName, '(',respNum_DSB.recordset[0].IntegerValue, ') - ', respTipo_DSB.recordset[0].StringValue)//, DSB.StrategyID)
+
+                    }
+                    const key="PBLINK"+i //respPBL.recordset[0].StringValue //nombre PBLINK
+                    i=i+1
+                    var obj = {};
+                    //consultas OPC:
+                    pgm_item["name"]=respPBL.recordset[0].StringValue //nombre PBLINK
+                    pgm_item["linknum"]=0
+                    pgm_item["fielnetwrktype"]="PROFIBUS DP"
+                    pgm_item["cpuload"]=70
+                    
+                    if (!respName_DSB.recordset[0]){
+                        console.log(respPBL.recordset[0].StringValue, ': No hay DSB asociados')
+                        obj[key] = {slaves: [], properties: pgm_item};
+                        pgm.push(obj)
+                    }
+                    else{
+                        obj[key]={slaves: slaves, properties: pgm_item}
+                        pgm.push(obj)
+                        
+                    }
+                    slaves = [];
+                    pgm_item={};
+        }      
+
+        res.json({pgm});
+        //res.json(json_error)
+        //***** */
+        //res.json({resp});
+        conn.close();
+        return;
+        
+     } catch (error) {
+         console.log(error);
+         res.status(500).send("Error al visualizar el PBLINK--")
+     }
+}
+
 
 exports.getOPCItem = async(req, res) => {
     
