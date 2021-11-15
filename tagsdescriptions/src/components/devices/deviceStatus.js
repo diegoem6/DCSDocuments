@@ -1,5 +1,7 @@
 import React, {useState, useContext, useEffect,Fragment} from 'react';
 import deviceContext from '../../context/devices/devicesContext'
+import C300 from './C300'
+import PGM from './PGM';
 
 const DeviceStatus = () => {
     
@@ -7,11 +9,7 @@ const DeviceStatus = () => {
     const dContext = useContext(deviceContext)
     const {getDevice, getDeviceType, networkmodelo, deviceSelected, devicetype} = dContext
 
-    const [deviceName, setDeviceName] = useState('')
-    const [deviceDescription, setDeviceDescription] = useState('')
     const [deviceTipo, setDeviceTipo] = useState('')
-    const [deviceIP, setDeviceIP] = useState('')
-    const [deviceURLOPC, setdeviceURLOPC] = useState('')
 
 
     useEffect(() => {
@@ -27,12 +25,9 @@ const DeviceStatus = () => {
 
     useEffect(() => {
         if(deviceSelected){
-            setDeviceName(deviceSelected.deviceName);
-            setDeviceDescription(deviceSelected.deviceDescription);
             getDeviceType(deviceSelected.deviceType); //aca tengo el ID
-            console.log(deviceSelected.deviceType)
-            setDeviceIP(deviceSelected.deviceIP);
-            setdeviceURLOPC(deviceSelected.deviceURLOPC);
+            deviceSelected.status = deviceStatus
+            
         }
         
     }, [deviceSelected])
@@ -40,174 +35,180 @@ const DeviceStatus = () => {
     useEffect(() => {
         if(devicetype){
             setDeviceTipo(devicetype.type)
+            deviceSelected.type_desc =  devicetype
+            
         }
     }, [devicetype])
 
+    const deviceStatus = {
+        "pgm": [
+            {
+                "PBLINK1": {
+                    "slaves": [
+                        {
+                            "DSB_Name": "302_42_136_DSB",
+                            "Slave_Num": 75,
+                            "Slave_Tipo": "ABB UMC22 Starter"
+                        },
+                        {
+                            "DSB_Name": "302_42_139_DSB",
+                            "Slave_Num": 78,
+                            "Slave_Tipo": "ABB UMC22 Starter"
+                        },
+                        {
+                            "DSB_Name": "300_40_151_DSB",
+                            "Slave_Num": 102,
+                            "Slave_Tipo": "DIRIS A40"
+                        },
+                        {
+                            "DSB_Name": "300_86_301_DSB",
+                            "Slave_Num": 101,
+                            "Slave_Tipo": "DIRIS A40"
+                        },
+                        {
+                            "DSB_Name": "301_42_066_DSB",
+                            "Slave_Num": 64,
+                            "Slave_Tipo": "ABB UMC22 Starter"
+                        },
+                        {
+                            "DSB_Name": "301_42_067_DSB",
+                            "Slave_Num": 65,
+                            "Slave_Tipo": "ABB UMC22 Starter"
+                        },
+                        {
+                            "DSB_Name": "302_42_078_DSB",
+                            "Slave_Num": 57,
+                            "Slave_Tipo": "ABB UMC22 Starter"
+                        },
+                        {
+                            "DSB_Name": "302_42_007_DSB",
+                            "Slave_Num": 32,
+                            "Slave_Tipo": "ABB UMC22 Starter"
+                        },
+                        {
+                            "DSB_Name": "302_42_061_DSB",
+                            "Slave_Num": 51,
+                            "Slave_Tipo": "ABB UMC22 Starter"
+                        },
+                        {
+                            "DSB_Name": "302_42_062_DSB",
+                            "Slave_Num": 52,
+                            "Slave_Tipo": "ABB UMC22 Starter"
+                        },
+                        {
+                            "DSB_Name": "302_42_111_DSB",
+                            "Slave_Num": 67,
+                            "Slave_Tipo": "ABB UMC22 Starter"
+                        }
+                    ],
+                    "properties": {
+                        "name": "302C2PB02L01",
+                        "linknum": 0,
+                        "fielnetwrktype": "PROFIBUS DP",
+                        "cpuload": 70,
+                        "state": "ONLINE"
+                    }
+                }
+            },
+            {
+                "PBLINK2": {
+                    "slaves": [],
+                    "properties": {
+                        "name": "302C2PB02L02",
+                        "linknum": 0,
+                        "fielnetwrktype": "PROFIBUS DP",
+                        "cpuload": 70,
+                        "state": "OFFLINE"
+                    }
+                }
+            }, 
+            {
+                "state": {
+                    "bcmstate": "OK", //state
+                    "modisredun": "off", //redundancy
+                    "cpufreeavg": 78.85, //cpu free avg
+                    "freememink": 9752, //free memory
+                    "ctemp": 37.25, //current temperature
+                    "pktstxavg" : 60, //pda packet sent avg
+                    "pktsrxavg" : 20, //pda packet received avg
+                    "pdcmsgavg": 1640, //pdc messages avg
+                    "cda_averagedisplayparams": 3.67,
+                    "softfailure": [
+                        {
+                            "label": "Device index switches changes",
+                            "value": "on"
+                        },
+                        {
+                            "label": "Factory data error",
+                            "value": "on"
+                        },
+                        {
+                            "label": "ROM Application Image Checksum",
+                            "value": "off"
+                        },
+                        {
+                            "label": "ROM Boot Image Checksum Failure",
+                            "value": "off"
+                        },
+                        {
+                            "label": "WDT Hardware Failure",
+                            "value": "on"
+                        },
+                        {
+                            "label": "WDT Refresh Warning",
+                            "value": "off"
+                        },
+                        {
+                            "label": "Critical Task Watchdog Warning",
+                            "value": "on"
+                        },
+                        {
+                            "label": "Uncorrectable Internal RAM Sweep Error",
+                            "value": "off"
+                        },
+                        {
+                            "label": "Corrected User RAM Sweep Error",
+                            "value": "on"
+                        },
+                        {
+                            "label": "Debug Flag Enabled",
+                            "value": "on"
+                        },
+                        {
+                            "label": "Minimum HW Revision",
+                            "value": "off"
+                        },
+                        {
+                            "label": "Partner Not Visible On FTE",
+                            "value": "on"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+    
 
     return ( 
         <Fragment>
-            <h1>{deviceTipo} : {deviceName}</h1>
-            <h2>{deviceDescription}</h2>
-            <h2>IP: {deviceIP}</h2>
-            <div class="device_grid">
-                {deviceTipo?
-                    <img classname="device_img" src={devicetype.url} alt={devicetype.url}/>
-                : null
-                }
-                <div className="device_div">
-                    <table className="device_table">
-                        <tr>
-                            <th width="50%">Estado Controlador</th>
-                            <td width="50%" key="nombre">CEE RUN</td>
-                        </tr>
-                    </table>
-                    <table className="device_table">
-                        <tr>
-                            <th bgcolor= "#dddddd" width="25%">FTE A</th>
-                            <td bgcolor= "#dddddd" width="25%" key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                            <th bgcolor= "#dddddd" width="25%">FTE B</th>
-                            <td bgcolor= "#dddddd" width="25%" key="nombre2">
-                            <img src = "/img/icon_red.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                    </table>
-                    <table className="device_table">
-                        <tr>
-                            <th width="50%">CPU Free (%)</th>
-                            <td width="50%" key="nombre">89.28</td>
-                        </tr>
-                        <tr>
-                            <th width="50%">Temp (°C)</th>
-                            <td width="50%" key="nombre">42.00</td>
-                        </tr>
-                        <tr>
-                            <th width="50%">Redundancy</th>
-                            <td width="50%" key="nombre">NONREDUND</td>
-                        </tr>
-                        <tr>
-                            <th width="50%">FTE InterLAN comm. failed</th>
-                            <td width="50%" key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th width="50%">FTE crossover cable field</th>
-                            <td width="50%" key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                    </table>
-                </div>   
-                <div className="device_div">
-                    <table className="device_table">
-                        <tr>
-                            <th width="50%">Battery State Warning</th>
-                            <td width="50%" key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Device Index Switches Changed</th>
-                            <td key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Factory Data Error</th>
-                            <td key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>ROM Application Image Checksum Failure</th>
-                            <td key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>ROM Boot Image Checksum Failure</th>
-                            <td key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>WDT Hardware Failure</th>
-                            <td key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>WDT Refresh Warning</th>
-                            <td key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Critical Task Watchdog Warning</th>
-                            <td key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Uncorrectable Internal RAM Sweep Error</th>
-                            <td key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Corrected Internal RAM Sweep Error</th>
-                            <td key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Uncorrected User RAM Sweep Error</th>
-                            <td key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Corrected User RAM Sweep Error</th>
-                            <td key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>IOLINK(1) Soft Fail Error</th>
-                            <td key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>IOLINK(2) Soft Fail Error</th>
-                            <td key="nombre">
-                                <img src = "/img/icon_red.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Debug Flag Enabled</th>
-                            <td key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Minimum HW Revision</th>
-                            <td key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Partner Not Visible on FTE</th>
-                            <td key="nombre">
-                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                            </td>
-                        </tr>
-                        
-                    </table>
-                </div>    
-            </div>
+            
+                
+            {deviceSelected ? 
+                <div>
+                    <h1>{deviceTipo} : {deviceSelected.deviceName}</h1>
+                    <h2>{deviceSelected.deviceDescription}</h2>
+                    <h2>IP: {deviceSelected.deviceIP}</h2>
+                    { deviceTipo === "C300" ? 
+                        <C300 
+                            deviceSelected = {deviceSelected} /> 
+                            :
+                        <PGM
+                            deviceSelected = {deviceSelected} /> 
+                    }
+                </div>
+                : 
+                null 
+            }
         </Fragment>
      );
 }

@@ -70,6 +70,7 @@ const DevicesState = props=>{
                 type:GET_DEVICE,
                 payload:res.data.device_get //device_get esta definida en la respuesta del server
             })
+            console.log(res)
         } catch (error) {
             const alert = {
                 msg:"hubo un error con el nooe de red",
