@@ -189,7 +189,7 @@ exports.getDeviceTypes = async (req,res)=>{
 }
 
 exports.getDevice = async (req,res)=>{
-    console.log("ACA")
+    //console.log("ACA")
     const errors = validationResult(req);
     if (!errors.isEmpty()){
         return res.status(400).json({errors:errors.array()});
@@ -247,8 +247,22 @@ exports.deleteDevice = async (req,res)=>{
 }
 
 
-exports.getPGMpblink = async(req, res) =>{
+exports.getC300 = async (req, res) => {
+    //recibo la IP y obtengo los datos de opc http://localhost:4000/api/devices/c300/192.53.11.251
+    const ip = req.params.ip
+    //console.log(ip)
+
+}
+
+
+exports.getPGM = async(req, res) =>{
     //console.log('Desde PBLINK del servidor')
+    
+    const idDevice = req.params.id
+    const device = await Device.findById(idDevice)
+
+    console.log(device.deviceURLOPC, device.deviceIP)
+
     let resp=""//, StID;
     const json_error = [{"PBLINK": "No existe ningún PBLINK asociado con esa IP"}]
     //resp = json_error;
@@ -329,6 +343,10 @@ exports.getPGMpblink = async(req, res) =>{
                     pgm_item["fielnetwrktype"]="PROFIBUS DP"
                     pgm_item["cpuload"]=70
                     
+                    data=getOPCItems('192.168.217.130', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
+                    console.log(data)
+                    //recorrer el json 
+
                     if (!respName_DSB.recordset[0]){
                         console.log(respPBL.recordset[0].StringValue, ': No hay DSB asociados')
                         obj[key] = {slaves: [], properties: pgm_item};
@@ -356,9 +374,38 @@ exports.getPGMpblink = async(req, res) =>{
      }
 }
 
+exports.getOPCItems = (req, res) =>{
+//const getOPCItems=async(ip, domain, user, pass, clsid, opc_route) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
 
-exports.getOPCItem = async(req, res) => {
-    
+    try {
+
+        
+        /*const datos_opc = await getOPC('192.168.217.130', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
+        if (!datos_opc){
+            console.log("No existe el nodo de red solicitado");
+            return res.status(404).send("No existe el nodo de red solicitadno")
+        }*/
+        const datos_opc=[
+            {name:"linknum",value: 1} ,
+            {"fielnetwrktype": "PROFIBUS DP"}
+        ]
+        //json que devuelve nombre del campo y valor (NAN en caso que quality <> 192)
+        res.json({datos_opc})
+        
+       res.json(ip)
+    } catch ({error}) {
+        console.log(error);
+        res.status(500).send({msg:"No se pudo eliminar el nodo de red, contacte a un administrador"})
+        
+    }
+}
+
+/*exports.getOPCItem = async(req, res) => {
+    //console.log("Entroooo")
     const errors = validationResult(req);
     if (!errors.isEmpty()){
         return res.status(400).json({errors:errors.array()});
@@ -369,7 +416,7 @@ exports.getOPCItem = async(req, res) => {
         const {data} = req.query
         //const {ip, tipo} = JSON.parse(data)
 
-        const datos_opc = await getOPC('192.168.217.130', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',['ASSETS/PRUEBA/POIANA1.PV','ASSETS/PRUEBA/ALTURA.PV', 'System Components/SRV-500/Controllers/C300_149.CPUFREEAVG'])
+        const datos_opc = await getOPC('192.168.217.130', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
         if (!datos_opc){
             console.log("No existe el nodo de red solicitado");
             return res.status(404).send("No existe el nodo de red solicitado")
@@ -384,4 +431,36 @@ exports.getOPCItem = async(req, res) => {
         res.status(500).send({msg:"No se pudo eliminar el nodo de red, contacte a un administrador"})
         
     }
-}
+*/
+
+//esta funcion esta OK:
+/*exports.getOPCItem = async(req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+
+    try {
+
+        const {data} = req.query
+        //const {ip, tipo} = JSON.parse(data)
+        console.log("antes de los datos")
+        
+        const datos_opc = await getOPC('192.168.217.139', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])//['ASSETS/PRUEBA/POIANA1.PV','ASSETS/PRUEBA/ALTURA.PV', 'System Components/SRV-500/Controllers/C300_149.CPUFREEAVG'])
+        console.log("Los datos OPC son: ",datos_opc)
+        if (!datos_opc){
+            console.log("No existe el nodo de red solicitado");
+            return res.status(404).send("No existe el nodo de red solicitado")
+        }
+
+        //let show_run = await connectTelnetShow(hostname, ip, tipo) //aca guardo el archivo, ver como aviso con urlDoc
+        //show_run = `${hostname}-show_${tipo}.txt`
+        res.json({datos_opc})
+
+    } catch ({error}) {
+        console.log("El error es ",error);
+        res.status(500).send({msg:"Hubo un error, contacte a un administrador"})
+        
+    }
+}*/

@@ -26,7 +26,7 @@ const DeviceStatus = () => {
     useEffect(() => {
         if(deviceSelected){
             getDeviceType(deviceSelected.deviceType); //aca tengo el ID
-            deviceSelected.status = deviceStatus
+            deviceSelected.status = deviceStatus //debería venir por el getDevice
             
         }
         
@@ -40,6 +40,90 @@ const DeviceStatus = () => {
         }
     }, [devicetype])
 
+    const deviceStatusC300 = {
+        "c300": {
+            "state": {
+                "c300state": "CEE RUN", //state
+                "lanafailed": "OFF", //FTE A Status
+                "lanbfailed": "ON", //FTE B Status
+                "cpufreeavg": 97.22, //CPU Free (%)
+                "ctemp": 37.25, //Temp (°C)
+                "rdnrolestate" : "NONREDUND", //redundancy
+                "interlanfailed" : "OFF", //fte interlan comm. failed
+                "xoverfailed": "OFF", //fte crossover cable field
+                "softfailure": [
+                    {
+                        "label": "Battery State Warning",
+                        "value": "on"
+                    },
+                    {
+                        "label": "Device Index Switches Changed",
+                        "value": "on"
+                    },
+                    {
+                        "label": "Factory Data Error",
+                        "value": "off"
+                    },
+                    {
+                        "label": "ROM Application Image Checksum Failure",
+                        "value": "off"
+                    },
+                    {
+                        "label": "ROM Boot Image Checksum Failure",
+                        "value": "on"
+                    },
+                    {
+                        "label": "WDT Hardware Failure",
+                        "value": "off"
+                    },
+                    {
+                        "label": "WDT Refresh Warning",
+                        "value": "on"
+                    },
+                    {
+                        "label": "Critical Task Watchdog Warning",
+                        "value": "off"
+                    },
+                    {
+                        "label": "Uncorrectable Internal RAM Sweep Error",
+                        "value": "on"
+                    },
+                    {
+                        "label": "Corrected Internal RAM Sweep Error",
+                        "value": "on"
+                    },
+                    {
+                        "label": "Uncorrected User RAM Sweep Error",
+                        "value": "off"
+                    },
+                    {
+                        "label": "Corrected User RAM Sweep Error",
+                        "value": "on"
+                    },
+                    {
+                        "label": "IOLINK(1) Soft Fail Error",
+                        "value": "on"
+                    },
+                    {
+                        "label": "IOLINK(2) Soft Fail Error",
+                        "value": "on"
+                    },
+                    {
+                        "label": "Debug Flag Enabled",
+                        "value": "on"
+                    },
+                    {
+                        "label": "Minimum HW Revision",
+                        "value": "on"
+                    },
+                    {
+                        "label": "Partner Not Visible on FTE",
+                        "value": "on"
+                    }
+                ]
+            }
+        }
+    }
     const deviceStatus = {
         "pgm": [
             {
