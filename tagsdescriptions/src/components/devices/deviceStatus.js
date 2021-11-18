@@ -37,7 +37,7 @@ const DeviceStatus = () => {
         if(devicetype){
             setDeviceTipo(devicetype.type)
             deviceSelected.type_desc =  devicetype
-            
+            deviceSelected.status = deviceStatusC300v2
         }
     }, [devicetype])
 
