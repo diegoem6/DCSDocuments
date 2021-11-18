@@ -33,11 +33,11 @@ router.delete('/:id',
     //deviceController.getDeviceStatus) ;
  
 router.get('/pgm/:id',
-    auth,
+    //auth,
     deviceController.getPGM) ;
 
 router.get('/c300/:id',
-    auth,
+    //auth,
     deviceController.getC300) ;
 
 //router.get('/opc/:ip',

@@ -143,6 +143,7 @@ exports.getOPC = async(ip, domain, user, pass, clsid, opc_route)=>{
     
     //const listaItem=['ASSETS/PRUEBA/POIANA1.PV','ASSETS/PRUEBA/ALTURA.PV']
     const listaItem = opc_route
+    //console.log (listaItem)
     let itemsList=[]
     for (let i = 0; i < listaItem.length; i++) {
       itemsList[i]={
@@ -152,6 +153,8 @@ exports.getOPC = async(ip, domain, user, pass, clsid, opc_route)=>{
     }
 
     let resAddItems = await opcItemManager.add(itemsList);
+    //console.log(resAddItems)
+    
     opcItemManager.validate(itemsList);
 
     //LEO EL GRUPPO:
@@ -161,7 +164,8 @@ exports.getOPC = async(ip, domain, user, pass, clsid, opc_route)=>{
       const item = itemsList[i];
 
       if (resItem[0] !== 0) {
-          node.error(`Error adding item '${itemsList[i].itemID}': ${errorMessage(resItem[0])}`);
+          return null
+          //node.error(`Error adding item '${itemsList[i].itemID}': ${errorMessage(resItem[0])}`);
       } else {
           serverHandles.push(resItem[1].serverHandle);
       }
@@ -169,8 +173,19 @@ exports.getOPC = async(ip, domain, user, pass, clsid, opc_route)=>{
     
     
     let opcSyncIO = await opcGroup.getSyncIO();
-    const resultado=await opcSyncIO.read(opc.constants.opc.dataSource.DEVICE, serverHandles)//.then(cycleCallback).catch(cycleError);
-    console.log(resultado)
+    
+    let resultado=await opcSyncIO.read(opc.constants.opc.dataSource.DEVICE, serverHandles)//.then(cycleCallback).catch(cycleError);
+    
+    for (let i = 0; i < resAddItems.length; i++) {
+      const resItem = resAddItems[i];
+      if (resItem[0] !== 0) {
+        //console.log ("El resitem es: ",resItem)
+        return null //node.error(`Error adding item '${itemsList[i].itemID}': ${errorMessage(resItem[0])}`);
+      } else {
+        resultado[i].itemID = resItem[1].itemID
+      }
+    }
+    //console.log("El resultado es", resultado)
     return resultado
 
 }
