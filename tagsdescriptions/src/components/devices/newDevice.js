@@ -28,6 +28,7 @@ const NewDevice = () => {
     useEffect(() => { /*tuve que meterlo en un useeffect porque en una funcion entraba dos veces*/
         //console.log(deviceSelected)
         getDeviceTypes()
+        console.log(devicetypes)
         if (deviceSelected !== null && deviceSelected.length>0){
             //console.log(deviceSelected)
             const [currentnetDevice] = deviceSelected
