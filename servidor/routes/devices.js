@@ -28,9 +28,19 @@ router.delete('/:id',
     auth,
     deviceController.deleteDevice) ;
 
-router.get('/pgm/:ip',
+//router.get('/device/:id',
+//    auth,
+    //deviceController.getDeviceStatus) ;
+ 
+router.get('/pgm/:id',
     auth,
-    deviceController.getPGMpblink) ;
+    deviceController.getPGM) ;
 
+router.get('/c300/:id',
+    auth,
+    deviceController.getC300) ;
+
+//router.get('/opc/:ip',
+//    deviceController.getOPCItems)
 
 module.exports = router

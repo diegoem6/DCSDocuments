@@ -33,7 +33,6 @@ app.use('/api/networkmodels', require('./routes/networkmodels'));
 app.use('/api/networkShow', require('./routes/networkShow'));
 app.use('/api/devices', require('./routes/devices'));
 app.use('/api/devicestypes', require('./routes/devicestypes'));
-app.use('/api/deviceopc', require('./routes/deviceopc'));
 app.use('/api/files', require('./routes/files'));
 
 app.listen (PORT, ()=>{
