@@ -12,7 +12,8 @@ import {
     GET_DEVICE,
     GET_DEVICE_TYPES,
     GET_DEVICE_TYPE,
-    RESET_MESSAGE
+    RESET_MESSAGE,
+    GET_DEVICE_STATUS
     } from '../../types/index'
 
 import axiosClient from '../../config/axios'
@@ -28,7 +29,8 @@ const DevicesState = props=>{
         message:null,
         devicetypes:[],
         devicetype:null,
-        error: false
+        error: false,
+        status:{}
     }
 
     //Dispatch para ejecutar las acciones
@@ -178,6 +180,23 @@ const DevicesState = props=>{
         }      
     }
 
+    const getDeviceStatus = async (idDevice) =>{
+        try {
+            const res = await axiosClient.get(`/api/devices/c300/${idDevice}`)
+            
+            dispatch({
+                type:GET_DEVICE_STATUS,
+                payload:res.data
+            })
+            
+
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
+
+
     const updateDevice = async (device) =>{
         
         try {
@@ -205,6 +224,7 @@ const DevicesState = props=>{
                 error: state.error,
                 devicetypes: state.devicetypes,
                 devicetype: state.devicetype,
+                status: state.status,
 
                 showForm, 
                 createDevice,
@@ -216,7 +236,8 @@ const DevicesState = props=>{
                 deleteDevice,
                 getDeviceTypes,
                 getDeviceType,
-                resetMessage
+                resetMessage,
+                getDeviceStatus
                 
             }}
         >

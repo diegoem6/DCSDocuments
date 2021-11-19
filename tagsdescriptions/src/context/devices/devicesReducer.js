@@ -9,7 +9,8 @@ import {
     UPDATE_DEVICE,
     GET_DEVICE_TYPES,
     GET_DEVICE_TYPE,
-    RESET_MESSAGE
+    RESET_MESSAGE,
+    GET_DEVICE_STATUS
     } from '../../types/index'
 
 export default (state,action)=>{
@@ -85,6 +86,13 @@ export default (state,action)=>{
             return({
                 ...state,
                 devicetype: action.payload
+            })
+        case GET_DEVICE_STATUS:
+            return({
+                ...state,
+                message:null,
+                error: false,
+                status: action.payload
             })
         default:
             return state;

@@ -1,3 +1,4 @@
+import { stat } from 'fs';
 import React, {useState, useContext, useEffect,Fragment} from 'react';
 import deviceContext from '../../context/devices/devicesContext'
 import C300 from './C300'
@@ -7,7 +8,7 @@ const DeviceStatus = () => {
     
     const devicestatusID=localStorage.getItem('devicestatusID');
     const dContext = useContext(deviceContext)
-    const {getDevice, getDeviceType, networkmodelo, deviceSelected, devicetype} = dContext
+    const {getDevice, getDeviceType, networkmodelo, deviceSelected, devicetype, getDeviceStatus, status} = dContext
 
     const [deviceTipo, setDeviceTipo] = useState('')
 
@@ -15,6 +16,7 @@ const DeviceStatus = () => {
     useEffect(() => {
         if (devicestatusID){
             getDevice(devicestatusID)
+            getDeviceStatus(devicestatusID)
             //console.log("El nodo seleccionado es: ",networkNodeSelected) //aca me quede no se por que no trae nada networkNodeSelected, pero si tiene...
             }
         else{
@@ -24,11 +26,16 @@ const DeviceStatus = () => {
     }, [devicestatusID])
 
     useEffect(() => {
+        if(status && deviceSelected){
+            deviceSelected.status_=status
+            console.log(deviceSelected.status_)
+        }
+    }, [status])
+
+    useEffect(() => {
         if(deviceSelected){
             getDeviceType(deviceSelected.deviceType); //aca tengo el ID
             //deviceSelected.status = deviceStatus
-            deviceSelected.status = deviceStatusC300v2;
-            
         }
         
     }, [deviceSelected])
@@ -37,7 +44,6 @@ const DeviceStatus = () => {
         if(devicetype){
             setDeviceTipo(devicetype.type)
             deviceSelected.type_desc =  devicetype
-            deviceSelected.status = deviceStatusC300v2
         }
     }, [devicetype])
 
@@ -423,12 +429,12 @@ const DeviceStatus = () => {
         <Fragment>
             
                 
-            {deviceSelected ? 
+            {(deviceSelected ) ? 
                 <div>
                     <h1>{deviceTipo} : {deviceSelected.deviceName}</h1>
                     <h2>{deviceSelected.deviceDescription}</h2>
                     <h2>IP: {deviceSelected.deviceIP}</h2>
-                    { deviceTipo === "c300" ? 
+                    { deviceTipo === "C300" ? 
                         <C300 
                             deviceSelected = {deviceSelected} /> 
                             :
