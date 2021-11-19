@@ -1032,14 +1032,21 @@ table {
   align-content: center;
 }
 
-td, th {
-  border: 1px solid #dddddd;
+td {
+  text-align: left;
+  padding: 8px;
+}
+th {
   text-align: left;
   padding: 8px;
 }
 
 tr:nth-child(even) {
   background-color: #dddddd;
+}
+
+tr{
+  background-color: white !important;
 }
 
 .paginador {
@@ -1080,6 +1087,25 @@ tr:nth-child(even) {
 
 .device_table{
   width: 100%;
+}
+
+.device_table th{
+  /* background-color: #a3a3d9; */
+  color:white;
+  background-color:  var(--gris3);
+}
+.device_table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+.device_table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+.device_table th:first-child {
+  border-top-left-radius: 10px;
+}
+.device_table th:last-child {
+  border-top-right-radius: 10px;
 }
 
 .device_grid{
