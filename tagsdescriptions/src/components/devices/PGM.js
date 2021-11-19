@@ -1,14 +1,13 @@
 import React, {Fragment} from 'react';
 
 const PGM = ({deviceSelected}) => {
-    console.log(deviceSelected)
     //{deviceSelected.status.pgm[2].state.bcmstate}
     return (
         <Fragment>
         <div className="device_grid">
                 {deviceSelected.type_desc?
                     <img className="device_img" src={deviceSelected.type_desc.url} alt={deviceSelected.type_desc.url}/>
-                : console.log("deviceSelected es null")
+                : null
                 }
                 {deviceSelected.status.pgm ? 
                     <div className="device_div">

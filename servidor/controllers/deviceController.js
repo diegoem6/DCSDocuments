@@ -248,133 +248,275 @@ exports.deleteDevice = async (req,res)=>{
 
 
 exports.getC300 = async (req, res) => {
+    
     //recibo el id y obtengo los datos de opc http://localhost:4000/api/devices/c300/614bd69bf9b2ced7610d0d43
     const idDevice = req.params.id
     const device = await Device.findById(idDevice)
-    //console.log(device.deviceURLOPC, device.deviceIP, device.deviceName)
-    let state=[
-        {property:"C300STATE"},{property:"lanafailed"},{property:"lanbfailed"},{property:"cpufreeavg"},{property:"ctemp"},
-        {property:"rdnrolestate"},{property:"interlanfailed"},{property:"xoverfailed"}
-    ]
-    //console.log(datosC300prop)
-    let opc=[]
-    state.forEach(datos => {
-        opc.push(device.deviceURLOPC + "/" + device.deviceName + "." + datos.property)
-    })
-    //console.log(opc)    
-    try {
+    const c300 = {
+        "state": [
+            {
+                "property": "C300STATE",
+                "type": "value",
+                "label": "Status",
+                "value": "CEERUN"
+            },
+            {
+                "property": "lanafailed",
+                "type": "icon",
+                "label": "FTE A",
+                "value": 0
+            },
+            {
+                "property": "lanbfailed",
+                "type": "icon",
+                "label": "FTE B",
+                "value": 0
+            },
+            {
+                "property": "cpufreeavg",
+                "type": "value",
+                "label": "CPU Free (%)",
+                "value": 95.8852310180664
+            },
+            {
+                "property": "ctemp",
+                "type": "value",
+                "label": "Temp (°C)",
+                "value": 42
+            },
+            {
+                "property": "rdnrolestate",
+                "type": "value",
+                "label": "Redundancy",
+                "value": "NonRedun"
+            },
+            {
+                "property": "interlanfailed",
+                "type": "icon",
+                "label": "FTE InterLAN comm. failed",
+                "value": 0
+            },
+            {
+                "property": "xoverfailed",
+                "type": "icon",
+                "label": "FTE crossover cable field",
+                "value": 0
+            }
+        ],
+        "softfailure": [
+            {
+                "property": "BCDSWSTS",
+                "label": "Battery State Warning",
+                "value": 0
+            },
+            {
+                "property": "BCDSWSTS",
+                "label": "Device Index Switches Changed",
+                "value": 0
+            },
+            {
+                "property": "FACTDATAERR",
+                "label": "Factory Data Error",
+                "value": 0
+            },
+            {
+                "property": "ROMAPPIMGCHKSMFAIL",
+                "label": "ROM Application Image Checksum Failure",
+                "value": 0
+            },
+            {
+                "property": "ROMBOOTIMGCHKSMFAIL",
+                "label": "ROM Boot Image Checksum Failure",
+                "value": 0
+            },
+            {
+                "property": "WDTHWFAIL",
+                "label": "WDT Hardware Failure",
+                "value": 0
+            },
+            {
+                "property": "WDTSWFAIL",
+                "label": "WDT Refresh Warning",
+                "value": 0
+            },
+            {
+                "property": "TASKHLTHMON",
+                "label": "Critical Task Watchdog Warning",
+                "value": 0
+            },
+            {
+                "property": "RAMSWEEPERR",
+                "label": "Uncorrectable Internal RAM Sweep Error",
+                "value": 0
+            },
+            {
+                "property": "RAMSCRUBERRS",
+                "label": "Corrected Internal RAM Sweep Error",
+                "value": 0
+            },
+            {
+                "property": "BACKUPRAMSWEEPERR",
+                "label": "Uncorrected User RAM Sweep Error",
+                "value": 0
+            },
+            {
+                "property": "BACKUPRAMSCRUBERRS",
+                "label": "Corrected User RAM Sweep Error",
+                "value": "oNaNn"
+            },
+            {
+                "property": "IOL1SOFTFAIL",
+                "label": "IOLINK(1) Soft Fail Error",
+                "value": 0
+            },
+            {
+                "property": "IOL2SOFTFAIL",
+                "label": "IOLINK(2) Soft Fail Error",
+                "value": 0
+            },
+            {
+                "property": "DEBUGFLAGSET",
+                "label": "Debug Flag Enabled",
+                "value": 0
+            },
+            {
+                "property": "MINHWREVSF",
+                "label": "Minimum HW Revision",
+                "value": 0
+            },
+            {
+                "property": "PARTNERNOTVISFTE",
+                "label": "Partner Not Visible on FTE",
+                "value": 0
+            }
+        ]
+    }
+    res.json({c300})
+    // //console.log(device.deviceURLOPC, device.deviceIP, device.deviceName)
+    // let state=[
+    //     {property:"C300STATE"},{property:"lanafailed"},{property:"lanbfailed"},{property:"cpufreeavg"},{property:"ctemp"},
+    //     {property:"rdnrolestate"},{property:"interlanfailed"},{property:"xoverfailed"}
+    // ]
+    // //console.log(datosC300prop)
+    // let opc=[]
+    // state.forEach(datos => {
+    //     opc.push(device.deviceURLOPC + "/" + device.deviceName + "." + datos.property)
+    // })
+    // //console.log(opc)    
+    // try {
        
-        let datos_opc = await getOPC('192.168.217.139', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',opc)//['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
-        if (!datos_opc){
-            console.log("Hubo errores en la consulta. Contacte al administrador.");
-            return res.status(404).send("Hubo errores en la consulta. Contacte al administrador.")
-        }
+    //     let datos_opc = await getOPC('192.168.217.139', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',opc)//['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
+    //     if (!datos_opc){
+    //         console.log("Hubo errores en la consulta. Contacte al administrador.");
+    //         return res.status(404).send("Hubo errores en la consulta. Contacte al administrador.")
+    //     }
 
-        let aux0=""
-        switch(datos_opc[0].value){
-            case 0: aux0="OFFNET"
-            break;
-            case 1: aux0="TESTING"
-            break;
-            case 2: aux0="BOOTING"
-            break;
-            case 3: aux0="ALIVE"
-            break;
-            case 4: aux0="LOADING"
-            break;
-            case 5: aux0="OK"
-            break;
-            case 6: aux0="FAILED"
-            break;
-            case 7: aux0="PIREADY"
-            break;
-            case 8: aux0="BACKUP"
-            break;
-            case 9: aux0="NOTLOADED"
-            break;
-            case 10: aux0="NOCEE"
-            break;
-            case 11: aux0="CEEIDLE"
-            break;
-            case 12: aux0= "CEERUN"
-            break;
-            case 13: aux0="CEEMIX"
-            break;
-            case 14: aux0="TIMESOURCE"
-            break;
-            default: aux0="NaN"
-        }
-        let aux1=""
-        switch(datos_opc[5].value){
-            case 0: aux1="Undefined"
-            break;
-            case 1: aux1="NonRedun"
-            break;
-            case 2: aux1="Primary"
-            break;
-            case 3: aux1="Secondary"
-            break;
-            default: aux1="NaN"
-        }
-        //let state=[ //array que voy a llenar con objetos que tienen las propiedades
-        state=[
-            {property:"C300STATE", type:"value", label: "Status", value: aux0},
-            {property:"lanafailed", type:"icon", label: "FTE A", value: datos_opc[1].value},
-            {property:"lanbfailed", type:"icon", label: "FTE B", value: datos_opc[2].value},
-            {property:"cpufreeavg", type:"value", label: "CPU Free (%)", value: datos_opc[3].value},
-            {property:"ctemp", type:"value", label: "Temp (°C)", value: datos_opc[4].value},
-            {property:"rdnrolestate", type:"value", label: "Redundancy", value: aux1},
-            {property:"interlanfailed", type:"icon", label: "FTE InterLAN comm. failed", value: datos_opc[6].value},
-            {property:"xoverfailed", type:"icon", label: "FTE crossover cable field", value: datos_opc[7].value}
-        ]
+    //     let aux0=""
+    //     switch(datos_opc[0].value){
+    //         case 0: aux0="OFFNET"
+    //         break;
+    //         case 1: aux0="TESTING"
+    //         break;
+    //         case 2: aux0="BOOTING"
+    //         break;
+    //         case 3: aux0="ALIVE"
+    //         break;
+    //         case 4: aux0="LOADING"
+    //         break;
+    //         case 5: aux0="OK"
+    //         break;
+    //         case 6: aux0="FAILED"
+    //         break;
+    //         case 7: aux0="PIREADY"
+    //         break;
+    //         case 8: aux0="BACKUP"
+    //         break;
+    //         case 9: aux0="NOTLOADED"
+    //         break;
+    //         case 10: aux0="NOCEE"
+    //         break;
+    //         case 11: aux0="CEEIDLE"
+    //         break;
+    //         case 12: aux0= "CEERUN"
+    //         break;
+    //         case 13: aux0="CEEMIX"
+    //         break;
+    //         case 14: aux0="TIMESOURCE"
+    //         break;
+    //         default: aux0="NaN"
+    //     }
+    //     let aux1=""
+    //     switch(datos_opc[5].value){
+    //         case 0: aux1="Undefined"
+    //         break;
+    //         case 1: aux1="NonRedun"
+    //         break;
+    //         case 2: aux1="Primary"
+    //         break;
+    //         case 3: aux1="Secondary"
+    //         break;
+    //         default: aux1="NaN"
+    //     }
+    //     //let state=[ //array que voy a llenar con objetos que tienen las propiedades
+    //     state=[
+    //         {property:"C300STATE", type:"value", label: "Status", value: aux0},
+    //         {property:"lanafailed", type:"icon", label: "FTE A", value: datos_opc[1].value},
+    //         {property:"lanbfailed", type:"icon", label: "FTE B", value: datos_opc[2].value},
+    //         {property:"cpufreeavg", type:"value", label: "CPU Free (%)", value: datos_opc[3].value},
+    //         {property:"ctemp", type:"value", label: "Temp (°C)", value: datos_opc[4].value},
+    //         {property:"rdnrolestate", type:"value", label: "Redundancy", value: aux1},
+    //         {property:"interlanfailed", type:"icon", label: "FTE InterLAN comm. failed", value: datos_opc[6].value},
+    //         {property:"xoverfailed", type:"icon", label: "FTE crossover cable field", value: datos_opc[7].value}
+    //     ]
 
-        let softfailure=[
-            //{property:"BATTERYNOTOKSFTAB", label: "Battery State Warning",value: "NaN"}//BATTERYNOTOKSFTAB, 
-            {property:"BCDSWSTS"},{property:"FACTDATAERR"},{property:"ROMAPPIMGCHKSMFAIL"},{property:"ROMBOOTIMGCHKSMFAIL"},{property:"WDTHWFAIL"},{property:"WDTSWFAIL"},
-            {property:"TASKHLTHMON"},{property:"RAMSWEEPERR"},{property:"RAMSCRUBERRS"},{property:"BACKUPRAMSWEEPERR"},{property:"BACKUPRAMSCRUBERRS"},
-            {property:"IOL1SOFTFAIL"},{property:"IOL2SOFTFAIL"},{property:"DEBUGFLAGSET"},{property:"MINHWREVSF"},{property:"PARTNERNOTVISFTE"}
-        ]
+    //     let softfailure=[
+    //         //{property:"BATTERYNOTOKSFTAB", label: "Battery State Warning",value: "NaN"}//BATTERYNOTOKSFTAB, 
+    //         {property:"BCDSWSTS"},{property:"FACTDATAERR"},{property:"ROMAPPIMGCHKSMFAIL"},{property:"ROMBOOTIMGCHKSMFAIL"},{property:"WDTHWFAIL"},{property:"WDTSWFAIL"},
+    //         {property:"TASKHLTHMON"},{property:"RAMSWEEPERR"},{property:"RAMSCRUBERRS"},{property:"BACKUPRAMSWEEPERR"},{property:"BACKUPRAMSCRUBERRS"},
+    //         {property:"IOL1SOFTFAIL"},{property:"IOL2SOFTFAIL"},{property:"DEBUGFLAGSET"},{property:"MINHWREVSF"},{property:"PARTNERNOTVISFTE"}
+    //     ]
 
-        opc=[]
-        softfailure.forEach(datos => {
-            opc.push(device.deviceURLOPC + "/" + device.deviceName + "." + datos.property)
-        })
-        //console.log(opc)
-        datos_opc = await getOPC('192.168.217.139', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',opc)//['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
-        if (!datos_opc){
-            console.log("Hubo errores en la consulta. Contacte al administrador.");
-            return res.status(404).send("Hubo errores en la consulta. Contacte al administrador.")
-        }
+    //     opc=[]
+    //     softfailure.forEach(datos => {
+    //         opc.push(device.deviceURLOPC + "/" + device.deviceName + "." + datos.property)
+    //     })
+    //     //console.log(opc)
+    //     datos_opc = await getOPC('192.168.217.139', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',opc)//['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
+    //     if (!datos_opc){
+    //         console.log("Hubo errores en la consulta. Contacte al administrador.");
+    //         return res.status(404).send("Hubo errores en la consulta. Contacte al administrador.")
+    //     }
 
-        softfailure=[
-            {property:"BCDSWSTS", label: "Battery State Warning",value: datos_opc[0].value}, // debería ser: BATTERYNOTOKSFTAB, 
-            {property:"BCDSWSTS", label: "Device Index Switches Changed",value: datos_opc[1].value},
-            {property:"FACTDATAERR", label: "Factory Data Error",value: datos_opc[2].value},
-            {property:"ROMAPPIMGCHKSMFAIL", label: "ROM Application Image Checksum Failure",value: datos_opc[3].value},
-            {property:"ROMBOOTIMGCHKSMFAIL", label: "ROM Boot Image Checksum Failure",value: datos_opc[4].value},
-            {property:"WDTHWFAIL", label: "WDT Hardware Failure",value: datos_opc[5].value},
-            {property:"WDTSWFAIL", label: "WDT Refresh Warning",value: datos_opc[6].value},
-            {property:"TASKHLTHMON", label: "Critical Task Watchdog Warning",value: datos_opc[7].value},
-            {property:"RAMSWEEPERR", label: "Uncorrectable Internal RAM Sweep Error",value: datos_opc[8].value},
-            {property:"RAMSCRUBERRS", label: "Corrected Internal RAM Sweep Error",value: datos_opc[9].value},
-            {property:"BACKUPRAMSWEEPERR", label: "Uncorrected User RAM Sweep Error",value: datos_opc[10].value},
-            {property:"BACKUPRAMSCRUBERRS", label: "Corrected User RAM Sweep Error",value: "oNaNn"},
-            {property:"IOL1SOFTFAIL", label: "IOLINK(1) Soft Fail Error",value: datos_opc[11].value},
-            {property:"IOL2SOFTFAIL", label: "IOLINK(2) Soft Fail Error",value: datos_opc[12].value},
-            {property:"DEBUGFLAGSET", label: "Debug Flag Enabled",value: datos_opc[13].value},
-            {property:"MINHWREVSF", label: "Minimum HW Revision",value: datos_opc[14].value},
-            {property:"PARTNERNOTVISFTE", label: "Partner Not Visible on FTE",value: datos_opc[15].value}
-        ]
+    //     softfailure=[
+    //         {property:"BCDSWSTS", label: "Battery State Warning",value: datos_opc[0].value}, // debería ser: BATTERYNOTOKSFTAB, 
+    //         {property:"BCDSWSTS", label: "Device Index Switches Changed",value: datos_opc[1].value},
+    //         {property:"FACTDATAERR", label: "Factory Data Error",value: datos_opc[2].value},
+    //         {property:"ROMAPPIMGCHKSMFAIL", label: "ROM Application Image Checksum Failure",value: datos_opc[3].value},
+    //         {property:"ROMBOOTIMGCHKSMFAIL", label: "ROM Boot Image Checksum Failure",value: datos_opc[4].value},
+    //         {property:"WDTHWFAIL", label: "WDT Hardware Failure",value: datos_opc[5].value},
+    //         {property:"WDTSWFAIL", label: "WDT Refresh Warning",value: datos_opc[6].value},
+    //         {property:"TASKHLTHMON", label: "Critical Task Watchdog Warning",value: datos_opc[7].value},
+    //         {property:"RAMSWEEPERR", label: "Uncorrectable Internal RAM Sweep Error",value: datos_opc[8].value},
+    //         {property:"RAMSCRUBERRS", label: "Corrected Internal RAM Sweep Error",value: datos_opc[9].value},
+    //         {property:"BACKUPRAMSWEEPERR", label: "Uncorrected User RAM Sweep Error",value: datos_opc[10].value},
+    //         {property:"BACKUPRAMSCRUBERRS", label: "Corrected User RAM Sweep Error",value: "oNaNn"},
+    //         {property:"IOL1SOFTFAIL", label: "IOLINK(1) Soft Fail Error",value: datos_opc[11].value},
+    //         {property:"IOL2SOFTFAIL", label: "IOLINK(2) Soft Fail Error",value: datos_opc[12].value},
+    //         {property:"DEBUGFLAGSET", label: "Debug Flag Enabled",value: datos_opc[13].value},
+    //         {property:"MINHWREVSF", label: "Minimum HW Revision",value: datos_opc[14].value},
+    //         {property:"PARTNERNOTVISFTE", label: "Partner Not Visible on FTE",value: datos_opc[15].value}
+    //     ]
 
-        //console.log(state)
-        const c300={state, softfailure}
-        res.json({c300});
-        //res.json({datos_opc});
-    }
-    catch(error){
-        console.log(error);
-         res.status(500).send("Error al visualizar el C300")
-    }
+    //     //console.log(state)
+    //     const c300={state, softfailure}
+    //     res.json({c300});
+    //     //res.json({datos_opc});
+    // }
+    
+    // catch(error){
+    //     console.log(error);
+    //      res.status(500).send("Error al visualizar el C300")
+    // }
 }
 
 

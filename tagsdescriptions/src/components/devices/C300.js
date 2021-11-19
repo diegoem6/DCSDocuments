@@ -1,17 +1,17 @@
 import React, { Fragment } from 'react';
 
 const C300 = ({deviceSelected}) => {
-    console.log(deviceSelected)
-    console.log(deviceSelected.status_)
+    //console.log(deviceSelected)
+    //console.log(deviceSelected.status_)
     return (
         <div className="device_grid">
                 {deviceSelected.type_desc?
                     <img className="device_img" src={deviceSelected.type_desc.url} alt={deviceSelected.type_desc.url}/>
-                : console.log("deviceSelected es null")
+                : null
                 }
                 {deviceSelected.status_.c300 ? 
                     (
-                    <div>
+                    <Fragment>
                         <div className="device_div">
                             <table className="device_table">
                                 <tbody className="device_table">
@@ -100,9 +100,9 @@ const C300 = ({deviceSelected}) => {
                                 </tbody>        
                             </table>
                         </div>
-                    </div>
+                    </Fragment>
                 )       
-                :console.log(deviceSelected.status_.c300)}
+                :null}
             </div>
     );
 };
