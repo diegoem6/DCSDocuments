@@ -182,7 +182,7 @@ const DevicesState = props=>{
 
     const getDeviceStatus = async (idDevice) =>{
         try {
-            const res = await axiosClient.get(`/api/devices/c300/${idDevice}`)
+            const res = await axiosClient.get(`/api/devices/status/${idDevice}`)
             
             dispatch({
                 type:GET_DEVICE_STATUS,
