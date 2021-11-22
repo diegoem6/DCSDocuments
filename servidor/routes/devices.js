@@ -32,13 +32,19 @@ router.delete('/:id',
 //    auth,
     //deviceController.getDeviceStatus) ;
  
+router.get('/status/:id',
+    //auth,
+    deviceController.getDeviceStatus) ; //no olvidar indicar de que servidor se hacen las consultas SQL, por ahora son del mio local
+
+/*
 router.get('/pgm/:id',
     //auth,
-    deviceController.getPGM) ;
+    deviceController.getPGM) ; //no olvidar indicar de que servidor se hacen las consultas SQL, por ahora son del mio local
 
 router.get('/c300/:id',
     //auth,
     deviceController.getC300) ;
+*/
 
 //router.get('/opc/:ip',
 //    deviceController.getOPCItems)

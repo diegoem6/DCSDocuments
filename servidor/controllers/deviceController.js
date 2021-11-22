@@ -247,19 +247,16 @@ exports.deleteDevice = async (req,res)=>{
 }
 
 
-exports.getC300 = async (req, res) => {
+const getC300 = async (device, res) => {
     //recibo el id y obtengo los datos de opc http://localhost:4000/api/devices/c300/614bd69bf9b2ced7610d0d43
-    const idDevice = req.params.id
-    const device = await Device.findById(idDevice)
+    //const idDevice = req.params.id
+    //const device = await Device.findById(idDevice)
     //console.log(device.deviceURLOPC, device.deviceIP, device.deviceName)
-    let state=[
-        {property:"C300STATE"},{property:"lanafailed"},{property:"lanbfailed"},{property:"cpufreeavg"},{property:"ctemp"},
-        {property:"rdnrolestate"},{property:"interlanfailed"},{property:"xoverfailed"}
-    ]
+    let state=["C300STATE","lanafailed","lanbfailed","cpufreeavg","ctemp","rdnrolestate","interlanfailed","xoverfailed"]
     //console.log(datosC300prop)
     let opc=[]
     state.forEach(datos => {
-        opc.push(device.deviceURLOPC + "/" + device.deviceName + "." + datos.property)
+        opc.push(device.deviceURLOPC + "/" + device.deviceName + "." + datos)
     })
     //console.log(opc)    
     try {
@@ -329,15 +326,15 @@ exports.getC300 = async (req, res) => {
         ]
 
         let softfailure=[
-            //{property:"BATTERYNOTOKSFTAB", label: "Battery State Warning",value: "NaN"}//BATTERYNOTOKSFTAB, 
-            {property:"BCDSWSTS"},{property:"FACTDATAERR"},{property:"ROMAPPIMGCHKSMFAIL"},{property:"ROMBOOTIMGCHKSMFAIL"},{property:"WDTHWFAIL"},{property:"WDTSWFAIL"},
-            {property:"TASKHLTHMON"},{property:"RAMSWEEPERR"},{property:"RAMSCRUBERRS"},{property:"BACKUPRAMSWEEPERR"},{property:"BACKUPRAMSCRUBERRS"},
-            {property:"IOL1SOFTFAIL"},{property:"IOL2SOFTFAIL"},{property:"DEBUGFLAGSET"},{property:"MINHWREVSF"},{property:"PARTNERNOTVISFTE"}
+            //"BATTERYNOTOKSFTAB",
+            "BCDSWSTS", "BCDSWSTS","FACTDATAERR","ROMAPPIMGCHKSMFAIL","ROMBOOTIMGCHKSMFAIL","WDTHWFAIL","WDTSWFAIL",
+            "TASKHLTHMON","RAMSWEEPERR","RAMSCRUBERRS","BACKUPRAMSWEEPERR","BACKUPRAMSCRUBERRS",
+            "IOL1SOFTFAIL","IOL2SOFTFAIL","DEBUGFLAGSET","MINHWREVSF","PARTNERNOTVISFTE"
         ]
 
         opc=[]
         softfailure.forEach(datos => {
-            opc.push(device.deviceURLOPC + "/" + device.deviceName + "." + datos.property)
+            opc.push(device.deviceURLOPC + "/" + device.deviceName + "." + datos)
         })
         //console.log(opc)
         datos_opc = await getOPC('192.168.217.139', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',opc)//['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
@@ -347,23 +344,23 @@ exports.getC300 = async (req, res) => {
         }
 
         softfailure=[
-            {property:"BCDSWSTS", label: "Battery State Warning",value: datos_opc[0].value}, // debería ser: BATTERYNOTOKSFTAB, 
-            {property:"BCDSWSTS", label: "Device Index Switches Changed",value: datos_opc[1].value},
-            {property:"FACTDATAERR", label: "Factory Data Error",value: datos_opc[2].value},
-            {property:"ROMAPPIMGCHKSMFAIL", label: "ROM Application Image Checksum Failure",value: datos_opc[3].value},
-            {property:"ROMBOOTIMGCHKSMFAIL", label: "ROM Boot Image Checksum Failure",value: datos_opc[4].value},
-            {property:"WDTHWFAIL", label: "WDT Hardware Failure",value: datos_opc[5].value},
-            {property:"WDTSWFAIL", label: "WDT Refresh Warning",value: datos_opc[6].value},
-            {property:"TASKHLTHMON", label: "Critical Task Watchdog Warning",value: datos_opc[7].value},
-            {property:"RAMSWEEPERR", label: "Uncorrectable Internal RAM Sweep Error",value: datos_opc[8].value},
-            {property:"RAMSCRUBERRS", label: "Corrected Internal RAM Sweep Error",value: datos_opc[9].value},
-            {property:"BACKUPRAMSWEEPERR", label: "Uncorrected User RAM Sweep Error",value: datos_opc[10].value},
-            {property:"BACKUPRAMSCRUBERRS", label: "Corrected User RAM Sweep Error",value: "oNaNn"},
-            {property:"IOL1SOFTFAIL", label: "IOLINK(1) Soft Fail Error",value: datos_opc[11].value},
-            {property:"IOL2SOFTFAIL", label: "IOLINK(2) Soft Fail Error",value: datos_opc[12].value},
-            {property:"DEBUGFLAGSET", label: "Debug Flag Enabled",value: datos_opc[13].value},
-            {property:"MINHWREVSF", label: "Minimum HW Revision",value: datos_opc[14].value},
-            {property:"PARTNERNOTVISFTE", label: "Partner Not Visible on FTE",value: datos_opc[15].value}
+            {property:"BCDSWSTS", label: "Battery State Warning", type:"icon4", value: datos_opc[0].value}, // debería ser: BATTERYNOTOKSFTAB, //tiene 0,1,2,3 estados, 0=OK (verde), 1=Undervoltage (amarillo), 2=Overvoltage (rojo) 3=unknown (gris)
+            {property:"BCDSWSTS", label: "Device Index Switches Changed", type:"icon",value: datos_opc[1].value},
+            {property:"FACTDATAERR", label: "Factory Data Error", type:"icon",value: datos_opc[2].value},
+            {property:"ROMAPPIMGCHKSMFAIL", label: "ROM Application Image Checksum Failure", type:"icon",value: datos_opc[3].value},
+            {property:"ROMBOOTIMGCHKSMFAIL", label: "ROM Boot Image Checksum Failure", type:"icon",value: datos_opc[4].value},
+            {property:"WDTHWFAIL", label: "WDT Hardware Failure", type:"icon",value: datos_opc[5].value},
+            {property:"WDTSWFAIL", label: "WDT Refresh Warning", type:"icon",value: datos_opc[6].value},
+            {property:"TASKHLTHMON", label: "Critical Task Watchdog Warning", type:"icon",value: datos_opc[7].value},
+            {property:"RAMSWEEPERR", label: "Uncorrectable Internal RAM Sweep Error", type:"icon",value: datos_opc[8].value},
+            {property:"RAMSCRUBERRS", label: "Corrected Internal RAM Sweep Error", type:"icon",value: datos_opc[9].value},
+            {property:"BACKUPRAMSWEEPERR", label: "Uncorrected User RAM Sweep Error", type:"icon",value: datos_opc[10].value},
+            {property:"BACKUPRAMSCRUBERRS", label: "Corrected User RAM Sweep Error", type:"icon",value: datos_opc[11].value},
+            {property:"IOL1SOFTFAIL", label: "IOLINK(1) Soft Fail Error", type:"icon",value: datos_opc[12].value},
+            {property:"IOL2SOFTFAIL", label: "IOLINK(2) Soft Fail Error", type:"icon",value: datos_opc[13].value},
+            {property:"DEBUGFLAGSET", label: "Debug Flag Enabled", type:"icon",value: datos_opc[14].value},
+            {property:"MINHWREVSF", label: "Minimum HW Revision", type:"icon",value: datos_opc[15].value},
+            {property:"PARTNERNOTVISFTE", label: "Partner Not Visible on FTE", type:"icon",value: datos_opc[16].value}
         ]
 
         //console.log(state)
@@ -378,31 +375,34 @@ exports.getC300 = async (req, res) => {
 }
 
 
-exports.getPGM = async(req, res) =>{
-    //icon4 para NETWORKSLAVELED[numSalve]
+const getPGM = async(device, res) =>{
+    //type="icon4" para NETWORKSLAVELED[numSalve]:
+        //0=LEDINACTIVE
+        //1=LEDRED
+        //2=LEDGREEN
+        //3=LEDYELLOW
     //recibo el id y obtengo los datos de opc http://localhost:4000/api/devices/pgm/614bd69bf9b2ced7610d0d43
-    const idDevice = req.params.id
+    
+    /*const idDevice = req.params.id
     const device = await Device.findById(idDevice)
-
+    */
     console.log(device.deviceURLOPC, device.deviceIP, device.deviceName)
+    const ip = device.deviceIP
+    servidor='localhost'; //POR PARAMETRO
 
     let resp=""//, StID;
     const json_error = [{"PBLINK": "No existe ningún PBLINK asociado con esa IP"}]
     //resp = json_error;
     pgm=[];
-    pgm_item={};
+    pblink_item=[];
     pblink=[];
-    slaves = [];
+    slaves_aux = [];
+    slaves=[];
     item = {}
     let i=1
 
     try {
-        
-        const ip = req.params.ip
-//        console.log(req.params.ip)
-        servidor='localhost'; //POR PARAMETRO
-        //console.log('El server es:', servidor);
-        
+                
         const conn = await connSQL.conectarSQL('localhost');
         let pool = await conn.connect();
         //StrategyID de los 2 pblinks:********************
@@ -425,64 +425,207 @@ exports.getPGM = async(req, res) =>{
             //console.log(pblink_id.StrategyID)
             respPBL = await pool.request()
                 .query(`select spv.StringValue from (STRATEGY_PARAM_VALUE spv inner join PARAM_DEF pd on spv.ParamID=pd.ParamID inner join TEMPLATE as t on t.TemplateID=pd.TemplateID) where (spv.StrategyID=${pblink_id.StrategyID} and pd.ParamName='NETBLOCKNAME' and t.templatename='PBLINK')`)
-                if (!respPBL.recordset[0]){
-                    resp = json_error;
-                    res.json({resp});
-                    conn.close();
-                    return;
+            if (!respPBL.recordset[0]){
+                resp = json_error;
+                res.json({resp});
+                conn.close();
+                return;
+            }
+            
+            //console.log(respPBL.recordset[0].StringValue)
+            //Obtengo los nombres de los esclavos con sus id's, a partir de los nombres de los pblinks:
+            respName_DSB = await pool.request()
+                .query(`select s.StrategyID, s.StrategyName from (strategy s inner join TEMPLATE t on s.TemplateID=t.TemplateID) where EEC=(select EEC from STRATEGY where StrategyName='${respPBL.recordset[0].StringValue}') and t.templatename='GENDSBDP'`)
+            
+            for(DSB of respName_DSB.recordset){ //armo todos los esclavos
+                //console.log(respPBL.recordset[0].StringValue, ': ', DSB.StrategyName, DSB.StrategyID)
+        
+                //a partir de cada StrategyID de los DSB, obtengo el numero de esclavo:
+                respNum_DSB = await pool.request()
+                    .query(`select spv.IntegerValue from (STRATEGY_PARAM_VALUE spv  inner join PARAM_DEF p on p.ParamID=spv.ParamID inner join TEMPLATE t on p.TemplateID=t.TemplateID) where (spv.StrategyID=${DSB.StrategyID} and p.ParamName='SLAVEADDRESS' and t.templatename='GENDSBDP')`)
+                
+                //a partir de cada StrategyID de los DSB, obtengo el tipo de esclavo:
+                respTipo_DSB = await pool.request()
+                    .query(`select spv.StringValue from (STRATEGY_PARAM_VALUE spv  inner join PARAM_DEF p on p.ParamID=spv.ParamID inner join TEMPLATE t on p.TemplateID=t.TemplateID) where (StrategyID=${DSB.StrategyID} and p.ParamName='DESC' and t.templatename='GENDSBDP')`)
+
+                    item={
+                        DSB_Name: DSB.StrategyName,
+                        Slave_Num: respNum_DSB.recordset[0].IntegerValue, 
+                        Slave_Tipo: respTipo_DSB.recordset[0].StringValue
+                    }
+                    //item.state="on"
+                    slaves_aux.push(item);
+                    console.log(respPBL.recordset[0].StringValue, ': ', DSB.StrategyName, '(',respNum_DSB.recordset[0].IntegerValue, ') - ', respTipo_DSB.recordset[0].StringValue)//, DSB.StrategyID)
+
+            }
+            //slaves_aux[0].state="on"
+            //Consulta los estados de los esclavos del PBLINK - armo los OPC:
+            let opc=[]
+            const pblink_name= respPBL.recordset[0].StringValue //nombre PBLINK
+            opc.push(device.deviceURLOPC + "/" + pblink_name + ".linknum")
+            opc.push(device.deviceURLOPC + "/" + pblink_name + ".fielnetwrktype")
+            opc.push(device.deviceURLOPC + "/" + pblink_name + ".cpuload")
+            opc.push(device.deviceURLOPC + "/" + pblink_name + ".state")
+
+            slaves_aux.forEach(datos => {
+                opc.push(device.deviceURLOPC + "/" + pblink_name + ".NETWORKSLAVELED[" + datos.Slave_Num + "]")
+            })
+            console.log(opc)    
+            try {
+                //let datos_opc = await getOPC('192.168.53.11', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',['System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG']) //,opc
+                datos_opc=[{"value": 0},{"value": "PROFIBUS PA"}, {"value": 70}, {"value": 2}, {"value": 1},{"value": 1},{"value": 1},{"value": 0},{"value": 0},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 0},{"value": 0},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 0},{"value": 0},{"value": 1},{"value": 0},{"value": 2},{"value": 1},{"value": 0}]
+                if (!datos_opc){
+                    console.log("Hubo errores en la consulta OPC. Contacte al administrador.");
+                    return res.status(404).send("Hubo errores en la consulta. Contacte al administrador.")
                 }
                 
-                //console.log(respPBL.recordset[0].StringValue)
-                //Obtengo los nombres de los esclavos con sus id's, a partir de los nombres de los pblinks:
-                respName_DSB = await pool.request()
-                    .query(`select s.StrategyID, s.StrategyName from (strategy s inner join TEMPLATE t on s.TemplateID=t.TemplateID) where EEC=(select EEC from STRATEGY where StrategyName='${respPBL.recordset[0].StringValue}') and t.templatename='GENDSBDP'`)
-                    
-                    for(DSB of respName_DSB.recordset){
-                        //console.log(respPBL.recordset[0].StringValue, ': ', DSB.StrategyName, DSB.StrategyID)
+                estados=[];
                 
-                        //a partir de cada StrategyID de los DSB, obtengo el numero de esclavo:
-                        respNum_DSB = await pool.request()
-                            .query(`select spv.IntegerValue from (STRATEGY_PARAM_VALUE spv  inner join PARAM_DEF p on p.ParamID=spv.ParamID inner join TEMPLATE t on p.TemplateID=t.TemplateID) where (spv.StrategyID=${DSB.StrategyID} and p.ParamName='SLAVEADDRESS' and t.templatename='GENDSBDP')`)
-                        
-                        //a partir de cada StrategyID de los DSB, obtengo el tipo de esclavo:
-                        respTipo_DSB = await pool.request()
-                            .query(`select spv.StringValue from (STRATEGY_PARAM_VALUE spv  inner join PARAM_DEF p on p.ParamID=spv.ParamID inner join TEMPLATE t on p.TemplateID=t.TemplateID) where (StrategyID=${DSB.StrategyID} and p.ParamName='DESC' and t.templatename='GENDSBDP')`)
+                let aux1=""
+                switch(datos_opc[3].value){
+                    case 0: aux1="NOTLOADED"
+                    break;
+                    case 1: aux1="LOADED"
+                    break;
+                    case 2: aux1="ONLINE"
+                    break;
+                    default: aux1="NaN"
+                }
 
-                            item={
-                                DSB_Name: DSB.StrategyName,
-                                Slave_Num: respNum_DSB.recordset[0].IntegerValue, 
-                                Slave_Tipo: respTipo_DSB.recordset[0].StringValue
-                            }
-                            slaves.push(item);
-                            console.log(respPBL.recordset[0].StringValue, ': ', DSB.StrategyName, '(',respNum_DSB.recordset[0].IntegerValue, ') - ', respTipo_DSB.recordset[0].StringValue)//, DSB.StrategyID)
+                //Properties del PBLINk---------------------------------------
+                pblink_item.push({property: "name", label: "Name", type: "value", value: respPBL.recordset[0].StringValue})
+                pblink_item.push({property: "linknum", label: "Numero de Link", type: "value", value: datos_opc[0].value})
+                pblink_item.push({property: "fielnetwrktype", label: "Network Type", type: "value", value: datos_opc[1].value})
+                pblink_item.push({property: "cpuload", label: "CPU (%)", type: "value", value: datos_opc[2].value})
+                pblink_item.push({property: "state", label: "State", type: "icon3", value: aux1})
 
+                slaves_aux.forEach((datos, i) => {
+                    if (i>4){
+                        item={
+                            DSB_Name: datos.DSB_Name,
+                            Slave_Num: datos.Slave_Num, 
+                            Slave_Tipo: datos.Slave_Tipo,
+                            state: datos_opc[i].value
+                        }
+                        slaves.push(item);
                     }
-                    const key="PBLINK"+i //respPBL.recordset[0].StringValue //nombre PBLINK
-                    i=i+1
-                    var obj = {};
-                    //consultas OPC:
-                    pgm_item["name"]=respPBL.recordset[0].StringValue //nombre PBLINK
-                    pgm_item["linknum"]=0
-                    pgm_item["fielnetwrktype"]="PROFIBUS DP"
-                    pgm_item["cpuload"]=70
-                    
-                    data=getOPCItems('192.168.217.130', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
-                    console.log(data)
-                    //recorrer el json 
+                })
+                console.log(estados)
+            }
+            catch(error){
+                console.log(error);
+                 res.status(500).send("Error al levantar los datos por OPC")
+            }
 
-                    if (!respName_DSB.recordset[0]){
-                        console.log(respPBL.recordset[0].StringValue, ': No hay DSB asociados')
-                        obj[key] = {slaves: [], properties: pgm_item};
-                        pgm.push(obj)
-                    }
-                    else{
-                        obj[key]={slaves: slaves, properties: pgm_item}
-                        pgm.push(obj)
-                        
-                    }
-                    slaves = [];
-                    pgm_item={};
-        }      
+            
+
+            const key="PBLINK"+i //respPBL.recordset[0].StringValue //nombre PBLINK
+            i=i+1
+            var obj = {};
+            
+            if (!respName_DSB.recordset[0]){
+                console.log(respPBL.recordset[0].StringValue, ': No hay DSB asociados')
+                obj[key] = {slaves: [], properties: pblink_item}; //si pongo {pblink_item} se escribe tambien pblink_item{datos pblink_item}, como esta ahora se guarda {datos pblink_item}
+                pgm.push(obj)
+            }
+            else{
+                obj[key]={slaves: slaves, properties: pblink_item}
+                pgm.push(obj)
+                
+            }
+            slaves = [];
+            slaves_aux = [];
+            pblink_item=[];
+        }
+        
+        opc=[]
+        const pblink_name= respPBL.recordset[0].StringValue //nombre PBLINK
+        const pgm_status=["bcmstate", "modisredun", "cpufreeavg", "freememink", "ctemp", "pktstxavg", "pktsrxavg", "pdcmsgavg", "cda_averagedisplayparams",
+        "BCDSWSTS", "FACTDATAERR", "ROMAPPIMGCHKSMFAIL", "ROMBOOTIMGCHKSMFAIL", "WDTHWFAIL", "WDTSWFAIL", "TASKHLTHMON", "RAMSWEEPERR", "RAMSCRUBERRS", "BACKUPRAMSWEEPERR", "BACKUPRAMSCRUBERRS", "DEBUGFLAGSET", "MINHWREVSF", "PARTNERNOTVISFTE"]
+        pgm_status.forEach(datos=>{
+            opc.push(device.deviceURLOPC + "/" + device.deviceName + "." + datos)
+        })
+        //console.log("PGM Status: ", opc)
+
+        //consulta OPC:
+        //datos_opc = await getOPC('192.168.53.11', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',opc)
+        //prueba consulta OPC 27 datos:
+        /*['System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG',
+        'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG',
+        'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG',
+        'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG',
+        'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG']) */
+        datos_opc=[{"value":8},{"value":0},{"value":78.85}, {"value":9752}, {"value":37.25}, {"value":60}, {"value":20}, {"value":1640}, {"value":3.67}, {"value": 1}, {"value": 1},
+        {"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 0}]
+        //console.log(datos_opc)
+        
+        let aux0=""
+        switch(datos_opc[0].value){
+            case 0: aux0="OFFNET"
+            break;
+            case 1: aux0="TESTING"
+            break;
+            case 2: aux0="BOOTING"
+            break;
+            case 3: aux0="ALIVE"
+            break;
+            case 4: aux0="LOADING"
+            break;
+            case 5: aux0="OK"
+            break;
+            case 6: aux0="FAILED"
+            break;
+            case 7: aux0="PIREADY"
+            break;
+            case 8: aux0="BACKUP"
+            break;
+            case 9: aux0="NOTLOADED"
+            break;
+            case 10: aux0="NOCEE"
+            break;
+            case 11: aux0="CEEIDLE"
+            break;
+            case 12: aux0= "CEERUN"
+            break;
+            case 13: aux0="CEEMIX"
+            break;
+            case 14: aux0="TIMESOURCE"
+            break;
+            default: aux0="NaN"
+        }
+
+        const softfailure=[
+            {property:"BCDSWSTS", label: "Device Index Switches Changed", type:"icon",value: datos_opc[9].value},
+            {property:"FACTDATAERR", label: "Factory Data Error", type:"icon",value: datos_opc[10].value},
+            {property:"ROMAPPIMGCHKSMFAIL", label: "ROM Application Image Checksum Failure", type:"icon",value: datos_opc[11].value},
+            {property:"ROMBOOTIMGCHKSMFAIL", label: "ROM Boot Image Checksum Failure", type:"icon",value: datos_opc[12].value},
+            {property:"WDTHWFAIL", label: "WDT Hardware Failure", type:"icon",value: datos_opc[13].value},
+            {property:"WDTSWFAIL", label: "WDT Refresh Warning", type:"icon",value: datos_opc[14].value},
+            {property:"TASKHLTHMON", label: "Critical Task Watchdog Warning", type:"icon",value: datos_opc[15].value},
+            {property:"RAMSWEEPERR", label: "Uncorrectable Internal RAM Sweep Error", type:"icon",value: datos_opc[16].value},
+            {property:"RAMSCRUBERRS", label: "Corrected Internal RAM Sweep Error", type:"icon",value: datos_opc[17].value},
+            {property:"BACKUPRAMSWEEPERR", label: "Uncorrected User RAM Sweep Error", type:"icon",value: datos_opc[18].value},
+            {property:"BACKUPRAMSCRUBERRS", label: "Corrected User RAM Sweep Error", type:"icon",value: datos_opc[19].value},
+            {property:"DEBUGFLAGSET", label: "Debug Flag Enabled", type:"icon",value: datos_opc[20].value},
+            {property:"MINHWREVSF", label: "Minimum HW Revision", type:"icon",value: datos_opc[21].value},
+            {property:"PARTNERNOTVISFTE", label: "Partner Not Visible on FTE", type:"icon",value: datos_opc[22].value}
+        ]
+
+        const state =
+            [
+                {property:"BCMSTATE", label: "Device Index Switches Changed", type:"value",value: aux0},
+                {property:"modisredun", label: "Device Index Switches Changed", type:"icon",value: datos_opc[1].value},
+                {property:"cpufreeavg", label: "Device Index Switches Changed", type:"value",value: datos_opc[2].value},
+                {property:"freememink", label: "Device Index Switches Changed", type:"value",value: datos_opc[3].value},
+                {property:"ctemp", label: "Device Index Switches Changed", type:"value",value: datos_opc[4].value},
+                {property:"pktstxavg", label: "Device Index Switches Changed", type:"value",value: datos_opc[5].value},
+                {property:"pktsrxavg", label: "Device Index Switches Changed", type:"value",value: datos_opc[6].value},
+                {property:"pdcmsgavg", label: "Device Index Switches Changed", type:"value",value: datos_opc[7].value},
+                {property:"cda_averagedisplayparams", label: "Device Index Switches Changed", type:"value",value: datos_opc[8].value},
+                {"sorftfailure": softfailure}
+            ]
+        
+        pgm.push({state})
 
         res.json({pgm});
         //res.json(json_error)
@@ -495,6 +638,22 @@ exports.getPGM = async(req, res) =>{
          console.log(error);
          res.status(500).send("Error al visualizar el PBLINK--")
      }
+}
+
+exports.getDeviceStatus = async (req, res)=>{
+    const idDevice = req.params.id
+    const device = await Device.findById(idDevice)
+
+    const device_tipo = await DeviceType.findById(device.deviceType)
+    //console.log(device_tipo.type)
+    switch (device_tipo.type){
+        case 'PGM': getPGM(device, res)
+            break;
+        case 'C300': getC300(device, res)
+            break;
+        default: res.status(500).send("No se encuentra el tipo de dispositivo")
+    }
+    //console.log(device.deviceURLOPC, device.deviceIP, device.deviceName)
 }
 
 exports.getOPCItems = (req, res) =>{
@@ -526,33 +685,4 @@ exports.getOPCItems = (req, res) =>{
         
     }
 }
-
-/*exports.getOPCItem = async(req, res) => {
-    //console.log("Entroooo")
-    const errors = validationResult(req);
-    if (!errors.isEmpty()){
-        return res.status(400).json({errors:errors.array()});
-    }
-
-    try {
-
-        const {data} = req.query
-        //const {ip, tipo} = JSON.parse(data)
-
-        const datos_opc = await getOPC('192.168.217.130', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
-        if (!datos_opc){
-            console.log("No existe el nodo de red solicitado");
-            return res.status(404).send("No existe el nodo de red solicitado")
-        }
-
-        //let show_run = await connectTelnetShow(hostname, ip, tipo) //aca guardo el archivo, ver como aviso con urlDoc
-        //show_run = `${hostname}-show_${tipo}.txt`
-        res.json({datos_opc})
-
-    } catch ({error}) {
-        console.log(error);
-        res.status(500).send({msg:"No se pudo eliminar el nodo de red, contacte a un administrador"})
-        
-    }
-*/
 
