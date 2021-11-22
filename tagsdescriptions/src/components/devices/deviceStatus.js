@@ -28,17 +28,9 @@ const DeviceStatus = () => {
     useEffect(() => {
         if(status && deviceSelected){
             deviceSelected.status_=status
-            console.log(deviceSelected.status_)
+            getDeviceType(deviceSelected.deviceType);
         }
-    }, [status])
-
-    useEffect(() => {
-        if(deviceSelected){
-            getDeviceType(deviceSelected.deviceType); //aca tengo el ID
-            //deviceSelected.status = deviceStatus
-        }
-        
-    }, [deviceSelected])
+    }, [deviceSelected, status])
 
     useEffect(() => {
         if(devicetype){
@@ -424,12 +416,12 @@ const DeviceStatus = () => {
         }
     }
 
-
+    console.log(deviceSelected)
     return ( 
         <Fragment>
             
                 
-            {(deviceSelected ) ? 
+            {(deviceSelected && deviceSelected.status_) ? 
                 <div>
                     <h1>{deviceTipo} : {deviceSelected.deviceName}</h1>
                     <h2>{deviceSelected.deviceDescription}</h2>
