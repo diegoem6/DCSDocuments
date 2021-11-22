@@ -612,8 +612,7 @@ const getPGM = async(device, res) =>{
         ]
 
         const state =
-            [
-                {property:"BCMSTATE", label: "Device Index Switches Changed", type:"value",value: aux0},
+                [{property:"BCMSTATE", label: "Device Index Switches Changed", type:"value",value: aux0},
                 {property:"modisredun", label: "Device Index Switches Changed", type:"icon",value: datos_opc[1].value},
                 {property:"cpufreeavg", label: "Device Index Switches Changed", type:"value",value: datos_opc[2].value},
                 {property:"freememink", label: "Device Index Switches Changed", type:"value",value: datos_opc[3].value},
@@ -622,9 +621,9 @@ const getPGM = async(device, res) =>{
                 {property:"pktsrxavg", label: "Device Index Switches Changed", type:"value",value: datos_opc[6].value},
                 {property:"pdcmsgavg", label: "Device Index Switches Changed", type:"value",value: datos_opc[7].value},
                 {property:"cda_averagedisplayparams", label: "Device Index Switches Changed", type:"value",value: datos_opc[8].value},
-                {"sorftfailure": softfailure}
-            ]
-        
+                {"sorftfailure": softfailure}]
+        //pgm={state}
+        //res.json({c300});
         pgm.push({state})
 
         res.json({pgm});

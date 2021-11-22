@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react';
 
 const PGM = ({deviceSelected}) => {
-    //{deviceSelected.status.pgm[2].state.bcmstate}
+    //{deviceSelected.status_.pgm[2].state.bcmstate}
     return (
         <Fragment>
         <div className="device_grid">
@@ -9,7 +9,7 @@ const PGM = ({deviceSelected}) => {
                     <img className="device_img" src={deviceSelected.type_desc.url} alt={deviceSelected.type_desc.url}/>
                 : null
                 }
-                {deviceSelected.status.pgm ? 
+                {deviceSelected.status_.pgm ? 
                     <div className="device_div">
                         <table className="device_table">
                             <tbody className="device_table">
@@ -17,65 +17,28 @@ const PGM = ({deviceSelected}) => {
                                     <th width="50%">Properties</th>
                                     <th width="50%"></th>
                                 </tr>
-                                <tr>
-                                    <td width="50%"><b>Estado</b></td>
-                                    <td width="50%" key="state">
-                                        {deviceSelected.status.pgm[2].state.bcmstate}
-                                    </td> 
-                                </tr>
-                                <tr>
-                                    <td width="50%"><b>CPU Free (%)</b></td>
-                                    <td width="50%" key="cpu">
-                                        {deviceSelected.status.pgm[2].state.cpufreeavg}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="50%"><b>Memory Free (Kb)</b></td>
-                                    <td width="50%" key="memory">
-                                        {deviceSelected.status.pgm[2].state.freememink}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="50%"><b>Temp (°C)</b></td>
-                                    <td width="50%" key="temp"> 
-                                        {deviceSelected.status.pgm[2].state.ctemp}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="50%"><b>Redundancy</b></td>
-                                    <td width="50%" key="redundancy">
-                                        {deviceSelected.status.pgm[2].state.modisredun}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="50%"><b>PDA packet sent avg</b></td>
-                                    <td width="50%" key="pdapacketsent">
-                                        {deviceSelected.status.pgm[2].state.pktstxavg}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="50%"><b>PDA packet received avg</b></td>
-                                    <td width="50%" key="pdapacketreceived">
-                                        {deviceSelected.status.pgm[2].state.pktsrxavg}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="50%"><b>PDC message avg</b></td>
-                                    <td width="50%" key="pdcemssageavg">
-                                        {deviceSelected.status.pgm[2].state.pdcmsgavg}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="50%"><b>CDA Avg display params/sec</b></td>
-                                    <td width="50%" key="nombre">
-                                        {deviceSelected.status.pgm[2].state.cda_averagedisplayparams}
-                                    </td>
-                                </tr>
+                                {deviceSelected.status_.pgm[2].state.map(datos=>{ //aca se usa map y despues un return, en javascript: foreach
+                                        return(<tr>
+                                            <td width="50%"><b>{datos.label}</b></td>
+                                            {datos.type === "icon" ?
+                                                (datos.value === 0 ? 
+                                                    <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
+                                                    : (<img src = "/img/icon_red.svg.png" className="img_status_interface"/>))
+                                            :
+                                                null
+                                            }
+                                            {(datos.type === "value") ?
+                                                <td width="50%" key="nombre"><b>{datos.value}</b></td>
+                                            :
+                                                null
+                                            }
+                                        </tr>)
+                                    })}
                             </tbody>
                         </table>
                     </div> 
                 : null }
-                {deviceSelected.status.pgm ?
+                {deviceSelected.status_.pgm ?
                     <div className="device_div">
                         <table className="device_table">
                             <tbody className="device_table">
@@ -84,7 +47,7 @@ const PGM = ({deviceSelected}) => {
                                     <th width="50%"></th>
                                 </tr>
                                 {
-                                    deviceSelected.status.pgm[2].state.softfailure.map(
+                                    deviceSelected.status_.pgm[2].state[0].softfailure[0].map(
                                         (failure) => {
                                             return (<tr>
                                                 <td width="50%"><b>{failure.label}</b></td>
@@ -111,7 +74,7 @@ const PGM = ({deviceSelected}) => {
                     <img className="device_img" src=''/>
                 : console.log("deviceSelected es null")
                 }
-                {deviceSelected.status.pgm ? 
+                {deviceSelected.status_.pgm ? 
                     <div className="device_div">
                         <table className="device_table">
                             <tbody className="device_table">
@@ -125,8 +88,8 @@ const PGM = ({deviceSelected}) => {
                                 <tr>
                                     <td width="50%"><b>State</b></td>
                                     <td width="50%" key="namepblink">
-                                       {deviceSelected.status.pgm[0].PBLINK1 ? 
-                                                (deviceSelected.status.pgm[0].PBLINK1.properties.state === "ONLINE" ?
+                                       {deviceSelected.status_.pgm[0].PBLINK1 ? 
+                                                (deviceSelected.status_.pgm[0].PBLINK1.properties.state === "ONLINE" ?
                                                 <img src = "/img/icon_green.svg.png" className="img_status_interface"/>:
                                                 <img src = "/img/icon_red.svg.png" className="img_status_interface"/>) 
                                                 : null}
@@ -135,19 +98,19 @@ const PGM = ({deviceSelected}) => {
                                 <tr>
                                     <td width="50%"><b>Name</b></td>
                                     <td width="50%" key="namepblink">
-                                        {deviceSelected.status.pgm[0].PBLINK1.properties.name}
+                                        {deviceSelected.status_.pgm[0].PBLINK1.properties.name}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td width="50%"><b>Link number</b></td>
                                     <td width="50%" key="linknumber">
-                                        {deviceSelected.status.pgm[0].PBLINK1.properties.linknum}
+                                        {deviceSelected.status_.pgm[0].PBLINK1.properties.linknum}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td width="50%"><b>Field network type</b></td>
                                     <td width="50%" key="fieldnetworktype"> 
-                                        {deviceSelected.status.pgm[0].PBLINK1.properties.fielnetwrktype}
+                                        {deviceSelected.status_.pgm[0].PBLINK1.properties.fielnetwrktype}
                                     </td>
                                 </tr>
                                 
@@ -164,7 +127,7 @@ const PGM = ({deviceSelected}) => {
                                     <th width="16%" key="nombre">State</th>
                                 </tr>
                                 {
-                                deviceSelected.status.pgm[0].PBLINK1.slaves.map(
+                                deviceSelected.status_.pgm[0].PBLINK1.slaves.map(
                                         (slave) => {
                                             return (<tr>
                                                 <td width="34%">{slave.DSB_Name}</td>
@@ -188,7 +151,7 @@ const PGM = ({deviceSelected}) => {
                         </table>
                     </div> 
                 : null }
-                {deviceSelected.status.pgm ? 
+                {deviceSelected.status_.pgm ? 
                     <div className="device_div">
                         <table className="device_table">
                             <tbody className="device_table">
@@ -201,8 +164,8 @@ const PGM = ({deviceSelected}) => {
                                 <tr>
                                     <td width="50%"><b>State</b></td>
                                     <td width="50%" key="namepblink">
-                                       {deviceSelected.status.pgm[1].PBLINK2 ? 
-                                                (deviceSelected.status.pgm[1].PBLINK2.properties.state === "ONLINE" ?
+                                       {deviceSelected.status_.pgm[1].PBLINK2 ? 
+                                                (deviceSelected.status_.pgm[1].PBLINK2.properties.state === "ONLINE" ?
                                                 <img src = "/img/icon_green.svg.png" className="img_status_interface"/>:
                                                 <img src = "/img/icon_red.svg.png" className="img_status_interface"/>) 
                                                 : null}
@@ -211,19 +174,19 @@ const PGM = ({deviceSelected}) => {
                                 <tr>
                                     <td width="50%"><b>Name</b></td>
                                     <td width="50%" key="namepblink">
-                                        {deviceSelected.status.pgm[1].PBLINK2.properties.name}
+                                        {deviceSelected.status_.pgm[1].PBLINK2.properties.name}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td width="50%"><b>Link number</b></td>
                                     <td width="50%" key="linknumber">
-                                        {deviceSelected.status.pgm[1].PBLINK2.properties.linknum}
+                                        {deviceSelected.status_.pgm[1].PBLINK2.properties.linknum}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td width="50%"><b>Field network type</b></td>
                                     <td width="50%" key="fieldnetworktype"> 
-                                        {deviceSelected.status.pgm[1].PBLINK2.properties.fielnetwrktype}
+                                        {deviceSelected.status_.pgm[1].PBLINK2.properties.fielnetwrktype}
                                     </td>
                                 </tr>
                                 
@@ -239,7 +202,7 @@ const PGM = ({deviceSelected}) => {
                                     <th width="34%" key="nombre">State</th>
                                 </tr>
                                 {
-                                deviceSelected.status.pgm[1].PBLINK2.slaves.map(
+                                deviceSelected.status_.pgm[1].PBLINK2.slaves.map(
                                         (slave) => {
                                             return (<tr>
                                                 <td width="34%">{slave.DSB_Name}</td>
