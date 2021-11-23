@@ -462,7 +462,7 @@ const getPGM = async(device, res) =>{
                             if(respTipo_DSB.recordset[0])
                                 tipo=respTipo_DSB.recordset[0].StringValue
                              else
-                                tipo='No especificado'
+                                tipo='Unknown'
                         }
                     item={
                         DSB_Name: DSB.StrategyName,
