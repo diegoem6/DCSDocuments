@@ -2,6 +2,17 @@ import React, {Fragment} from 'react';
 
 const PGM = ({deviceSelected}) => {
     //{deviceSelected.status_.pgm[2].state.bcmstate}
+    
+    const renderSwitch_icon3 = (param) => {
+        console.log(param)
+        switch(param) {
+            case "NOTLOADED": return (<div><td width="10%" key="icono"><img src = "/img/icon_grey.svg.png" className="img_status_interface"/></td><td width="40%" key="nombre"><span>Not Loaded</span></td></div>)
+            case "LOADED": return (<div><td width="10%" key="icono"><img src = "/img/icon_grey.svg.png" className="img_status_interface"/></td><td width="40%" key="nombre"><span>Loaded</span></td></div>)
+            case "ONLINE": return (<div><td width="10%" key="icono"><img src = "/img/icon_green.svg.png" className="img_status_interface"/></td><td width="40%" key="nombre"><span>On Line</span></td></div>)
+            default: return (<div><td width="10%" key="icono"><img src = "/img/icon_grey.svg.png" className="img_status_interface"/></td><td width="40%" key="nombre"><span>Error OPC</span></td></div>)
+        }
+    }
+
     return (
         <Fragment>
         <div className="device_grid">
@@ -28,7 +39,7 @@ const PGM = ({deviceSelected}) => {
                                                 null
                                             }
                                             {(datos.type === "value") ?
-                                                <td width="50%" key="nombre"><b>{datos.value}</b></td>
+                                                <td width="50%" key="nombre">{datos.value}</td>
                                             :
                                                 null
                                             }
@@ -47,12 +58,12 @@ const PGM = ({deviceSelected}) => {
                                     <th width="50%"></th>
                                 </tr>
                                 {
-                                    deviceSelected.status_.pgm[2].state[0].softfailure[0].map(
+                                    deviceSelected.status_.pgm[2].softfailure.map(
                                         (failure) => {
                                             return (<tr>
                                                 <td width="50%"><b>{failure.label}</b></td>
                                                 <td width="50%" key="nombre">
-                                                    {failure.value === "on" ? 
+                                                    {failure.value === 0 ? 
                                                         <img src = "/img/icon_green.svg.png" className="img_status_interface"/>:
                                                         <img src = "/img/icon_red.svg.png" className="img_status_interface"/>
                                                     }
@@ -77,43 +88,29 @@ const PGM = ({deviceSelected}) => {
                 {deviceSelected.status_.pgm ? 
                     <div className="device_div">
                         <table className="device_table">
-                            <tbody className="device_table">
+                        <tbody className="device_table">
                                 <tr>
                                     <th width="50%"><b>PBLink 1</b></th>
-                                    <th width="50%">
-                                        
-                                    </th>
-                                    
-                                </tr>
-                                <tr>
-                                    <td width="50%"><b>State</b></td>
-                                    <td width="50%" key="namepblink">
-                                       {deviceSelected.status_.pgm[0].PBLINK1 ? 
-                                                (deviceSelected.status_.pgm[0].PBLINK1.properties.state === "ONLINE" ?
-                                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>:
-                                                <img src = "/img/icon_red.svg.png" className="img_status_interface"/>) 
-                                                : null}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="50%"><b>Name</b></td>
-                                    <td width="50%" key="namepblink">
-                                        {deviceSelected.status_.pgm[0].PBLINK1.properties.name}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="50%"><b>Link number</b></td>
-                                    <td width="50%" key="linknumber">
-                                        {deviceSelected.status_.pgm[0].PBLINK1.properties.linknum}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="50%"><b>Field network type</b></td>
-                                    <td width="50%" key="fieldnetworktype"> 
-                                        {deviceSelected.status_.pgm[0].PBLINK1.properties.fielnetwrktype}
-                                    </td>
+                                    <th width="50%"></th>
                                 </tr>
                                 
+                                {deviceSelected.status_.pgm[0].PBLINK1.properties.map(datos=>{ //aca se usa map y despues un return, en javascript: foreach
+                                        return(<tr>
+                                            <td width="50%"><b>{datos.label}</b></td>
+                                            {datos.type === "icon3" ?
+                                                renderSwitch_icon3(datos.value)
+                                            :
+                                                null
+                                            }
+                                            {(datos.type === "value") ?
+                                                <td width="50%" key="nombre">{datos.value}</td>
+                                            :
+                                                null
+                                            }
+                                        </tr>)
+                                    })}
+
+
                                 
                             </tbody>
                         </table>
@@ -122,7 +119,7 @@ const PGM = ({deviceSelected}) => {
                             <tbody className="device_table">
                                 <tr>
                                     <th width="34%">DSB Name</th>
-                                    <th width="16%" key="nombre">Slave</th>
+                                    <th width="16%" key="nombre">Slave #</th>
                                     <th width="34%" key="nombre">Slave type</th>
                                     <th width="16%" key="nombre">State</th>
                                 </tr>
@@ -132,14 +129,14 @@ const PGM = ({deviceSelected}) => {
                                             return (<tr>
                                                 <td width="34%">{slave.DSB_Name}</td>
                                                 <td width="16%" key="nombre">
-                                                    {slave.Slave_Num}
+                                                    {slave.slave_Num}
                                                     
                                                 </td>
                                                 <td width="34%" key="nombre">
-                                                    {slave.Slave_Tipo}
+                                                    {slave.slave_Tipo}
                                                 </td>
                                                 <td width="16%" key="nombre">
-                                                    {slave.State === "on" ?
+                                                    {slave.state === 1 ?
                                                     <img src = "/img/icon_green.svg.png" className="img_status_interface"/>:
                                                     <img src = "/img/icon_red.svg.png" className="img_status_interface"/>}
                                                 </td>
@@ -161,34 +158,22 @@ const PGM = ({deviceSelected}) => {
                                     </th>
                                     
                                 </tr>
-                                <tr>
-                                    <td width="50%"><b>State</b></td>
-                                    <td width="50%" key="namepblink">
-                                       {deviceSelected.status_.pgm[1].PBLINK2 ? 
-                                                (deviceSelected.status_.pgm[1].PBLINK2.properties.state === "ONLINE" ?
-                                                <img src = "/img/icon_green.svg.png" className="img_status_interface"/>:
-                                                <img src = "/img/icon_red.svg.png" className="img_status_interface"/>) 
-                                                : null}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="50%"><b>Name</b></td>
-                                    <td width="50%" key="namepblink">
-                                        {deviceSelected.status_.pgm[1].PBLINK2.properties.name}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="50%"><b>Link number</b></td>
-                                    <td width="50%" key="linknumber">
-                                        {deviceSelected.status_.pgm[1].PBLINK2.properties.linknum}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="50%"><b>Field network type</b></td>
-                                    <td width="50%" key="fieldnetworktype"> 
-                                        {deviceSelected.status_.pgm[1].PBLINK2.properties.fielnetwrktype}
-                                    </td>
-                                </tr>
+                                
+                                {deviceSelected.status_.pgm[1].PBLINK2.properties.map(datos=>{ //aca se usa map y despues un return, en javascript: foreach
+                                        return(<tr>
+                                            <td width="50%"><b>{datos.label}</b></td>
+                                            {datos.type === "icon3" ?
+                                                renderSwitch_icon3(datos.value)
+                                            :
+                                                null
+                                            }
+                                            {(datos.type === "value") ?
+                                                <td width="50%" key="nombre">{datos.value}</td>
+                                            :
+                                                null
+                                            }
+                                        </tr>)
+                                    })}
                                 
                             </tbody>
                         </table>
@@ -197,9 +182,9 @@ const PGM = ({deviceSelected}) => {
                             <tbody className="device_table">
                                 <tr>
                                     <th width="34%">DSB Name</th>
-                                    <th width="16%" key="nombre">Slave</th>
+                                    <th width="16%" key="nombre">Slave #</th>
                                     <th width="34%" key="nombre">Slave type</th>
-                                    <th width="34%" key="nombre">State</th>
+                                    <th width="16%" key="nombre">State</th>
                                 </tr>
                                 {
                                 deviceSelected.status_.pgm[1].PBLINK2.slaves.map(
@@ -207,14 +192,14 @@ const PGM = ({deviceSelected}) => {
                                             return (<tr>
                                                 <td width="34%">{slave.DSB_Name}</td>
                                                 <td width="16%" key="nombre">
-                                                    {slave.Slave_Num}
+                                                    {slave.slave_Num}
                                                     
                                                 </td>
-                                                <td width="50%" key="nombre">
-                                                    {slave.Slave_Tipo}
+                                                <td width="34%" key="nombre">
+                                                    {slave.slave_Tipo}
                                                 </td>
-                                                <td width="50%" key="nombre">
-                                                    {slave.State === "on" ?
+                                                <td width="16%" key="nombre">
+                                                    {slave.state === 1 ?
                                                     <img src = "/img/icon_green.svg.png" className="img_status_interface"/>:
                                                     <img src = "/img/icon_red.svg.png" className="img_status_interface"/>}
                                                 </td>

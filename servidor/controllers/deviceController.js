@@ -4,6 +4,7 @@ const Device = require('../models/Device');
 const DeviceType = require ('../models/DeviceType');
 const { getOPC } = require('./commController');
 const connSQL = require('../config/sql');
+const {findServer} = require('./commonController')
 
 exports.addDevice = async (req,res)=>{
     const errors = validationResult(req);
@@ -255,13 +256,16 @@ const getC300 = async (device, res) => {
     let state=["C300STATE","lanafailed","lanbfailed","cpufreeavg","ctemp","rdnrolestate","interlanfailed","xoverfailed"]
     //console.log(datosC300prop)
     let opc=[]
+    const servidor=findServer(device.deviceName)
+    //console.log(servidor)
+    //const servidor = '192.168.217.139'
     state.forEach(datos => {
         opc.push(device.deviceURLOPC + "/" + device.deviceName + "." + datos)
     })
     //console.log(opc)    
     try {
        
-        let datos_opc = await getOPC('192.168.217.139', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',opc)//['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
+        let datos_opc = await getOPC(servidor, 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',opc)//['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
         if (!datos_opc){
             console.log("Hubo errores en la consulta. Contacte al administrador.");
             return res.status(404).send("Hubo errores en la consulta. Contacte al administrador.")
@@ -386,9 +390,11 @@ const getPGM = async(device, res) =>{
     /*const idDevice = req.params.id
     const device = await Device.findById(idDevice)
     */
-    console.log(device.deviceURLOPC, device.deviceIP, device.deviceName)
+    //console.log(device.deviceURLOPC, device.deviceIP, device.deviceName)
     const ip = device.deviceIP
-    servidor='localhost'; //POR PARAMETRO
+    const servidor=findServer(device.deviceName)
+    //console.log(servidor)
+    //const servidor = 'localhost'
 
     let resp=""//, StID;
     const json_error = [{"PBLINK": "No existe ningún PBLINK asociado con esa IP"}]
@@ -403,13 +409,13 @@ const getPGM = async(device, res) =>{
 
     try {
                 
-        const conn = await connSQL.conectarSQL('localhost');
+        const conn = await connSQL.conectarSQL(servidor);
         let pool = await conn.connect();
         //StrategyID de los 2 pblinks:********************
         resp = await pool.request()
             /*.query(`SELECT AreaName, Source AS Tagname, Block, AlarmLimit, ConditionName, Description, Action, Priority, Actor, Value, [EMSEvents].dbo.UTCFILETIMEToDateTime(LocalTime) as Fecha FROM [EMSEvents].dbo.Events where Source like '${TAG}'
             AND dbo.UTCFILETIMEToDateTime(LocalTime) >= DATEADD(day, -1, GETDATE())`)*/
-            .query(`select spv.StrategyID from (STRATEGY_PARAM_VALUE spv inner join PARAM_DEF pd on spv.ParamID=pd.ParamID inner join TEMPLATE as t on t.TemplateID=pd.TemplateID) where (spv.StringValue='${ip}' and pd.paramname='NETIP' and t.templatename='PBLINK')`)
+            .query(`select spv.StrategyID from (STRATEGY_PARAM_VALUE spv inner join PARAM_DEF pd on spv.ParamID=pd.ParamID inner join TEMPLATE as t on t.TemplateID=pd.TemplateID) where (spv.StringValue='${ip}' and pd.paramname='NETIP' and t.templatename='PBLINK' and spv.StrategyID < 0)`)
         
         if (!resp.recordset[0]){
             resp = json_error;
@@ -435,27 +441,38 @@ const getPGM = async(device, res) =>{
             //console.log(respPBL.recordset[0].StringValue)
             //Obtengo los nombres de los esclavos con sus id's, a partir de los nombres de los pblinks:
             respName_DSB = await pool.request()
-                .query(`select s.StrategyID, s.StrategyName from (strategy s inner join TEMPLATE t on s.TemplateID=t.TemplateID) where EEC=(select EEC from STRATEGY where StrategyName='${respPBL.recordset[0].StringValue}') and t.templatename='GENDSBDP'`)
+            .query(`select s.StrategyID, s.StrategyName from (strategy s inner join TEMPLATE t on s.TemplateID=t.TemplateID) where EEC=(select EEC from STRATEGY where StrategyName='${respPBL.recordset[0].StringValue}' and t.templatename not like 'PBLINK')`) //'GENDSBDP' or t.templatename='DRIVEDSBDP')`)
             
             for(DSB of respName_DSB.recordset){ //armo todos los esclavos
                 //console.log(respPBL.recordset[0].StringValue, ': ', DSB.StrategyName, DSB.StrategyID)
         
                 //a partir de cada StrategyID de los DSB, obtengo el numero de esclavo:
                 respNum_DSB = await pool.request()
-                    .query(`select spv.IntegerValue from (STRATEGY_PARAM_VALUE spv  inner join PARAM_DEF p on p.ParamID=spv.ParamID inner join TEMPLATE t on p.TemplateID=t.TemplateID) where (spv.StrategyID=${DSB.StrategyID} and p.ParamName='SLAVEADDRESS' and t.templatename='GENDSBDP')`)
-                
+                    .query(`select spv.IntegerValue from (STRATEGY_PARAM_VALUE spv  inner join PARAM_DEF p on p.ParamID=spv.ParamID inner join TEMPLATE t on p.TemplateID=t.TemplateID) where (spv.StrategyID=${DSB.StrategyID} and p.ParamName='SLAVEADDRESS' and t.templatename not like 'PBLINK')`) 
+                //console.log(DSB.StrategyName, " - ", DSB.StrategyID,"-", respNum_DSB.recordset[0].IntegerValue)
                 //a partir de cada StrategyID de los DSB, obtengo el tipo de esclavo:
                 respTipo_DSB = await pool.request()
-                    .query(`select spv.StringValue from (STRATEGY_PARAM_VALUE spv  inner join PARAM_DEF p on p.ParamID=spv.ParamID inner join TEMPLATE t on p.TemplateID=t.TemplateID) where (StrategyID=${DSB.StrategyID} and p.ParamName='DESC' and t.templatename='GENDSBDP')`)
-
+                    .query(`select spv.StringValue from (STRATEGY_PARAM_VALUE spv  inner join PARAM_DEF p on p.ParamID=spv.ParamID inner join TEMPLATE t on p.TemplateID=t.TemplateID) where (StrategyID=${DSB.StrategyID} and p.ParamName='DESC' and t.templatename not like 'PBLINK')`) 
+                    //console.log('el tipo de dispositivo: ',respTipo_DSB.recordset[0].StringValue)
+                    if(respTipo_DSB.recordset[0])
+                        tipo=respTipo_DSB.recordset[0].StringValue
+                    else
+                        {respTipo_DSB = await pool.request()
+                            .query(`select spv.StringValue from (STRATEGY_PARAM_VALUE spv  inner join PARAM_DEF p on p.ParamID=spv.ParamID inner join TEMPLATE t on p.TemplateID=t.TemplateID) where (StrategyID=${DSB.StrategyID} and p.ParamName='DEVICETYPE' and t.templatename not like 'PBLINK')`) 
+                            if(respTipo_DSB.recordset[0])
+                                tipo=respTipo_DSB.recordset[0].StringValue
+                             else
+                                tipo='No especificado'
+                        }
                     item={
                         DSB_Name: DSB.StrategyName,
-                        Slave_Num: respNum_DSB.recordset[0].IntegerValue, 
-                        Slave_Tipo: respTipo_DSB.recordset[0].StringValue
+                        slave_Num: respNum_DSB.recordset[0].IntegerValue, 
+                        slave_Tipo: tipo
                     }
                     //item.state="on"
                     slaves_aux.push(item);
-                    console.log(respPBL.recordset[0].StringValue, ': ', DSB.StrategyName, '(',respNum_DSB.recordset[0].IntegerValue, ') - ', respTipo_DSB.recordset[0].StringValue)//, DSB.StrategyID)
+                    //console.log(respPBL.recordset[0].StringValue, ': ', DSB.StrategyName, '(',respNum_DSB.recordset[0].IntegerValue, ') - ', respTipo_DSB.recordset[0].StringValue)//, DSB.StrategyID)
+                    console.log(respPBL.recordset[0].StringValue, ': ', DSB.StrategyName, '(',respNum_DSB.recordset[0].IntegerValue, ')')//, DSB.StrategyID)
 
             }
             //slaves_aux[0].state="on"
@@ -468,12 +485,12 @@ const getPGM = async(device, res) =>{
             opc.push(device.deviceURLOPC + "/" + pblink_name + ".state")
 
             slaves_aux.forEach(datos => {
-                opc.push(device.deviceURLOPC + "/" + pblink_name + ".NETWORKSLAVELED[" + datos.Slave_Num + "]")
+                opc.push(device.deviceURLOPC + "/" + pblink_name + ".NETWORKSLAVELED[" + datos.slave_Num + "]")
             })
             console.log(opc)    
             try {
-                //let datos_opc = await getOPC('192.168.53.11', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',['System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG']) //,opc
-                datos_opc=[{"value": 0},{"value": "PROFIBUS PA"}, {"value": 70}, {"value": 2}, {"value": 1},{"value": 1},{"value": 1},{"value": 0},{"value": 0},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 0},{"value": 0},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 0},{"value": 0},{"value": 1},{"value": 0},{"value": 2},{"value": 1},{"value": 0}]
+                let datos_opc = await getOPC(servidor, 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',['System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG']) //,opc
+                //datos_opc=[{"value": 0},{"value": "PROFIBUS PA"}, {"value": 70}, {"value": 2}, {"value": 0},{"value": 1},{"value": 1},{"value": 0},{"value": 0},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 0},{"value": 0},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 0},{"value": 0},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 0}]
                 if (!datos_opc){
                     console.log("Hubo errores en la consulta OPC. Contacte al administrador.");
                     return res.status(404).send("Hubo errores en la consulta. Contacte al administrador.")
@@ -499,16 +516,16 @@ const getPGM = async(device, res) =>{
                 pblink_item.push({property: "cpuload", label: "CPU (%)", type: "value", value: datos_opc[2].value})
                 pblink_item.push({property: "state", label: "State", type: "icon3", value: aux1})
 
-                slaves_aux.forEach((datos, i) => {
-                    if (i>4){
+                slaves_aux.forEach((datos,i) => {
+                    //if (i>4){
                         item={
                             DSB_Name: datos.DSB_Name,
-                            Slave_Num: datos.Slave_Num, 
-                            Slave_Tipo: datos.Slave_Tipo,
-                            state: datos_opc[i].value
+                            slave_Num: datos.slave_Num, 
+                            slave_Tipo: datos.slave_Tipo,
+                            state: datos_opc[i+4].value
                         }
                         slaves.push(item);
-                    }
+                    //}
                 })
                 console.log(estados)
             }
@@ -556,7 +573,7 @@ const getPGM = async(device, res) =>{
         'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG',
         'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG']) */
         datos_opc=[{"value":8},{"value":0},{"value":78.85}, {"value":9752}, {"value":37.25}, {"value":60}, {"value":20}, {"value":1640}, {"value":3.67}, {"value": 1}, {"value": 1},
-        {"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 0}]
+        {"value": 1},{"value": 0},{"value": 1},{"value": 0},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 0}]
         //console.log(datos_opc)
         
         let aux0=""
@@ -613,18 +630,18 @@ const getPGM = async(device, res) =>{
 
         const state =
                 [{property:"BCMSTATE", label: "Device Index Switches Changed", type:"value",value: aux0},
-                {property:"modisredun", label: "Device Index Switches Changed", type:"icon",value: datos_opc[1].value},
-                {property:"cpufreeavg", label: "Device Index Switches Changed", type:"value",value: datos_opc[2].value},
-                {property:"freememink", label: "Device Index Switches Changed", type:"value",value: datos_opc[3].value},
-                {property:"ctemp", label: "Device Index Switches Changed", type:"value",value: datos_opc[4].value},
-                {property:"pktstxavg", label: "Device Index Switches Changed", type:"value",value: datos_opc[5].value},
-                {property:"pktsrxavg", label: "Device Index Switches Changed", type:"value",value: datos_opc[6].value},
-                {property:"pdcmsgavg", label: "Device Index Switches Changed", type:"value",value: datos_opc[7].value},
-                {property:"cda_averagedisplayparams", label: "Device Index Switches Changed", type:"value",value: datos_opc[8].value},
-                {"sorftfailure": softfailure}]
+                {property:"modisredun", label: "Redundancy", type:"icon",value: datos_opc[1].value},
+                {property:"cpufreeavg", label: "CPU Free avg", type:"value",value: datos_opc[2].value},
+                {property:"freememink", label: "Free Memory", type:"value",value: datos_opc[3].value},
+                {property:"ctemp", label: "Current Temperature", type:"value",value: datos_opc[4].value},
+                {property:"pktstxavg", label: "pda packet sent avg", type:"value",value: datos_opc[5].value},
+                {property:"pktsrxavg", label: "pda packet received avg", type:"value",value: datos_opc[6].value},
+                {property:"pdcmsgavg", label: "pdc messages avg", type:"value",value: datos_opc[7].value},
+                {property:"cda_averagedisplayparams", label: "CDA Average Display Params", type:"value",value: datos_opc[8].value}
+                ]
         //pgm={state}
         //res.json({c300});
-        pgm.push({state})
+        pgm.push({state, softfailure})
 
         res.json({pgm});
         //res.json(json_error)
