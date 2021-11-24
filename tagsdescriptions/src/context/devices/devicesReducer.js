@@ -10,7 +10,8 @@ import {
     GET_DEVICE_TYPES,
     GET_DEVICE_TYPE,
     RESET_MESSAGE,
-    GET_DEVICE_STATUS
+    GET_DEVICE_STATUS,
+    SEARCH_DEVICE
     } from '../../types/index'
 
 export default (state,action)=>{
@@ -31,6 +32,7 @@ export default (state,action)=>{
             return ({
                 ...state, 
                 devices:action.payload,
+                devicesSearch:action.payload,
                 deviceSelected: null,
                 error:false,
                 message:null
@@ -93,6 +95,15 @@ export default (state,action)=>{
                 message:null,
                 error: false,
                 status: action.payload
+            })
+        case SEARCH_DEVICE:
+            return ({
+                ...state,
+                devicesSearch: state.devices.filter(
+                    device=> device.deviceName.indexOf(action.payload) > -1
+                ),
+                message:null,
+                error: false,
             })
         default:
             return state;

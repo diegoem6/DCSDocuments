@@ -11,7 +11,7 @@ const DevicesList = () => {
     const {asset} = aContext
 
     const dContext = useContext(deviceContext)
-    const {getDevices, devices} = dContext
+    const {getDevices, devices, devicesSearch} = dContext
     
     // const tContext = useContext(tagDescriptorContext)
     // const {searchtagdescriptors, getTagsDescriptors} = tContext
@@ -40,15 +40,15 @@ const DevicesList = () => {
         if (asset){
             setPag(
                 {...pag,
-                    pageCount: Math.ceil(devices.length/pag.perPage),
-                    data:devices,
+                    pageCount: Math.ceil(devicesSearch.length/pag.perPage),
+                    data:devicesSearch,
                     offset:0,
                     currentPage:0
                 })
          
         }
         // eslint-disable-next-line
-    }, [devices])
+    }, [devicesSearch])
 
     if(!asset) {
         return <h2>Seleccione un asset</h2>
@@ -72,7 +72,7 @@ const DevicesList = () => {
         <Fragment>
             <h2>Dispositivos para el asset: {asset[0].name}</h2>
             <ul>
-                {(devices.length===0)?
+                {(devicesSearch.length===0)?
                     (<li className="tarea"><p>No hay nodos de red asociados el asset seleccionado</p></li>)
                 :
                     pag.data.slice(pag.offset,pag.offset+pag.perPage).map(nn =>(

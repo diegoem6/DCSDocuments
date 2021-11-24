@@ -13,7 +13,8 @@ import {
     GET_DEVICE_TYPES,
     GET_DEVICE_TYPE,
     RESET_MESSAGE,
-    GET_DEVICE_STATUS
+    GET_DEVICE_STATUS,
+    SEARCH_DEVICE
     } from '../../types/index'
 
 import axiosClient from '../../config/axios'
@@ -25,6 +26,7 @@ const DevicesState = props=>{
     const initialState={
         form:false,
         devices:[],
+        devicesSearch:[],
         deviceSelected:null,
         message:null,
         devicetypes:[],
@@ -214,6 +216,13 @@ const DevicesState = props=>{
         }
     }
 
+    const searchDevices = (text) => {
+        dispatch({
+            type:SEARCH_DEVICE,
+            payload:text
+        })
+    }
+
     return (
         <devicesContext.Provider
             value={{
@@ -224,6 +233,7 @@ const DevicesState = props=>{
                 devicetypes: state.devicetypes,
                 devicetype: state.devicetype,
                 status: state.status,
+                devicesSearch: state.devicesSearch,
 
                 showForm, 
                 createDevice,
@@ -236,7 +246,8 @@ const DevicesState = props=>{
                 getDeviceTypes,
                 getDeviceType,
                 resetMessage,
-                getDeviceStatus
+                getDeviceStatus,
+                searchDevices
                 
             }}
         >

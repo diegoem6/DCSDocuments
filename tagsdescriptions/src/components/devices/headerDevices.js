@@ -8,12 +8,13 @@ const HeaderDevice = () => {
     const history = useHistory();
     
     const dContext = useContext(deviceContext)
-    const {showForm} = dContext
+    const {showForm, searchDevices} = dContext
 
 
     const aContext = useContext(assetContext)
     const {asset} = aContext
 
+    const [search, setSearch ] = useState('')
 
     
     if (!asset) return null
@@ -22,11 +23,24 @@ const HeaderDevice = () => {
         
         showForm();
     }
-    
+    const onChange = (e)=>{
+        setSearch(e.target.value)
+        searchDevices(e.target.value)
+    }
     
     return (  
         <div className="formulario">
-            
+            <div 
+                className="contenedor-input">
+                <input 
+                    type="text"
+                    className="input-text"
+                    placeholder="buscar device"
+                    name="search"
+                    value={search}
+                    onChange = {onChange}
+                />
+            </div>
             <div 
                 className="contenedor-input"
             >

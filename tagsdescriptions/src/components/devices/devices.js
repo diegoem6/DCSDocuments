@@ -5,7 +5,7 @@ import NewDevice from '../devices/newDevice';
 import DeviceList from'../devices/devicesList'
 
 import HeaderDevice from '../devices/headerDevices';
-import SidebarNetwork from '../../layout/sidebarNetwork';
+import SidebarDevices from '../../layout/sidebarDevices';
 import deviceContext from '../../context/devices/devicesContext';
 import authContext from '../../context/auth/authContext'
 import alertContext from '../../context/alerts/alertContext';
@@ -36,7 +36,7 @@ const Devices = ()=>{
         <div className="contenedor-app">
               {/*alert? (<div className={`alerta ${alert.category}`}>{alert.msg} </div>)
                     :null*/}
-              <SidebarNetwork
+              <SidebarDevices
                 tipo="Devices"
               />
               

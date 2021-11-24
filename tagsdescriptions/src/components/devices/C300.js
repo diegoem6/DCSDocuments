@@ -47,7 +47,7 @@ const C300 = ({deviceSelected}) => {
                                                 null
                                             }
                                             {(datos.type === "value") ?
-                                                <td width="50%" key="nombre"><b>{datos.value}</b></td>
+                                                <td width="50%" key="nombre">{datos.value}</td>
                                             :
                                                 null
                                             }

@@ -201,7 +201,6 @@ exports.getDevice = async (req,res)=>{
         const idDevice = req.params.id
         //console.log('El ID es: ',idNodo)
         const device_find = await Device.findById(idDevice)
-        console.log(device_find)
         if (!device_find){
             console.log("No existe el dispositivo");
             return res.status(404).send("No existe el dispositivo")
@@ -323,7 +322,7 @@ const getC300 = async (device, res) => {
             {property:"C300STATE", type:"value", label: "Status", value: aux0},
             {property:"lanafailed", type:"icon", label: "FTE A", value: datos_opc[1].value},
             {property:"lanbfailed", type:"icon", label: "FTE B", value: datos_opc[2].value},
-            {property:"cpufreeavg", type:"value", label: "CPU Free (%)", value: datos_opc[3].value},
+            {property:"cpufreeavg", type:"value", label: "CPU Free (%)", value: parseFloat(datos_opc[3].value).toFixed(2)},
             {property:"ctemp", type:"value", label: "Temp (°C)", value: datos_opc[4].value},
             {property:"rdnrolestate", type:"value", label: "Redundancy", value: aux1},
             {property:"interlanfailed", type:"icon", label: "FTE InterLAN comm. failed", value: datos_opc[6].value},
@@ -479,7 +478,7 @@ const getPGM = async(device, res) =>{
             //slaves_aux[0].state="on"
             //Consulta los estados de los esclavos del PBLINK - armo los OPC:
             let opc=[]
-            console.log(respPBL.recordset)
+            //console.log(respPBL.recordset)
             const pblink_name= respPBL.recordset[0].StringValue //nombre PBLINK
             opc.push(device.deviceURLOPC + "/" + device.deviceName + "/" + pblink_name + ".LINKNUM")
             opc.push(device.deviceURLOPC + "/" + device.deviceName + "/" + pblink_name + ".FIELDNETWORKTYPE")
@@ -503,7 +502,7 @@ const getPGM = async(device, res) =>{
                 
                 if (!datos_opc){
                     console.log("Hubo errores en la consulta OPC. Contacte al administrador.");
-                    return res.status(404).send("Hubo errores en la consulta. Contacte al administrador.")
+                    return res.status(500).send("Hubo errores en la consulta. Contacte al administrador.")
                 }
                 
                 estados=[];
@@ -518,12 +517,18 @@ const getPGM = async(device, res) =>{
                     break;
                     default: aux1="NaN"
                 }
-
+                let aux2=""
+                switch(datos_opc[1].value){
+                    case 0: aux2="PROFIBUS DP"
+                    break;
+                    
+                    default: aux2="PROFIBUS DP"
+                }
                 //Properties del PBLINk---------------------------------------
                 pblink_item.push({property: "name", label: "Name", type: "value", value: respPBL.recordset[0].StringValue})
                 pblink_item.push({property: "linknum", label: "Numero de Link", type: "value", value: datos_opc[0].value})
-                pblink_item.push({property: "fielnetwrktype", label: "Network Type", type: "value", value: datos_opc[1].value})
-                pblink_item.push({property: "cpuload", label: "CPU (%)", type: "value", value: datos_opc[2].value})
+                pblink_item.push({property: "fielnetwrktype", label: "Network Type", type: "value", value: aux2})
+                pblink_item.push({property: "cpuload", label: "CPU (%)", type: "value", value: parseFloat(datos_opc[2].value).toFixed(2)})
                 pblink_item.push({property: "state", label: "State", type: "icon3", value: aux1})
 
                 slaves_aux.forEach((datos,i) => {
@@ -551,7 +556,7 @@ const getPGM = async(device, res) =>{
             var obj = {};
             
             if (!respName_DSB.recordset[0]){
-                console.log(respPBL.recordset[0].StringValue, ': No hay DSB asociados')
+                //console.log(respPBL.recordset[0].StringValue, ': No hay DSB asociados')
                 obj[key] = {slaves: [], properties: pblink_item}; //si pongo {pblink_item} se escribe tambien pblink_item{datos pblink_item}, como esta ahora se guarda {datos pblink_item}
                 pgm.push(obj)
             }
@@ -642,13 +647,13 @@ const getPGM = async(device, res) =>{
         const state =
                 [{property:"BCMSTATE", label: "Device Index Switches Changed", type:"value",value: aux0},
                 {property:"modisredun", label: "Redundancy", type:"icon",value: datos_opc[1].value},
-                {property:"cpufreeavg", label: "CPU Free avg", type:"value",value: datos_opc[2].value},
-                {property:"freememink", label: "Free Memory", type:"value",value: datos_opc[3].value},
-                {property:"ctemp", label: "Current Temperature", type:"value",value: datos_opc[4].value},
-                {property:"pktstxavg", label: "pda packet sent avg", type:"value",value: datos_opc[5].value},
-                {property:"pktsrxavg", label: "pda packet received avg", type:"value",value: datos_opc[6].value},
-                {property:"pdcmsgavg", label: "pdc messages avg", type:"value",value: datos_opc[7].value},
-                {property:"cda_averagedisplayparams", label: "CDA Average Display Params", type:"value",value: datos_opc[8].value}
+                {property:"cpufreeavg", label: "CPU Free avg", type:"value",value: parseFloat(datos_opc[2].value).toFixed(2)},
+                {property:"freememink", label: "Free Memory", type:"value",value: parseFloat(datos_opc[3].value).toFixed(0)},
+                {property:"ctemp", label: "Current Temperature", type:"value",value: parseFloat(datos_opc[4].value).toFixed(2)},
+                {property:"pktstxavg", label: "pda packet sent avg", type:"value",value: parseFloat(datos_opc[5].value).toFixed(2)},
+                {property:"pktsrxavg", label: "pda packet received avg", type:"value",value: parseFloat(datos_opc[6].value).toFixed(2)},
+                {property:"pdcmsgavg", label: "pdc messages avg", type:"value",value: parseFloat(datos_opc[7].value).toFixed(2)},
+                {property:"cda_averagedisplayparams", label: "CDA Average Display Params", type:"value",value: parseFloat(datos_opc[8].value).toFixed(2)}
                 ]
         //pgm={state}
         //res.json({c300});

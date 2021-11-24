@@ -8,7 +8,7 @@ import Asset from '../components/assets/asset'
 
 
 
-const SidebarNetwork = () => {
+const SidebarDevices = () => {
     
 
     const aContext = useContext(assetContext)
@@ -37,7 +37,7 @@ const SidebarNetwork = () => {
 
     return ( 
         <aside>
-            <h1>Network<span>DCS</span></h1>
+            <h1>Devices<span>DCS</span></h1>
            
             <div className="proyectos">
                 
@@ -74,4 +74,4 @@ const SidebarNetwork = () => {
      );
 }
  
-export default SidebarNetwork;
+export default SidebarDevices;
