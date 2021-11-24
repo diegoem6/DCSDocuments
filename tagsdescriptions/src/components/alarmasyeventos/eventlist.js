@@ -65,7 +65,10 @@ const Eventlist = () => {
         {(alarmasyeventos[0] != null) ?
             (
             <>
-            <h2>Tabla de eventos {alarmasyeventos[0][0].Tagname}</h2>
+            <div className = "divHeaderAlarms">
+                
+                <h1>Tabla de eventos {alarmasyeventos[0][0].Tagname}</h1>
+            </div>
                 <table>
                 <tr>
                     <th>Area</th>

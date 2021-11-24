@@ -46,9 +46,11 @@ const DeviceStatus = () => {
                 
             {(deviceSelected && deviceSelected.status_) ? 
                 <div>
-                    <h1>{deviceTipo} : {deviceSelected.deviceName}</h1>
-                    <h2>{deviceSelected.deviceDescription}</h2>
-                    <h2>IP: {deviceSelected.deviceIP}</h2>
+                    <div className = "divHeader">
+                        <h1>{deviceTipo} : {deviceSelected.deviceName}</h1>
+                        <h2>{deviceSelected.deviceDescription}</h2>
+                        <h2>IP: {deviceSelected.deviceIP}</h2>
+                    </div>
                     { deviceTipo === "C300" ? 
                         <C300 
                             deviceSelected = {deviceSelected} /> 

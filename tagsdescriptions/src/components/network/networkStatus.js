@@ -24,7 +24,7 @@ const NetworkStatus = () => {
     
     useEffect(() => {
         if(urlDoc){
-            
+            //console.log(urlDoc)
             window.open(`../../../files/${urlDoc}`,'_blank') //poner la ruta
         }    
     }, [urlDoc])
@@ -62,7 +62,8 @@ const NetworkStatus = () => {
     useEffect(() => {
         if(networkmodelo){
             setnodeModel(networkmodelo.model)
-            
+            console.log('El modelo es: ',networkmodelo.model)
+            console.log(networkmodelo.url)
         }
     }, [networkmodelo])
     
@@ -86,18 +87,24 @@ const NetworkStatus = () => {
 
     return ( 
         <Fragment>
-            <h1>{nodeName}</h1>
-            <h2>{nodeDescription} : {nodeIP}</h2>
-            <div className = "download">
-                <p>show run <a onClick={()=>onClickCreateShowRun("RUN")} target="_blank"><img className="download_icon" src="/img/download.png"/></a></p>
-                <p>show tech <a onClick={()=>onClickCreateShowRun("TECH")} target="_blank"><img className="download_icon" src="/img/download.png"/></a></p>
+            <div className = "divHeaderNetwork">
+                <h1>{nodeName}</h1>
+                <h2>{nodeDescription} : {nodeIP} - {networkmodelo ? <Fragment>{networkmodelo.model}</Fragment>: null
+                }</h2>
+                
             </div>
-            
             {networkmodelo?
-                <img class="status_modelo_imagen" src={networkmodelo.url} alt={networkmodelo.url}/>
-            : null
-            }
-            <h2></h2>
+                    
+                    <img class="status_modelo_imagen" src={networkmodelo.url} alt={networkmodelo.url}/>
+                : null
+                }
+                <div className = "download">
+                    <p>show run <a onClick={()=>onClickCreateShowRun("RUN")} target="_blank"><img className="download_icon" src="/img/download.png"/></a></p>
+                    <p>show tech <a onClick={()=>onClickCreateShowRun("TECH")} target="_blank"><img className="download_icon" src="/img/download.png"/></a></p>
+                </div>
+                
+                <h2></h2>
+            
                 <table>
                     <tr>
                         <th width="15%">Interface</th>
