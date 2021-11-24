@@ -260,12 +260,13 @@ const getC300 = async (device, res) => {
     //console.log(servidor)
     //const servidor = '192.168.217.139'
     state.forEach(datos => {
-        opc.push(device.deviceURLOPC + "/" + device.deviceName + "." + datos)
+        opc.push(device.deviceURLOPC + "/" + device.deviceName +  "." + datos)
     })
     //console.log(opc)    
     try {
-       
-        let datos_opc = await getOPC(servidor, 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',opc)//['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
+        //console.log(opc)
+        let datos_opc = await getOPC(servidor, 'PMEPKS', 'epksadmin', 'hw.mdp.2013', '6031BF75-9CF2-11d1-A97B-00C04FC01389',opc)//['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
+        //console.log(datos_opc)
         if (!datos_opc){
             console.log("Hubo errores en la consulta. Contacte al administrador.");
             return res.status(404).send("Hubo errores en la consulta. Contacte al administrador.")
@@ -338,10 +339,11 @@ const getC300 = async (device, res) => {
 
         opc=[]
         softfailure.forEach(datos => {
-            opc.push(device.deviceURLOPC + "/" + device.deviceName + "." + datos)
+            opc.push(device.deviceURLOPC + "/" + device.deviceName  + "." + datos)
         })
         //console.log(opc)
-        datos_opc = await getOPC('192.168.217.139', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',opc)//['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
+        //let datos_opc = await getOPC(servidor, 'PMEPKS', 'epksadmin', 'hw.mdp.2013', '6031BF75-9CF2-11d1-A97B-00C04FC01389',opc)//['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
+        datos_opc = await getOPC(servidor, 'PMEPKS', 'epksadmin', 'hw.mdp.2013', '6031BF75-9CF2-11d1-A97B-00C04FC01389',opc)//['ASSETS/PRUEBA/H101.pv','ASSETS/PRUEBA/POIANA1.pv', 'System Components/SRV-500/Controllers/C300_165.CPUFREEAVG'])
         if (!datos_opc){
             console.log("Hubo errores en la consulta. Contacte al administrador.");
             return res.status(404).send("Hubo errores en la consulta. Contacte al administrador.")
@@ -394,7 +396,7 @@ const getPGM = async(device, res) =>{
     const ip = device.deviceIP
     const servidor=findServer(device.deviceName)
     //console.log(servidor)
-    //const servidor = 'localhost'
+    //const servidor = 'localhsost'
 
     let resp=""//, StID;
     const json_error = [{"PBLINK": "No existe ningún PBLINK asociado con esa IP"}]
@@ -408,16 +410,15 @@ const getPGM = async(device, res) =>{
     let i=1
 
     try {
-                
         const conn = await connSQL.conectarSQL(servidor);
         let pool = await conn.connect();
+        
         //StrategyID de los 2 pblinks:********************
         resp = await pool.request()
             /*.query(`SELECT AreaName, Source AS Tagname, Block, AlarmLimit, ConditionName, Description, Action, Priority, Actor, Value, [EMSEvents].dbo.UTCFILETIMEToDateTime(LocalTime) as Fecha FROM [EMSEvents].dbo.Events where Source like '${TAG}'
             AND dbo.UTCFILETIMEToDateTime(LocalTime) >= DATEADD(day, -1, GETDATE())`)*/
             .query(`select spv.StrategyID from (STRATEGY_PARAM_VALUE spv inner join PARAM_DEF pd on spv.ParamID=pd.ParamID inner join TEMPLATE as t on t.TemplateID=pd.TemplateID) where (spv.StringValue='${ip}' and pd.paramname='NETIP' and t.templatename='PBLINK' and spv.StrategyID < 0)`)
-        
-        if (!resp.recordset[0]){
+            if (!resp.recordset[0]){
             resp = json_error;
             res.json({resp});
             conn.close();
@@ -430,7 +431,7 @@ const getPGM = async(device, res) =>{
         for (pblink_id of resp.recordset){
             //console.log(pblink_id.StrategyID)
             respPBL = await pool.request()
-                .query(`select spv.StringValue from (STRATEGY_PARAM_VALUE spv inner join PARAM_DEF pd on spv.ParamID=pd.ParamID inner join TEMPLATE as t on t.TemplateID=pd.TemplateID) where (spv.StrategyID=${pblink_id.StrategyID} and pd.ParamName='NETBLOCKNAME' and t.templatename='PBLINK')`)
+                .query(`select spv.StringValue from (STRATEGY_PARAM_VALUE spv inner join PARAM_DEF pd on spv.ParamID=pd.ParamID inner join TEMPLATE as t on t.TemplateID=pd.TemplateID) where (spv.StrategyID=${pblink_id.StrategyID} and pd.ParamName='NETBLOCKNAME' and t.templatename='PBLINK' and spv.StrategyID < 0)`)
             if (!respPBL.recordset[0]){
                 resp = json_error;
                 res.json({resp});
@@ -441,7 +442,7 @@ const getPGM = async(device, res) =>{
             //console.log(respPBL.recordset[0].StringValue)
             //Obtengo los nombres de los esclavos con sus id's, a partir de los nombres de los pblinks:
             respName_DSB = await pool.request()
-            .query(`select s.StrategyID, s.StrategyName from (strategy s inner join TEMPLATE t on s.TemplateID=t.TemplateID) where EEC=(select EEC from STRATEGY where StrategyName='${respPBL.recordset[0].StringValue}' and t.templatename not like 'PBLINK')`) //'GENDSBDP' or t.templatename='DRIVEDSBDP')`)
+            .query(`select s.StrategyID, s.StrategyName from (strategy s inner join TEMPLATE t on s.TemplateID=t.TemplateID) where EEC in (select EEC from STRATEGY where StrategyName='${respPBL.recordset[0].StringValue}' and t.templatename not like 'PBLINK' and s.StrategyID < 0)`) //'GENDSBDP' or t.templatename='DRIVEDSBDP')`)
             
             for(DSB of respName_DSB.recordset){ //armo todos los esclavos
                 //console.log(respPBL.recordset[0].StringValue, ': ', DSB.StrategyName, DSB.StrategyID)
@@ -472,25 +473,34 @@ const getPGM = async(device, res) =>{
                     //item.state="on"
                     slaves_aux.push(item);
                     //console.log(respPBL.recordset[0].StringValue, ': ', DSB.StrategyName, '(',respNum_DSB.recordset[0].IntegerValue, ') - ', respTipo_DSB.recordset[0].StringValue)//, DSB.StrategyID)
-                    console.log(respPBL.recordset[0].StringValue, ': ', DSB.StrategyName, '(',respNum_DSB.recordset[0].IntegerValue, ')')//, DSB.StrategyID)
+                    //console.log(respPBL.recordset[0].StringValue, ': ', DSB.StrategyName, '(',respNum_DSB.recordset[0].IntegerValue, ')')//, DSB.StrategyID)
 
             }
             //slaves_aux[0].state="on"
             //Consulta los estados de los esclavos del PBLINK - armo los OPC:
             let opc=[]
+            console.log(respPBL.recordset)
             const pblink_name= respPBL.recordset[0].StringValue //nombre PBLINK
-            opc.push(device.deviceURLOPC + "/" + pblink_name + ".linknum")
-            opc.push(device.deviceURLOPC + "/" + pblink_name + ".fielnetwrktype")
-            opc.push(device.deviceURLOPC + "/" + pblink_name + ".cpuload")
-            opc.push(device.deviceURLOPC + "/" + pblink_name + ".state")
+            opc.push(device.deviceURLOPC + "/" + device.deviceName + "/" + pblink_name + ".LINKNUM")
+            opc.push(device.deviceURLOPC + "/" + device.deviceName + "/" + pblink_name + ".FIELDNETWORKTYPE")
+            opc.push(device.deviceURLOPC + "/" + device.deviceName + "/" + pblink_name + ".CPULOAD")
+            opc.push(device.deviceURLOPC + "/" + device.deviceName + "/" + pblink_name + ".STATE")
 
             slaves_aux.forEach(datos => {
-                opc.push(device.deviceURLOPC + "/" + pblink_name + ".NETWORKSLAVELED[" + datos.slave_Num + "]")
+                opc.push(device.deviceURLOPC + "/" + device.deviceName + "/" + pblink_name + ".NETWORKSLAVELED[" + datos.slave_Num + "]")
             })
-            console.log(opc)    
             try {
-                let datos_opc = await getOPC(servidor, 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',['System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG']) //,opc
+                //let datos_opc = await getOPC(servidor, servidor, 'mngr', 'mngr', 'E42ED0A7-C0F1-43b2-9807-F04C705B9251',[`System Components/${servidor}/Controllers/C300_BORRAR.RDNROLESTATE`,`System Components/${servidor}/Controllers/C300_BORRAR.CTEMP`, `System Components/${servidor}/Controllers/C300_BORRAR.CPUFREEAVG`]) //,opc
+                
+//                 opc=[ 
+//                 '/SYSTEM COMPONENTS/PMCLS006/CONTROLLERS/259C1PB01L01.COMMSTATE',
+//   '/SYSTEM COMPONENTS/PMCLS006/CONTROLLERS/259C1PB01L01.COMMSTATE',
+//   '/SYSTEM COMPONENTS/PMCLS006/CONTROLLERS/259C1PB01L01.COMMSTATE',
+//   '/SYSTEM COMPONENTS/PMCLS006/CONTROLLERS/259C1PB01L01.COMMSTATE']
+            //[`/SYSTEM COMPONENTS/PMCLS006/CONTROLLERS/259C1PB01/259C1PB01L01.COMMSTATE`]
+                let datos_opc = await getOPC(servidor, 'PMEPKS', 'epksadmin', 'hw.mdp.2013', '6031BF75-9CF2-11d1-A97B-00C04FC01389',opc) //,opc
                 //datos_opc=[{"value": 0},{"value": "PROFIBUS PA"}, {"value": 70}, {"value": 2}, {"value": 0},{"value": 1},{"value": 1},{"value": 0},{"value": 0},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 0},{"value": 0},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 0},{"value": 0},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 0}]
+                
                 if (!datos_opc){
                     console.log("Hubo errores en la consulta OPC. Contacte al administrador.");
                     return res.status(404).send("Hubo errores en la consulta. Contacte al administrador.")
@@ -502,9 +512,9 @@ const getPGM = async(device, res) =>{
                 switch(datos_opc[3].value){
                     case 0: aux1="NOTLOADED"
                     break;
-                    case 1: aux1="LOADED"
+                    case 1: aux1="ONLINE"
                     break;
-                    case 2: aux1="ONLINE"
+                    case 2: aux1="LOADED"
                     break;
                     default: aux1="NaN"
                 }
@@ -527,11 +537,11 @@ const getPGM = async(device, res) =>{
                         slaves.push(item);
                     //}
                 })
-                console.log(estados)
+                //console.log(estados)
             }
             catch(error){
                 console.log(error);
-                 res.status(500).send("Error al levantar los datos por OPC")
+                //res.status(500).send("Error al levantar los datos por OPC")
             }
 
             
@@ -557,7 +567,8 @@ const getPGM = async(device, res) =>{
         
         opc=[]
         const pblink_name= respPBL.recordset[0].StringValue //nombre PBLINK
-        const pgm_status=["bcmstate", "modisredun", "cpufreeavg", "freememink", "ctemp", "pktstxavg", "pktsrxavg", "pdcmsgavg", "cda_averagedisplayparams",
+        const pgm_status=["bcmstate", "modisredun", "cpufreeavg", "freememink", "ctemp", "pktstxavg", "pktsrxavg", "pdcmsgavg", 
+        "TRDISPAVGPPS",
         "BCDSWSTS", "FACTDATAERR", "ROMAPPIMGCHKSMFAIL", "ROMBOOTIMGCHKSMFAIL", "WDTHWFAIL", "WDTSWFAIL", "TASKHLTHMON", "RAMSWEEPERR", "RAMSCRUBERRS", "BACKUPRAMSWEEPERR", "BACKUPRAMSCRUBERRS", "DEBUGFLAGSET", "MINHWREVSF", "PARTNERNOTVISFTE"]
         pgm_status.forEach(datos=>{
             opc.push(device.deviceURLOPC + "/" + device.deviceName + "." + datos)
@@ -565,15 +576,15 @@ const getPGM = async(device, res) =>{
         //console.log("PGM Status: ", opc)
 
         //consulta OPC:
-        //datos_opc = await getOPC('192.168.53.11', 'WORKGROUP', 'mngr', 'HoneywellMNGR', '6031BF75-9CF2-11d1-A97B-00C04FC01389',opc)
+        datos_opc = await getOPC(servidor, 'PMEPKS', 'epksadmin', 'hw.mdp.2013', '6031BF75-9CF2-11d1-A97B-00C04FC01389',opc) 
         //prueba consulta OPC 27 datos:
-        /*['System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG',
-        'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG',
-        'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG',
-        'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG',
-        'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.RDNROLESTATE','System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG']) */
-        datos_opc=[{"value":8},{"value":0},{"value":78.85}, {"value":9752}, {"value":37.25}, {"value":60}, {"value":20}, {"value":1640}, {"value":3.67}, {"value": 1}, {"value": 1},
-        {"value": 1},{"value": 0},{"value": 1},{"value": 0},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 0}]
+        /*['System Components/servidor/Controllers/C300_BORRAR.RDNROLESTATE','System Components/servidor/Controllers/C300_BORRAR.CTEMP', 'System Components/servidor/Controllers/C300_BORRAR.CPUFREEAVG',
+        'System Components/servidor/Controllers/C300_BORRAR.RDNROLESTATE','System Components/servidor/Controllers/C300_BORRAR.CTEMP', 'System Components/servidor/Controllers/C300_BORRAR.CPUFREEAVG', 'System Components/servidor/Controllers/C300_BORRAR.RDNROLESTATE','System Components/servidor/Controllers/C300_BORRAR.CTEMP', 'System Components/servidor/Controllers/C300_BORRAR.CPUFREEAVG',
+        'System Components/servidor/Controllers/C300_BORRAR.RDNROLESTATE','System Components/servidor/Controllers/C300_BORRAR.CTEMP', 'System Components/servidor/Controllers/C300_BORRAR.CPUFREEAVG', 'System Components/servidor/Controllers/C300_BORRAR.RDNROLESTATE','System Components/servidor/Controllers/C300_BORRAR.CTEMP', 'System Components/servidor/Controllers/C300_BORRAR.CPUFREEAVG',
+        'System Components/servidor/Controllers/C300_BORRAR.RDNROLESTATE','System Components/servidor/Controllers/C300_BORRAR.CTEMP', 'System Components/servidor/Controllers/C300_BORRAR.CPUFREEAVG', 'System Components/servidor/Controllers/C300_BORRAR.RDNROLESTATE','System Components/servidor/Controllers/C300_BORRAR.CTEMP', 'System Components/servidor/Controllers/C300_BORRAR.CPUFREEAVG',
+        'System Components/servidor/Controllers/C300_BORRAR.RDNROLESTATE','System Components/servidor/Controllers/C300_BORRAR.CTEMP', 'System Components/servidor/Controllers/C300_BORRAR.CPUFREEAVG', 'System Components/servidor/Controllers/C300_BORRAR.RDNROLESTATE','System Components/servidor/Controllers/C300_BORRAR.CTEMP', 'System Components/WIN-HVFH2TLT9OM/Controllers/C300_BORRAR.CPUFREEAVG']) */
+        //datos_opc=[{"value":8},{"value":0},{"value":78.85}, {"value":9752}, {"value":37.25}, {"value":60}, {"value":20}, {"value":1640}, {"value":3.67}, {"value": 1}, {"value": 1},
+        //{"value": 1},{"value": 0},{"value": 1},{"value": 0},{"value": 1},{"value": 0},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 1},{"value": 0}]
         //console.log(datos_opc)
         
         let aux0=""
@@ -652,7 +663,7 @@ const getPGM = async(device, res) =>{
         
      } catch (error) {
          console.log(error);
-         res.status(500).send("Error al visualizar el PBLINK--")
+         //res.status(500).send("Error al visualizar el PBLINK--")
      }
 }
 

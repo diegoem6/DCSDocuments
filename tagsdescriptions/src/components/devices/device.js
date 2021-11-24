@@ -47,9 +47,9 @@ const Device = ({device}) => {
     return ( 
         <li className="tarea sombra">
             <p>{device.deviceName} </p>
-            <p>{device.deviceDescription}</p>
+            <p>{device.deviceType === "619d325c071b9588e7f609e1" ? "C300" : "PGM"}</p>
             <div className="acciones">                
-               
+            
                 {/* <a 
                     target='_blank'
                     href={`${process.env.REACT_APP_SHOWTAG_URL}/showTagDescriptor/${tagdescriptor.tagname}`}

@@ -164,7 +164,9 @@ exports.getOPC = async(ip, domain, user, pass, clsid, opc_route)=>{
       const item = itemsList[i];
 
       if (resItem[0] !== 0) {
-          return null
+        console.log ("El resitem es: ",resItem)  
+        return null
+
           //node.error(`Error adding item '${itemsList[i].itemID}': ${errorMessage(resItem[0])}`);
       } else {
           serverHandles.push(resItem[1].serverHandle);
@@ -179,7 +181,7 @@ exports.getOPC = async(ip, domain, user, pass, clsid, opc_route)=>{
     for (let i = 0; i < resAddItems.length; i++) {
       const resItem = resAddItems[i];
       if (resItem[0] !== 0) {
-        //console.log ("El resitem es: ",resItem)
+        console.log ("El resitem es: ",resItem)
         return null //node.error(`Error adding item '${itemsList[i].itemID}': ${errorMessage(resItem[0])}`);
       } else {
         resultado[i].itemID = resItem[1].itemID

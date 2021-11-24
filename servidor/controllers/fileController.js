@@ -4,6 +4,7 @@ const fs = require('fs')
 const readXlsxFile = require('read-excel-file/node')
 const NetworkNode = require('../models/NetworkNode');
 const TagDescriptor = require('../models/TagDescriptor')
+const Device = require('../models/Device')
 
 const multerConfiguration = {
     limits: {fileSize : 20*1024*1024 },
@@ -55,16 +56,20 @@ exports.processFile = async(req, res)=>{
     }
 }
 const processRow = async (model, headers, values)  => {
-  
+    
         var obj = {};
         headers.forEach((header, i) => obj[header] = values[i]);
         
-        if (model = "NetworkNode"){
+        if (model === "NetworkNode"){
             
             const new_networkNode = new NetworkNode(obj);
             await new_networkNode.save()
         }
-        if (model = "TagDescriptor"){
+        if (model === "devices"){
+            const new_device = new Device(obj);
+            await new_device.save()
+        }
+        if (model === "TagDescriptor"){
             
             let tagdescriptor = new TagDescriptor(obj);
             if (tagdescriptor.tagname){

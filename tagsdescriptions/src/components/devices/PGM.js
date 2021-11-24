@@ -4,12 +4,20 @@ const PGM = ({deviceSelected}) => {
     //{deviceSelected.status_.pgm[2].state.bcmstate}
     
     const renderSwitch_icon3 = (param) => {
-        console.log(param)
         switch(param) {
             case "NOTLOADED": return (<div><td width="10%" key="icono"><img src = "/img/icon_grey.svg.png" className="img_status_interface"/></td><td width="40%" key="nombre"><span>Not Loaded</span></td></div>)
             case "LOADED": return (<div><td width="10%" key="icono"><img src = "/img/icon_grey.svg.png" className="img_status_interface"/></td><td width="40%" key="nombre"><span>Loaded</span></td></div>)
             case "ONLINE": return (<div><td width="10%" key="icono"><img src = "/img/icon_green.svg.png" className="img_status_interface"/></td><td width="40%" key="nombre"><span>On Line</span></td></div>)
             default: return (<div><td width="10%" key="icono"><img src = "/img/icon_grey.svg.png" className="img_status_interface"/></td><td width="40%" key="nombre"><span>Error OPC</span></td></div>)
+        }
+    }
+    const renderSwitch_icon4 = (param) => {
+        switch(param) {
+            case 0: return (<img src = "/img/icon_grey.svg.png" className="img_status_interface"/>)
+            case 1: return (<img src = "/img/icon_red.svg.png" className="img_status_interface"/>)
+            case 2: return (<img src = "/img/icon_green.svg.png" className="img_status_interface"/>)
+            case 3: return (<img src = "/img/icon_yellow.svg.png" className="img_status_interface"/>)
+            default: return (<img src = "/img/icon_grey.svg.png" className="img_status_interface"/>)
         }
     }
 
@@ -33,8 +41,8 @@ const PGM = ({deviceSelected}) => {
                                             <td width="50%"><b>{datos.label}</b></td>
                                             {datos.type === "icon" ?
                                                 (datos.value === 0 ? 
-                                                    <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                                                    : (<img src = "/img/icon_red.svg.png" className="img_status_interface"/>))
+                                                    <img src = "/img/icon_red.svg.png" className="img_status_interface"/>
+                                                    : (<img src = "/img/icon_green.svg.png" className="img_status_interface"/>))
                                             :
                                                 null
                                             }
@@ -136,9 +144,7 @@ const PGM = ({deviceSelected}) => {
                                                     {slave.slave_Tipo}
                                                 </td>
                                                 <td width="16%" key="nombre">
-                                                    {slave.state === 1 ?
-                                                    <img src = "/img/icon_green.svg.png" className="img_status_interface"/>:
-                                                    <img src = "/img/icon_red.svg.png" className="img_status_interface"/>}
+                                                    {renderSwitch_icon4(slave.state)}
                                                 </td>
                                             </tr>)
                                         }
@@ -199,9 +205,7 @@ const PGM = ({deviceSelected}) => {
                                                     {slave.slave_Tipo}
                                                 </td>
                                                 <td width="16%" key="nombre">
-                                                    {slave.state === 1 ?
-                                                    <img src = "/img/icon_green.svg.png" className="img_status_interface"/>:
-                                                    <img src = "/img/icon_red.svg.png" className="img_status_interface"/>}
+                                                    {renderSwitch_icon4(slave.state)}
                                                 </td>
                                             </tr>)
                                         }
