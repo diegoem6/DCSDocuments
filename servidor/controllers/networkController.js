@@ -4,8 +4,11 @@ const TagDescriptor = require('../models/TagDescriptor')
 const {validationResult} = require('express-validator');
 const NetworkNode = require('../models/NetworkNode');
 const NetworkModel = require ('../models/NetworkNodeModel')
+const Area = require ('../models/Area')
 const {getSNMP,getSNPM_Sync, connectTelnetShow, connectTelnetShowTech} = require ('./commController');
 const NetworkNodeModel = require('../models/NetworkNodeModel');
+const Connection = require('../models/Connection');
+const Device = require('../models/Device');
 
 exports.addNetworkNode = async (req,res)=>{
     const errors = validationResult(req);
@@ -66,7 +69,7 @@ exports.updateNetworkNode = async (req,res)=>{
             return res.status(404).send({msg:"No existe el nodo de red"})
         }
 
-        const {nodeName, nodeDescription, nodeModel, nodeIP} = req.body
+        const {nodeName, nodeDescription, nodeModel, nodeIP, area} = req.body
         if (nodeName!==null){
             //networkNodeUpdated.name = nodeName
             networkNodeUpdated.nodeName = nodeName
@@ -79,6 +82,9 @@ exports.updateNetworkNode = async (req,res)=>{
         }
         if (nodeIP!==null){
             networkNodeUpdated.nodeIP = nodeIP
+        }
+        if (area!==null){
+            networkNodeUpdated.area = area
         }
         //db.collection.findOneAndUpdate( filter, update, options )
         networkNodeUpdated = await NetworkNode.findOneAndUpdate({_id:req.params.id},networkNodeUpdated,{new:true});
@@ -352,4 +358,163 @@ exports.createNetworkNodeShowRun = async (req, res)=>{
         
     }
 
+}
+
+/* retorno un json de este tipo: 
+res{
+    nodes:[],
+    connecions:[]
+}
+*/
+exports.getArchitectureNodes = async (req, res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+
+    try {
+        
+       
+        const networkNodes = await NetworkNode.find()
+
+        let nodes = [];
+
+        for (const nn of networkNodes){
+            let newNn = {};
+            newNn.id = nn.nodeName;
+            newNn.node = nn.nodeName;
+            newNn.area = nn.area;
+            nodes.push(newNn)
+        }
+        const connectionsArray = await Connection.find({type:'core'})
+        let connections = [];
+
+        for (const cc of connectionsArray){
+            let new_connection = {};
+            new_connection.ids = cc.source;
+            new_connection.idt = cc.target;
+            new_connection.description = cc.description;
+            connections.push(new_connection)
+        }
+        let coreArchitecture ={}
+        coreArchitecture.nodes = nodes;
+        coreArchitecture.connections = connections;
+        res.json({coreArchitecture})
+        
+    } catch ({error}) {
+        console.log(error);
+        res.status(500).send({msg:"No se pudo obtener los nodos y conexiones del core de la red"})
+        
+    }
+
+}
+
+/////// TODO ////////
+/*
+    Recibo un netwrok node name y retorno un json del tipo: 
+    res:{
+        nodes:[],
+        conecctions:[]
+    }
+*/
+exports.getArchitectureDevices = async (req, res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+
+    try {
+        //const {asset} = req.query;
+        //existe el asset?
+        //console.log(asset)
+        const {networkNode} = req.body;
+        
+        const connectionsArray = await Connection.find({source:networkNode,type:'access'})
+        
+
+        let nodes = [];
+        let connections = [];
+
+        let newNn = {};
+        newNn.id = networkNode;
+        newNn.node = networkNode;
+        newNn.area = 1
+        nodes.push(newNn);
+        for (const cc of connectionsArray){
+            newNn={};
+            let nn = await Device.find({deviceName:cc.target})
+            
+            newNn.id = nn[0].deviceName;
+            newNn.node = nn[0].deviceName;
+            newNn.area = 1
+            nodes.push(newNn)
+            nn = null;
+            newNn = null;
+
+            let new_connection = {};
+            new_connection.ids = cc.source;
+            new_connection.idt = cc.target;
+            new_connection.description = cc.description;
+            connections.push(new_connection)
+        }
+        
+        
+        let accessArchitecture ={}
+        accessArchitecture.nodes = nodes;
+        accessArchitecture.connections = connections;
+        res.json({accessArchitecture})
+
+        //console.log(networkNodes)
+
+    } catch ({error}) {
+        console.log(error);
+        res.status(500).send({msg:"No se pudo obtener los nodos de red para este asset"})
+        
+    }
+
+}
+
+
+exports.getAreas = async (req,res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+
+    try {
+
+        const areas = await Area.find()
+        res.json({areas})
+
+    } catch ({error}) {
+        console.log(error);
+        res.status(500).send({msg:"No se pudo obtener los modelos de los nodos"})
+        
+    }
+}
+
+exports.getAreaById = async(req, res) =>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+
+    try {
+        //revisar el id
+        const idArea = req.params.id
+        const area = await Area.findById(idArea)
+        
+        if (!area){
+            console.log("No existe el area");
+            return res.status(404).send("No existe el area")
+        }
+        
+        //envío el modelo del nodo
+        res.json({area})
+
+    } catch ({error}) {
+        console.log(error);
+        res.status(500).send({msg:"No se pudo procesar el modelo del nodo de red, contacte a un administrador"})
+        
+    }
 }

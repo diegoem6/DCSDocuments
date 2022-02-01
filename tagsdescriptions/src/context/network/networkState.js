@@ -5,6 +5,7 @@ import {
     CREATE_NETWORK_NODE,
     SHOW_FORM_NETWORK, 
     GET_NETWORK_NODES,
+    GET_AREAS,
     SHOW_ERROR,
     UPDATE_NETWORK_NODE,
     DELETE_NETWORK_NODE,
@@ -27,8 +28,9 @@ const NetworkState = props=>{
         networkNodes:[],
         networkNodeSelected:null,
         message:null,
-        networkmodelos:[],
-        networkmodelo:null,
+        networkmodels:[],
+        areas:[],
+        networkmodel:null,
         urlDoc:null
     }
 
@@ -135,6 +137,26 @@ const NetworkState = props=>{
         }
     }
 
+    const getAreas = async () =>{
+        try{
+            const res = await axiosClient.get('/api/areas')
+            dispatch({
+                type: GET_AREAS,
+                payload: res.data.areas /*mismo nombre que devuelve el controller en el server*/ 
+            })
+        }
+        catch(error){
+            const alert = {
+                msg: error.response.data.msg,
+                category: 'alerta-error'
+            }
+            dispatch({
+                type:SHOW_ERROR,
+                payload:alert
+            })
+        }
+    }
+
     const getNetworkModel = async(idNetworkModel) =>{
         try {
             const res = await axiosClient.get(`/api/networkmodels/${idNetworkModel}`);
@@ -223,9 +245,10 @@ const NetworkState = props=>{
                 networkNodes: state.networkNodes,
                 networkNodeSelected: state.networkNodeSelected,
                 error: state.error,
-                networkmodelos: state.networkmodelos,
-                networkmodelo: state.networkmodelo,
+                networkmodels: state.networkmodels,
+                networkmodel: state.networkmodel,
                 urlDoc:state.urlDoc,
+                areas:state.areas,
                 showForm, 
                 createNetworkNode,
                 getNetworkNodes,
@@ -237,7 +260,8 @@ const NetworkState = props=>{
                 getNetworkModels,
                 getNetworkModel,
                 resetMessage,
-                createNetworkNodeShowRun
+                createNetworkNodeShowRun,
+                getAreas
             }}
         >
 

@@ -6,7 +6,7 @@ const NetworkStatus = () => {
 
     const networkstatusID=localStorage.getItem('networkstatusID');
     const tContext = useContext(networkContext)
-    const {getNetworkNode, networkNodeSelected, getNetworkModel, networkmodelo, urlDoc, createNetworkNodeShowRun} = tContext
+    const {getNetworkNode, networkNodeSelected, getNetworkModel, networkmodel, urlDoc, createNetworkNodeShowRun} = tContext
     //let {nodeName, nodeDescription, nodeModel, nodeIP}="sss"
     const [nodeName, setnodeName]=useState("")
     const [nodeDescription, setnodeDescription]=useState("")
@@ -60,12 +60,12 @@ const NetworkStatus = () => {
 
 
     useEffect(() => {
-        if(networkmodelo){
-            setnodeModel(networkmodelo.model)
-            console.log('El modelo es: ',networkmodelo.model)
-            console.log(networkmodelo.url)
+        if(networkmodel){
+            setnodeModel(networkmodel.model)
+            console.log('El modelo es: ',networkmodel.model)
+            console.log(networkmodel.url)
         }
-    }, [networkmodelo])
+    }, [networkmodel])
     
     const handlePageClick = (e) => {
         const selectedPage = e.selected;
@@ -89,13 +89,13 @@ const NetworkStatus = () => {
         <Fragment>
             <div className = "divHeaderNetwork">
                 <h1>{nodeName}</h1>
-                <h2>{nodeDescription} : {nodeIP} - {networkmodelo ? <Fragment>{networkmodelo.model}</Fragment>: null
+                <h2>{nodeDescription} : {nodeIP} - {networkmodel ? <Fragment>{networkmodel.model}</Fragment>: null
                 }</h2>
                 
             </div>
-            {networkmodelo?
+            {networkmodel?
                     
-                    <img class="status_modelo_imagen" src={networkmodelo.url} alt={networkmodelo.url}/>
+                    <img class="status_modelo_imagen" src={networkmodel.url} alt={networkmodel.url}/>
                 : null
                 }
                 <div className = "download">
@@ -110,7 +110,7 @@ const NetworkStatus = () => {
                         <th width="15%">Interface</th>
                         <th width="55%">Descripcion</th>
                         <th width="10%">Estado</th>
-                        <th width="5%" >Vlan</th>
+                        <th width="5%">Vlan</th>
                         <th width="5%">Speed</th>
                         <th width="10%">Duplex</th>
                     </tr>

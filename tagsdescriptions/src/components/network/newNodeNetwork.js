@@ -12,7 +12,7 @@ const NewNodeNetwork = () => {
     const {asset} = asContext
 
     const nContext = useContext(networkContext)
-    const {networkNodeSelected, showForm, createNetworkNode, updateNetworkNode, networkmodelos, getNetworkModels, message, resetMessage} = nContext
+    const {networkNodeSelected, showForm, createNetworkNode, updateNetworkNode, networkmodels, areas,  getNetworkModels, getAreas, message, resetMessage} = nContext
 
     const aContext = useContext(alertContext)
     const {alert, showAlert} = aContext
@@ -21,22 +21,26 @@ const NewNodeNetwork = () => {
     const [nodeName, setNodeName] = useState('')
     const [nodeDescription, setNodeDescription] = useState('')
     const [nodeModel, setNodeModel] = useState('')
+    const [area, setArea] = useState('')
     const [nodeIP, setNodeIP] = useState('')
 
     useEffect(() => { /*tuve que meterlo en un useeffect porque en una funcion entraba dos veces*/
         //console.log(networkNodeSelected)
         getNetworkModels()
+        getAreas()
         if (networkNodeSelected !== null && networkNodeSelected.length>0){
             //console.log(networkNodeSelected)
             const [currentnetworkNode] = networkNodeSelected
             setNodeName(currentnetworkNode.nodeName)
             setNodeDescription(currentnetworkNode.nodeDescription)
             setNodeModel(currentnetworkNode.nodeModel)
+            setArea(currentnetworkNode.area)
             setNodeIP(currentnetworkNode.nodeIP)
         }else{
             setNodeName('')
             setNodeDescription('')
             setNodeModel('')
+            setArea('')
             setNodeIP('')
         }
         // eslint-disable-next-line
@@ -89,6 +93,7 @@ const NewNodeNetwork = () => {
         newNetworkNode.nodeName = nodeName;
         newNetworkNode.nodeDescription = nodeDescription;
         newNetworkNode.nodeModel = nodeModel;
+        newNetworkNode.area = area;
         newNetworkNode.nodeIP = nodeIP;
         newNetworkNode.asset = asset[0]._id;
         //console.log(newNetworkNode)
@@ -136,14 +141,30 @@ const NewNodeNetwork = () => {
                              >
                                 <option key="asdasd" value="">Seleccione un modelo</option>
                                 {//cargo todos los modelos:
-                                networkmodelos ?
-                                    networkmodelos.map(networkmodelo=>( //al ser un array puedo utilizar map, que siempre requiere de un key
-                                    <option key={networkmodelo._id} value={networkmodelo._id}>{networkmodelo.model}</option>
+                                networkmodels ?
+                                    networkmodels.map(networkmodel=>( //al ser un array puedo utilizar map, que siempre requiere de un key
+                                    <option key={networkmodel._id} value={networkmodel._id}>{networkmodel.model}</option>
                                 ))
                                 : null
                                 }
                              </select>
-                                
+                             
+                             
+                             <select className={`input-text${icon}`}
+                                onChange={e => setArea(e.target.value)}
+                                value={area} //esto es para que se mantenga seleccionado lo que elegi en el combo, sino vuelve al que estaba antes
+                             >
+                                <option key="qwe" value="">Seleccione un area</option>
+                                {//cargo todos los modelos:
+                                areas ?
+                                    areas.map(area=>( //al ser un array puedo utilizar map, que siempre requiere de un key
+                                    <option key={area.area} value={area.area}>{area.description}</option>
+                                ))
+                                : null
+                                }
+                             </select>
+
+
                              <input  
                                 type="text"
                                 className={`input-text${icon}`}

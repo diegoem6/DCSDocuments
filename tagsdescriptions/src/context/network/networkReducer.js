@@ -3,6 +3,7 @@ import {
     CREATE_NETWORK_NODE,
     GET_NETWORK_NODES,
     GET_NETWORK_NODE,
+    GET_AREAS,
     SHOW_ERROR,
     DELETE_NETWORK_NODE,
     SELECT_NETWORK_NODE,
@@ -81,12 +82,17 @@ export default (state,action)=>{
         case GET_NETWORK_MODELS:
             return({
                 ...state,
-                networkmodelos: action.payload
+                networkmodels: action.payload
             })
         case GET_NETWORK_MODEL:
             return({
                 ...state,
-                networkmodelo: action.payload
+                networkmodel: action.payload
+            })
+        case GET_AREAS:
+            return({
+                ...state,
+                areas: action.payload
             })
         case CREATE_NETWORK_SHOW_RUN:
             return ({

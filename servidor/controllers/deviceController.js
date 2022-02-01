@@ -130,7 +130,17 @@ exports.getDevices = async (req,res)=>{
             return res.status(404).send({res:"No existe el asset"})
         }
 
-        const devices = await Device.find({asset:asset_updated._id}).sort({creado:-1})
+        const oldDevices = await Device.find({asset:asset_updated._id}).sort({creado:-1})
+       
+        let devices = []
+
+        for (const dev of oldDevices){
+            const typeDesc = await this.igetDeviceType(dev.deviceType)
+            let newDev = dev.toObject();
+            newDev.deviceTypeDesc = typeDesc
+            devices.push(newDev)
+        }
+        
         res.json({devices})
         //console.log(networkNodes)
 
@@ -141,6 +151,28 @@ exports.getDevices = async (req,res)=>{
     }
 }
 
+exports.igetDeviceType = async (id) =>{
+   
+    try {
+        //revisar el id
+        const idDevice = id
+        //console.log('El ID es: ',idDevice)
+        const device_find = await DeviceType.findById(idDevice)
+        
+        //console.log("HOLA",device_find.type)
+        if (!device_find){
+            console.log("No existe el dispositivo");
+            return res.status(404).send("No existe el dispositivo")
+        }
+        // logica OPC para obtener el status
+        let device_type = device_find
+        //device_get.status = []
+       return device_type.type //devuelvo .type, .url y ._id
+
+    } catch ({error}) {
+        console.log(error);
+    }
+}
 exports.getDeviceTypesByID = async(req, res) =>{
     const errors = validationResult(req);
     if (!errors.isEmpty()){

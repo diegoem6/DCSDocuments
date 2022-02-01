@@ -2,16 +2,19 @@ import React, {useContext} from 'react';
 import { Link } from 'react-router-dom'
 import devicesContext from "../../context/devices/devicesContext";
 import { confirmAlert } from 'react-confirm-alert';
+import DeviceStatus from './deviceStatus';
 
 
 //import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const Device = ({device}) => {
     
+    
+
+    const dContext = useContext(devicesContext)
+    const {deleteDevice, selectDevice, showForm, getDevice, getDeviceType} = dContext
     //console.log(device)
     
-    const dContext = useContext(devicesContext)
-    const {deleteDevice, selectDevice, showForm, getDevice} = dContext
     
     const editDevice = (device)=>{ 
         //console.log(device)
@@ -47,7 +50,8 @@ const Device = ({device}) => {
     return ( 
         <li className="tarea sombra">
             <p>{device.deviceName} </p>
-            <p>{device.deviceType === "619d325c071b9588e7f609e1" ? "C300" : "PGM"}</p>
+            <p>{device.deviceTypeDesc}</p> 
+            
             <div className="acciones">                
             
                 {/* <a 

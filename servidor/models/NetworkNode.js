@@ -15,6 +15,9 @@ const NetworkNodeSchema = mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref: 'NetworkNodeModel'
     },
+    area:{
+        type:Number
+    },
     nodeIP:{
         type:String,
         require:true,
