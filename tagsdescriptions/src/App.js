@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 import Login from './components/auth/login'
@@ -27,6 +27,7 @@ import Assets from './components/assets/assets'
 import PrivateRoute from './components/routes/privateRoute'
 
 import authToken from '../src/config/token'
+import Diagrama from './components/architecture/diagrama';
 
 
 
@@ -57,6 +58,7 @@ function App() {
                         <PrivateRoute exact path="/devices" component={devices}/>
                         <PrivateRoute exact path="/devicestatus" component={deviceStatus}/>
                         <PrivateRoute exact path="/importDevices" component={ImportDevices}/>
+                        <PrivateRoute exact path="/architecture" component={Diagrama}/>
                       </Switch>
                     </Router>
                   </ImportState>

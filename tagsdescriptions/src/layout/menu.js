@@ -42,6 +42,14 @@ const Menu = () => {
                                 Dispositivos DCS
                             </Link>
                         </div>
+                        <div className="campo-form">
+                            <Link 
+                                to={'/architecture'}
+                                className="btn btn-block btn-primario"
+                            >
+                                Arquitectura Redes
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </Fragment>
