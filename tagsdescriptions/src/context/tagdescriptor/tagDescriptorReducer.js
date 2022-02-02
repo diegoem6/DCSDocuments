@@ -18,7 +18,6 @@ import {
     GET_INTERLOCKS,
     GET_AYE,
     GET_FOTOS} from '../../types/index'
-import { stat } from 'fs'
 
 export default (state,action)=>{
     switch(action.type){

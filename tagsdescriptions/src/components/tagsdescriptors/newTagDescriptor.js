@@ -4,7 +4,6 @@ import systemContext from '../../context/system/systemContext'
 import SunEditor,{buttonList} from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import alertContext from '../../context/alerts/alertContext';
-import { Editor } from '@tinymce/tinymce-react';
 //import Files from 'react-files'
 
 const NewTagDescriptor = () => {
