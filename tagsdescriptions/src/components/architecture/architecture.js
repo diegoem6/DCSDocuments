@@ -1,5 +1,7 @@
 /*Dibuja la arquitectura*/ 
 
+const createArchitecture = () => {
+
 /*Agregado*/
 const initBgColor = '#1A192B';
 
@@ -79,10 +81,12 @@ let area4yB=(cant_area[22]+cant_area[23])*pasoy + area2yB
 let area5yB = area4yB -40 + area2yB
 let area6yB=(cant_area[22]+cant_area[23]+cant_area[24])*pasoy + area2yB
 
-console.log(area2y, ' ',area3y, ' ',area4y, ' ',area5y, ' ',area6y, ' ',)
-console.log(area2yB, ' ',area3yB, ' ',area4yB, ' ',area5yB, ' ',area6yB, ' ',)
-console.log(cant_area[1], ' ', cant_area[2], ' ', cant_area[3], ' ', cant_area[4], ' ', cant_area[5], ' ', cant_area[6])
-console.log(cant_area[21], ' ', cant_area[22], ' ', cant_area[23], ' ', cant_area[24], ' ', cant_area[25], ' ', cant_area[26])
+// console.log(area2y, ' ',area3y, ' ',area4y, ' ',area5y, ' ',area6y, ' ',)
+// console.log(area2yB, ' ',area3yB, ' ',area4yB, ' ',area5yB, ' ',area6yB, ' ',)
+// console.log(cant_area[1], ' ', cant_area[2], ' ', cant_area[3], ' ', cant_area[4], ' ', cant_area[5], ' ', cant_area[6])
+// console.log(cant_area[21], ' ', cant_area[22], ' ', cant_area[23], ' ', cant_area[24], ' ', cant_area[25], ' ', cant_area[26])
+console.log("Renderizando architecture.js")
+
 
 equipos.forEach((eq, i)=>{
   
@@ -164,7 +168,7 @@ equipos.forEach((eq, i)=>{
     
   }
 
-  console.log(draweq)
+  //console.log(draweq)
 
 draweq.push({
     id: eq.id, type: 'Botones', sourcePosition: 'right', targetPosition: 'left',data: { color: color, equipo: eq.equipo, posin: posin, posout: posout},position: { x: posx, y: posy }, style: { background: color}
@@ -175,11 +179,8 @@ conexiones.forEach((con, i)=>{
   draweq.push({ id: con.ids+'-'+con.idt, source: con.ids, target: con.idt, type: 'smoothstep' }) //type: 'smoothstep' , label: con.desc
 })
 
-//console.log(draweq)
+return draweq;
 
- 
+}
 
- export default (
-  draweq
-  //display
-);
+export default createArchitecture;;

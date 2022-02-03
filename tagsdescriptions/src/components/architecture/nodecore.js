@@ -25,8 +25,8 @@ export default memo(({ data, isConnectable }) => {
         :
         (null)
       }
-      <div>
-        <strong><center>{data.equipo}</center></strong>
+      <div className='nodeCoreContent'>
+        <strong><center className='nodeCoreLabel'>{data.equipo}</center></strong>
       </div>
       <input
         className="boton"
