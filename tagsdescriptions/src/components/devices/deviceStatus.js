@@ -1,4 +1,3 @@
-import { stat } from 'fs';
 import React, {useState, useContext, useEffect,Fragment} from 'react';
 import deviceContext from '../../context/devices/devicesContext'
 import C300 from './C300'

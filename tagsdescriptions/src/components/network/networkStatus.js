@@ -3,7 +3,7 @@ import networkContext from "../../context/network/networkContext";
 import ReactPaginate from 'react-paginate';
 
 const NetworkStatus = () => {
-
+    
     const networkstatusID=localStorage.getItem('networkstatusID');
     const tContext = useContext(networkContext)
     const {getNetworkNode, networkNodeSelected, getNetworkModel, networkmodel, urlDoc, createNetworkNodeShowRun} = tContext
@@ -47,6 +47,7 @@ const NetworkStatus = () => {
             //setnodeModel(getNetworkModel(networkNodeSelected.nodeModel).model)
             getNetworkModel(networkNodeSelected.nodeModel) /* pido el networkmodelo */
             setnodeIP(networkNodeSelected.nodeIP)
+            
             setPag(
                  {...pag,
                      pageCount: Math.ceil(networkNodeSelected.status.length/pag.perPage),

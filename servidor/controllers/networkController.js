@@ -290,7 +290,7 @@ exports.getNetworkNode = async (req,res)=>{
                 duplex: ""
             }
         }
-
+        
         res.json({network_get})
 
 
