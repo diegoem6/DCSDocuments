@@ -18,6 +18,11 @@ router.get('/getArchitectureNodes/',
 router.get('/getArchitectureDevices/',
     auth,
     networkController.getArchitectureDevices) ;
+
+router.get('/getNetworkNodeID/',
+    auth,
+    networkController.getNetworkNodeID) ;
+    
 /*
 router.put('/:id',
     auth,

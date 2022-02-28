@@ -11,7 +11,10 @@ import {
     GET_NETWORK_MODELS,
     GET_NETWORK_MODEL,
     RESET_MESSAGE,
-    CREATE_NETWORK_SHOW_RUN
+    CREATE_NETWORK_SHOW_RUN,
+    GET_ARCHITECTURE_NODES,
+    GET_ARCHITECTURE_DEVICES,
+    GET_NETWORK_NODE_ID
     } from '../../types/index'
 
 export default (state,action)=>{
@@ -100,6 +103,23 @@ export default (state,action)=>{
                 error:false, 
                 urlDoc: action.payload
             })
+        case GET_ARCHITECTURE_DEVICES:
+            return({
+                ...state,
+                error:false,
+                networkArchitectureDevices: action.payload
+            })
+            case GET_ARCHITECTURE_NODES:
+                return({
+                    ...state,
+                    error:false,
+                    networkArchitectureNodes: action.payload
+                })
+            case GET_NETWORK_NODE_ID:
+                return({
+                    ...state,
+                    networkNodeID: action.payload
+                })
         default:
             return state;
     }

@@ -1,17 +1,31 @@
 /*Para switches, firewealls y routers*/ 
-import React, { memo } from 'react';
+import React, { memo, useContext, useEffect } from 'react';
 
 import { Handle } from 'react-flow-renderer';
+import networkContext from '../../context/network/networkContext'
+import Diagrama from './diagrama';
 
-const aux="left"
-const funcion=()=>{
-  //console.log("Entre")
-}
 export default memo(({ data, isConnectable }) => {
   //console.log(data.posin, data.posout.uno)
   
+  const tContext = useContext(networkContext)
+  const {getNetworkNodeID, networkNodeID, getNetworkArchitectureDevices, networkArchitectureDevices} = tContext //getNetworkNode 
   
-  
+  useEffect(()=>{
+    if(networkArchitectureDevices){
+      console.log("Entro 25 veces!!!!")
+      //<Diagrama />
+    }
+  }, [networkArchitectureDevices])
+
+  useEffect(()=>{ //para mostrar el status:
+    if ((networkNodeID  !== localStorage.getItem('devicestatusID')) && networkNodeID){ //si no agrego la comparacion con lo que habia antes, entra 24 veces! que onda el useEffect, hace lo que quiere...
+      localStorage.setItem('devicestatusID',networkNodeID)
+      window.open('/networkstatus')
+    }
+  },[networkNodeID])
+
+
   return (
     <>
       {(data.posin) ?
@@ -25,23 +39,49 @@ export default memo(({ data, isConnectable }) => {
         :
         (null)
       }
+      
       <div>
-        <strong><center>{data.equipo}</center></strong>
+        <strong><center>{data.equipo} - {data.devicetype}</center></strong>
       </div>
-      <input
+
+      {((data.devicetype) === 'Switch') ?
+        <input
+          className="boton"
+          type="button"
+          value="Connections"
+          onClick={()=>
+            {   console.log("Connections ", data.equipo)
+                getNetworkArchitectureDevices(data.equipo)
+            }
+            /*<NetworkStatus />*/
+          }
+          defaultValue={data.color}
+        />
+      :
+        (null)
+      }
+      
+      {(((data.devicetype) === 'Switch') || (data.devicetype) === 'CF9' || (data.devicetype) === 'C300' || (data.devicetype) === 'PGM') ?
+        <input
         className="boton"
         type="button"
-        value="Connections"
-        onClick={funcion()}
+        //style="background-color: black; color : white;"
+        value="       Status       "
         defaultValue={data.color}
-      />
-      <input
-      className="boton"
-      type="button"
-      //style="background-color: black; color : white;"
-      value="       Status       "
-      defaultValue={data.color}
-    />
+        onClick={()=>
+          {   console.log("Entro_Click")
+              getNetworkNodeID(data.equipo)
+              //getNodeID(data.equipo) //levanto el id del nodo
+              //localStorage.setItem('devicestatusID',networkNodeID) //guardo en el localstorage una variable networkstatusID con el dato networkNode._id
+              //window.open('/networkstatus') // /events esta definido en app.js
+          }
+          /*<NetworkStatus />*/
+        }
+        />
+      :
+        (null)
+      }
+
       {(data.posout) ?
         <Handle
           type="source"
@@ -56,5 +96,6 @@ export default memo(({ data, isConnectable }) => {
       }
 
     </>
+
   );
 });

@@ -4,7 +4,7 @@ const fs = require('fs');
 const opc = require('node-opc-da');
 
 
-exports.getSNPM_Sync = async (ip, commmunity, oids) =>{
+exports.getSNMP_Sync = async (ip, commmunity, oids) =>{
   
   function parseVarbinds(varbinds){
     let answer;
@@ -28,30 +28,39 @@ exports.getSNPM_Sync = async (ip, commmunity, oids) =>{
 
     return answer;
   }  
-  var session = snmp.createSession (ip, commmunity);
-  // Wrapper for the SNMP Request        
-  let wrapper = (oids) => {
-      return new Promise(
-          (resolve) => {
-          session.get(oids, function ( error, varbinds ) {
-              if(error){
-                  response = {code:1, message: error};
-              }
-              resolve(varbinds);
-          })
-  })};
+  /*const options={
+    timeout: 500
+  }*/
+  try {
+    var session = snmp.createSession (ip, commmunity);
+    // Wrapper for the SNMP Request        
+    let wrapper = (oids) => {
+        return new Promise(
+            (resolve) => {
+            session.get(oids, function ( error, varbinds ) {
+                if(error){
+                    response = {code:1, message: error};
+                }
+                resolve(varbinds);
+            })
+    })};
+    await wrapper(oids).then(
+        data => response = parseVarbinds(data)
+    ).catch(
+        error => {
+            console.log(error);
+            response = {code: 1, message: error};
+        }
+    );
+
+    return response;
+  } catch (error) {
+    console.log("Error getting SNMP items")
+  }
+  
 
   //Calling the wrapper and parsing the varbinds received from the SNMP call
-  await wrapper(oids).then(
-      data => response = parseVarbinds(data)
-  ).catch(
-      error => {
-          console.log(error);
-          response = {code: 1, message: error};
-      }
-  );
-
-  return response;
+  
 }
 
 exports.getSNMP = async (ip, commmunity, oids, res)=>{

@@ -55,7 +55,7 @@ exports.addDevice = async (req,res)=>{
 
 exports.updateDevice = async (req,res)=>{
     const errors = validationResult(req);
-
+    console.log(req.body)
     if (!errors.isEmpty()){
         return res.status(400).json({errors:errors.array()});
     }
@@ -74,13 +74,13 @@ exports.updateDevice = async (req,res)=>{
         const deviceType_updated = await DeviceType.findById(req.body.deviceType)
         //console.log(deviceType_updated)
         if (!deviceType_updated){
-            console.log("No existe el tipo de dispositivo");
+            //console.log("No existe el tipo de dispositivo");
             return res.status(404).send("No existe el tipo de dispositivo")
         }
 
         let deviceUpdate = await Device.findById(req.params.id)
         if (!deviceUpdate){
-            console.log("No existe el dispositivo");
+            //console.log("No existe el dispositivo");
             return res.status(404).send({msg:"No existe el dispositivo"})
         }
 

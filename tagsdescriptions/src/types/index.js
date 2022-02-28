@@ -68,7 +68,7 @@ export const    DELETE_NETWORK_NODE         =   "DELETE_NETWORK_NODE"
 export const    SELECT_NETWORK_NODE         =   "SELECT_NETWORK_NODE"
 export const    GET_NETWORK_MODELS          =   "GET_NETWORK_MODELS"
 export const    GET_NETWORK_MODEL           =   "GET_NETWORK_MODEL"
-
+export const    GET_NETWORK_NODE_ID         =   "GET_NETWORK_NODE_ID"
 
 export const    GET_AREAS                   =   "GET_AREAS"
 
@@ -87,3 +87,6 @@ export const    GET_DEVICE_TYPES        =   "GET_DEVICE_TYPES"
 export const    GET_DEVICE_STATUS       =   "GET_DEVICE_STATUS"
 export const    PROCESS_IMPORT_FILE     =   "PROCESS_IMPORT_FILE"
 export const    SEARCH_DEVICE           =   "SEARCH_DEVICE"
+
+export const    GET_ARCHITECTURE_NODES  =   "GET_ARCHITECTURE_NODES"
+export const    GET_ARCHITECTURE_DEVICES    =   "GET_ARCHITECTURE_DEVICES"

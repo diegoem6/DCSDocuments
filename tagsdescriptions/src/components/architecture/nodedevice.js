@@ -2,6 +2,7 @@
 import React, { memo } from 'react';
 
 import { Handle } from 'react-flow-renderer';
+import Diagrama from './Diagrama';
 
 const aux="left"
 const funcion=()=>{
@@ -32,7 +33,7 @@ export default memo(({ data, isConnectable }) => {
         className="boton"
         type="button"
         value="Connections"
-        onClick={funcion()}
+        
         defaultValue={data.color}
       />
       <input
@@ -40,6 +41,13 @@ export default memo(({ data, isConnectable }) => {
       type="button"
       //style="background-color: black; color : white;"
       value="       Status       "
+      onClick={()=>
+        {   console.log("Entro")
+            localStorage.setItem('networkstatusID',"12") //guardo en el localstorage una variable networkstatusID con el dato networkNode._id
+            window.open('/networkstatus') // /events esta definido en app.js
+        }
+        /*<NetworkStatus />*/
+    }
       defaultValue={data.color}
     />
       {(data.posout) ?

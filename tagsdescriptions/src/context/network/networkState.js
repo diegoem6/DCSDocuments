@@ -14,11 +14,15 @@ import {
     GET_NETWORK_MODELS,
     GET_NETWORK_MODEL,
     RESET_MESSAGE,
-    CREATE_NETWORK_SHOW_RUN
+    CREATE_NETWORK_SHOW_RUN,
+    GET_ARCHITECTURE_NODES,
+    GET_ARCHITECTURE_DEVICES,
+    GET_NETWORK_NODE_ID
     } from '../../types/index'
 
 import axiosClient from '../../config/axios'
-
+import { stat } from 'fs';
+import qs from 'qs'
 
 const NetworkState = props=>{
     
@@ -28,10 +32,13 @@ const NetworkState = props=>{
         networkNodes:[],
         networkNodeSelected:null,
         message:null,
+        networkNodeID:null,
         networkmodels:[],
         areas:[],
         networkmodel:null,
-        urlDoc:null
+        urlDoc:null,
+        networkArchitectureDevices:{},
+        networkArchitectureNodes:[]
     }
 
     //Dispatch para ejecutar las acciones
@@ -200,20 +207,15 @@ const NetworkState = props=>{
     }
 
     const updateNetworkNode = async (network_node) =>{
-        
         try {
             const id = network_node._id
             const res = await axiosClient.put(`/api/network/${id}`,network_node)
-            
             dispatch({
                 type:UPDATE_NETWORK_NODE,
                 payload:res.data.network_node_modified
             })
-            
-
         } catch (error) {
             console.log(error)
-
         }
     }
 
@@ -238,6 +240,64 @@ const NetworkState = props=>{
         }
     }
 
+    const getNetworkArchitectureDevices = async(networkNode) =>{
+        try {
+            //console.log(networknode)
+            const res = await axiosClient.get('/api/architecture/getArchitectureDevices', {params:{networkNode}}) //networkNode se tiene que llamar igual de ambos lados
+            //const res = await axiosClient.get('api/architecture/getArchitectureDevices?networkNode=PMSWSY011A')
+            console.log(res)
+            dispatch({
+                type:GET_ARCHITECTURE_DEVICES,
+                payload:res.data.accessArchitecture //aca accedo a nodes y connections
+            })
+            
+
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
+
+    const getNetworkArchitectureNodes = async() =>{
+        console.log("Entro en getNetworkArchitectureNodes")
+        try {
+            const res = await axiosClient.get('/api/architecture/getArchitectureNodes')
+            console.log(res)
+            dispatch({
+                type:GET_ARCHITECTURE_NODES,
+                payload:res.data.coreArchitecture //aca accedo a nodes y connections
+            })
+            
+
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
+
+    const getNetworkNodeID = async (networknode) =>{
+        try {
+            
+            const res = await axiosClient.get('/api/architecture/getNetworkNodeID', {params:{networknode}});
+            //const res = await axiosClient.request({method: 'GET', url: '/api/architecture/getNetworkNodeID',  data:{ networknode: 'PMSWSE221A' }})
+            dispatch({
+                type:GET_NETWORK_NODE_ID,
+                payload:res.data.idnetworknode //idnetworknode esta definida en la respuesta del server
+            })
+        } catch (error) {
+            const alert = {
+                msg:"hubo un error con el nooe de red",
+                category:"alerta-error"
+            }
+            dispatch({
+                type:SHOW_ERROR,
+                payload: alert
+            })
+        }      
+    }
+
+
+
     return (
         <networkContext.Provider
             value={{
@@ -249,6 +309,9 @@ const NetworkState = props=>{
                 networkmodel: state.networkmodel,
                 urlDoc:state.urlDoc,
                 areas:state.areas,
+                networkArchitectureDevices: state.networkArchitectureDevices,
+                networkArchitectureNodes: state.networkArchitectureNodes,
+                networkNodeID: state.networkNodeID,
                 showForm, 
                 createNetworkNode,
                 getNetworkNodes,
@@ -261,7 +324,10 @@ const NetworkState = props=>{
                 getNetworkModel,
                 resetMessage,
                 createNetworkNodeShowRun,
-                getAreas
+                getAreas,
+                getNetworkArchitectureDevices,
+                getNetworkArchitectureNodes,
+                getNetworkNodeID
             }}
         >
 

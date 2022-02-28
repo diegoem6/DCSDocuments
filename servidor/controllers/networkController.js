@@ -5,10 +5,13 @@ const {validationResult} = require('express-validator');
 const NetworkNode = require('../models/NetworkNode');
 const NetworkModel = require ('../models/NetworkNodeModel')
 const Area = require ('../models/Area')
-const {getSNMP,getSNPM_Sync, connectTelnetShow, connectTelnetShowTech} = require ('./commController');
+const {getSNMP,getSNMP_Sync, connectTelnetShow, connectTelnetShowTech} = require ('./commController');
 const NetworkNodeModel = require('../models/NetworkNodeModel');
 const Connection = require('../models/Connection');
 const Device = require('../models/Device');
+const DeviceType = require('../models/DeviceType');
+const { findById } = require('../models/System');
+
 
 exports.addNetworkNode = async (req,res)=>{
     const errors = validationResult(req);
@@ -42,7 +45,6 @@ exports.addNetworkNode = async (req,res)=>{
 
 exports.updateNetworkNode = async (req,res)=>{
     const errors = validationResult(req);
-
     if (!errors.isEmpty()){
         return res.status(400).json({errors:errors.array()});
     }
@@ -171,6 +173,7 @@ exports.getNetworkModelByID = async(req, res) =>{
 
 exports.getNetworkNode = async (req,res)=>{
     const errors = validationResult(req);
+    
     if (!errors.isEmpty()){
         return res.status(400).json({errors:errors.array()});
     }
@@ -223,16 +226,15 @@ exports.getNetworkNode = async (req,res)=>{
                 oid_alias="1.3.6.1.2.1.31.1.1.1.18.1000" + x
                 oid_duplex="1.3.6.1.2.1.10.7.2.1.19.1000" + x
             }
-            
-            item.interface = await getSNPM_Sync(network_get.nodeIP,"public",[oid_name])
-            item.description = await getSNPM_Sync(network_get.nodeIP,"public",[oid_desc])
-            item.state = await getSNPM_Sync(network_get.nodeIP,"public",[oid_state])
+            item.interface = await getSNMP_Sync(network_get.nodeIP,"public",[oid_name])
+            item.description = await getSNMP_Sync(network_get.nodeIP,"public",[oid_desc])
+            item.state = await getSNMP_Sync(network_get.nodeIP,"public",[oid_state])
             item.state === "1" ? item.state = "up" : item.state = "down"
-            item.speed = await getSNPM_Sync(network_get.nodeIP,"public",[oid_speed])
+            item.speed = await getSNMP_Sync(network_get.nodeIP,"public",[oid_speed])
             item.speed = parseInt(item.speed)/1000000
 
-            item.vlan = await getSNPM_Sync(network_get.nodeIP,"public",[oid_vlan])
-            item.duplex = await getSNPM_Sync(network_get.nodeIP,"public",[oid_duplex])
+            item.vlan = await getSNMP_Sync(network_get.nodeIP,"public",[oid_vlan])
+            item.duplex = await getSNMP_Sync(network_get.nodeIP,"public",[oid_duplex])
 
             x+=1
             network_get.status.push(item);
@@ -267,15 +269,15 @@ exports.getNetworkNode = async (req,res)=>{
                 oid_duplex="1.3.6.1.2.1.10.7.2.1.19.1010" + x
             }
 
-            item.interface = await getSNPM_Sync(network_get.nodeIP,"public",[oid_name])
-            item.description = await getSNPM_Sync(network_get.nodeIP,"public",[oid_desc])
-            item.state = await getSNPM_Sync(network_get.nodeIP,"public",[oid_state])
+            item.interface = await getSNMP_Sync(network_get.nodeIP,"public",[oid_name])
+            item.description = await getSNMP_Sync(network_get.nodeIP,"public",[oid_desc])
+            item.state = await getSNMP_Sync(network_get.nodeIP,"public",[oid_state])
             item.state === "1" ? item.state = "up" : item.state = "down"
-            item.speed = await getSNPM_Sync(network_get.nodeIP,"public",[oid_speed])
+            item.speed = await getSNMP_Sync(network_get.nodeIP,"public",[oid_speed])
             item.speed = parseInt(item.speed)/1000000
 
-            item.vlan = await getSNPM_Sync(network_get.nodeIP,"public",[oid_vlan])
-            item.duplex = await getSNPM_Sync(network_get.nodeIP,"public",[oid_duplex])
+            item.vlan = await getSNMP_Sync(network_get.nodeIP,"public",[oid_vlan])
+            item.duplex = await getSNMP_Sync(network_get.nodeIP,"public",[oid_duplex])
             
             x+=1
             network_get.status.push(item);
@@ -342,7 +344,7 @@ exports.createNetworkNodeShowRun = async (req, res)=>{
         const {data} = req.query
         const {ip, tipo} = JSON.parse(data)
         
-        const hostname = await getSNPM_Sync(ip,"public",['1.3.6.1.2.1.1.5.0'])
+        const hostname = await getSNMP_Sync(ip,"public",['1.3.6.1.2.1.1.5.0'])
         if (!hostname){
             console.log("No existe el nodo de red solicitado");
             return res.status(404).send("No existe el nodo de red solicitado")
@@ -384,6 +386,9 @@ exports.getArchitectureNodes = async (req, res)=>{
             newNn.id = nn.nodeName;
             newNn.node = nn.nodeName;
             newNn.area = nn.area;
+            let tipodevice = await DeviceType.findById(nn.deviceType); //Busco Devicetypes cada
+            //console.log(tipodevice)
+            newNn.devicetype = tipodevice.type
             nodes.push(newNn)
         }
         const connectionsArray = await Connection.find({type:'core'})
@@ -394,6 +399,7 @@ exports.getArchitectureNodes = async (req, res)=>{
             new_connection.ids = cc.source;
             new_connection.idt = cc.target;
             new_connection.description = cc.description;
+            
             connections.push(new_connection)
         }
         let coreArchitecture ={}
@@ -424,38 +430,82 @@ exports.getArchitectureDevices = async (req, res)=>{
     }
 
     try {
-        //const {asset} = req.query;
-        //existe el asset?
-        //console.log(asset)
-        const {networkNode} = req.body;
-        
+        //const {networkNode} = req.body;
+        const {networkNode} = req.query; //del params levanto el dato del networknode
         const connectionsArray = await Connection.find({source:networkNode,type:'access'})
         
+        //console.log(connectionsArray)
 
         let nodes = [];
         let connections = [];
+        let new_connection = {}
 
-        let newNn = {};
+        let newNn = {}; 
+        let newNn0 = {}; 
         newNn.id = networkNode;
         newNn.node = networkNode;
-        newNn.area = 1
+        //newNn.devicetype = "Switch"
+        newNn.level = 2;
+        //newNn.area = 21 //el area es para el color de los dispositivos y para indicar donde se tienen que mostrar los dispositivos
         nodes.push(newNn);
-        for (const cc of connectionsArray){
+        //let tipodevice = await DeviceType.find() //levanto todos
+        for (const cc of connectionsArray){ //recorro todas las conexiones que tiene el equipo
+            //console.log("Este es el cc: ", cc)
             newNn={};
-            let nn = await Device.find({deviceName:cc.target})
+            let nn = await Device.find({deviceName:cc.target}) //de aca obtengo toda la informacion del dispositivo conectado (deviceDescription, deviceType, deviceIP, asset, deviceURLOPC)
+            //console.log("Estoy aca ", nn[0])
             
-            newNn.id = nn[0].deviceName;
-            newNn.node = nn[0].deviceName;
-            newNn.area = 1
-            nodes.push(newNn)
-            nn = null;
-            newNn = null;
+            if (nn[0]){
+                //console.log("Entro.....")
+                newNn.id = nn[0].deviceName;
+                newNn.node = nn[0].deviceName;
+                //console.log(nn[0].deviceType) //deviceType
+                let tipodevice = await DeviceType.findById(nn[0].deviceType); //Busco Devicetypes cada
+                //let tipodevice = await DeviceType.findById(nn[0].deviceType); //Busco Devicetypes cada
+                //console.log(tipodevice)
+                newNn.devicetype = tipodevice.type;
+                newNn.level = 1
+                //newNn.area = 22 //el area es para el color de los dispositivos y para indicar donde se tienen que mostrar los dispositivos
+                nodes.push(newNn)
+                nn = null;
+                //console.log('El newnode es: ', newNn.node, " y tipo ", tipodevice.type)
+                
+                if (tipodevice.type === 'CF9'){ // levanto las conexiones que tiene el CF9 y las devuelvo:
+                    let connectionsArray0 = await Connection.find({source:newNn.node})
+                    newNn = null;
+                    newNn={};
+                    //console.log('El connection array es: ',connectionsArray0)
+                    for (const cc of connectionsArray0){ //recorro todas las conexiones que tiene el equipo
+                        //console.log('Esta es la conexion: ',cc)
+                        nn = await Device.find({deviceName:cc.target}) //levanto datos de los nodos
+                        if(nn[0]){
+                            console.log("Este es el device", nn[0])
+                            newNn.id = nn[0].deviceName;
+                            newNn.node = nn[0].deviceName;
+                            tipodevice = await DeviceType.findById(nn[0].deviceType); //Busco Devicetypes cada
+                            newNn.devicetype = tipodevice.type;
+                            newNn.level = 0
+                            nodes.push(newNn)
+                            newNn = null;
+                            newNn={};
+                            nn = null;
+                        }
+                        
+                        new_connection = {};
+                        new_connection.ids = cc.source;
+                        new_connection.idt = cc.target;
+                        new_connection.description = cc.description;
+                        connections.push(new_connection)
+                    }
+                }
 
-            let new_connection = {};
-            new_connection.ids = cc.source;
-            new_connection.idt = cc.target;
-            new_connection.description = cc.description;
-            connections.push(new_connection)
+
+                new_connection = {};
+                new_connection.ids = cc.source;
+                new_connection.idt = cc.target;
+                new_connection.description = cc.description;
+                connections.push(new_connection)
+            }
         }
         
         
@@ -515,6 +565,34 @@ exports.getAreaById = async(req, res) =>{
     } catch ({error}) {
         console.log(error);
         res.status(500).send({msg:"No se pudo procesar el modelo del nodo de red, contacte a un administrador"})
+        
+    }
+}
+
+exports.getNetworkNodeID = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+    try {
+        const {networknode} = req.query; //del params levanto el dato del networknode
+        //otra forma: req.query.networknode
+        console.log("El nodo es", networknode)
+        //const idnetworknodeconsulta = await NetworkNode.find({nodeName:'PMSWSE221A'})
+        const idnetworknodeconsulta = await NetworkNode.find({nodeName: networknode})
+        //console.log(idnetworknodeconsulta)
+        const idnetworknode = idnetworknodeconsulta[0]._id
+        console.log(idnetworknode)
+        if (!idnetworknode){
+            console.log("No existe el nodo");
+            return res.status(404).send("No existe el nodo")
+        }
+                
+        res.json({idnetworknode})//envío el id del nodo
+
+    } catch ({error}) {
+        console.log(error);
+        res.status(500).send({msg:"No se pudo procesar el nodo de red, contacte a un administrador"})
         
     }
 }
