@@ -6,13 +6,17 @@ const ConnectionSchema = mongoose.Schema({
         require:true,
         trim:true
     },
+    source_port:{
+        type:String,
+        require:true
+    },
     target:{
         type:String,
         require:true,
         trim:true
     },
-    source_port:{
-        type:Number,
+    target_port:{
+        type:String,
         require:true
     },
     description:{

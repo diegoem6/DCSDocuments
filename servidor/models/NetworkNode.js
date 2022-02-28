@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 
 const NetworkNodeSchema = mongoose.Schema({
+    _id:{
+        type: String     
+    },
     nodeName:{
         type:String,
         require:true,
@@ -30,6 +33,10 @@ const NetworkNodeSchema = mongoose.Schema({
     asset:{
         type:mongoose.Schema.Types.ObjectId,
         ref: 'Asset'
+    },
+    deviceType:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'DeviceType'
     }
 })
 
