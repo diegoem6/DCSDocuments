@@ -80,10 +80,10 @@ const createArchitectureDevices = ()=>{
   let area5yB = area4yB -40 + area2yB
   let area6yB=(cant_area[22]+cant_area[23]+cant_area[24])*pasoy + area2yB
 
-  console.log(area2y, ' ',area3y, ' ',area4y, ' ',area5y, ' ',area6y, ' ',)
-  console.log(area2yB, ' ',area3yB, ' ',area4yB, ' ',area5yB, ' ',area6yB, ' ',)
-  console.log(cant_area[1], ' ', cant_area[2], ' ', cant_area[3], ' ', cant_area[4], ' ', cant_area[5], ' ', cant_area[6])
-  console.log(cant_area[21], ' ', cant_area[22], ' ', cant_area[23], ' ', cant_area[24], ' ', cant_area[25], ' ', cant_area[26])
+  // console.log(area2y, ' ',area3y, ' ',area4y, ' ',area5y, ' ',area6y, ' ',)
+  // console.log(area2yB, ' ',area3yB, ' ',area4yB, ' ',area5yB, ' ',area6yB, ' ',)
+  // console.log(cant_area[1], ' ', cant_area[2], ' ', cant_area[3], ' ', cant_area[4], ' ', cant_area[5], ' ', cant_area[6])
+  // console.log(cant_area[21], ' ', cant_area[22], ' ', cant_area[23], ' ', cant_area[24], ' ', cant_area[25], ' ', cant_area[26])
 
   equipos.forEach((eq, i)=>{
 

@@ -20,6 +20,8 @@ router.get('/:id',
     auth,
     deviceController.getDevice) ;
 
+
+
 router.put('/:id',
     auth,
     deviceController.updateDevice) ;

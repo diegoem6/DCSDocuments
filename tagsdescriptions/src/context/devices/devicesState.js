@@ -14,7 +14,8 @@ import {
     GET_DEVICE_TYPE,
     RESET_MESSAGE,
     GET_DEVICE_STATUS,
-    SEARCH_DEVICE
+    SEARCH_DEVICE,
+    GET_DEVICE_NODE_ID
     } from '../../types/index'
 
 import axiosClient from '../../config/axios'
@@ -223,6 +224,26 @@ const DevicesState = props=>{
         })
     }
 
+    const getDeviceID = async (deviceName) =>{
+        try {
+            const res = await axiosClient.get('/api/architecture/getDeviceID', {params:{deviceName}});
+            //const res = await axiosClient.request({method: 'GET', url: '/api/architecture/getNetworkNodeID',  data:{ networknode: 'PMSWSE221A' }})
+            dispatch({
+                type:GET_DEVICE_NODE_ID,
+                payload:res.data.idDevice //idnetworknode esta definida en la respuesta del server
+            })
+        } catch (error) {
+            const alert = {
+                msg:"hubo un error con el device",
+                category:"alerta-error"
+            }
+            dispatch({
+                type:SHOW_ERROR,
+                payload: alert
+            })
+        }      
+    }
+
     return (
         <devicesContext.Provider
             value={{
@@ -234,6 +255,7 @@ const DevicesState = props=>{
                 devicetype: state.devicetype,
                 status: state.status,
                 devicesSearch: state.devicesSearch,
+                deviceID: state.deviceID,
 
                 showForm, 
                 createDevice,
@@ -247,7 +269,8 @@ const DevicesState = props=>{
                 getDeviceType,
                 resetMessage,
                 getDeviceStatus,
-                searchDevices
+                searchDevices,
+                getDeviceID
                 
             }}
         >

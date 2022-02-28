@@ -5,7 +5,7 @@ const NetworkNodeModelSchema = mongoose.Schema({
         type:String,
         require:true
     },
-    URL:{
+    url:{
         type:String,
         require:true,
         trim:true

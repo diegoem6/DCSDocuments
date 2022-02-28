@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const networkController = require('../controllers/networkController')
+const deviceController = require('../controllers/deviceController')
 const auth = require('../middlewares/auth')
 /*
 router.post('/',
@@ -22,6 +23,10 @@ router.get('/getArchitectureDevices/',
 router.get('/getNetworkNodeID/',
     auth,
     networkController.getNetworkNodeID) ;
+    
+router.get('/getDeviceID/',
+    auth,
+    deviceController.getDeviceID) ;
     
 /*
 router.put('/:id',

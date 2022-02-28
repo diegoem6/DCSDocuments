@@ -88,5 +88,6 @@ export const    GET_DEVICE_STATUS       =   "GET_DEVICE_STATUS"
 export const    PROCESS_IMPORT_FILE     =   "PROCESS_IMPORT_FILE"
 export const    SEARCH_DEVICE           =   "SEARCH_DEVICE"
 
-export const    GET_ARCHITECTURE_NODES  =   "GET_ARCHITECTURE_NODES"
+export const    GET_ARCHITECTURE_NODES      =   "GET_ARCHITECTURE_NODES"
 export const    GET_ARCHITECTURE_DEVICES    =   "GET_ARCHITECTURE_DEVICES"
+export const    GET_DEVICE_NODE_ID          =   "GET_DEVICE_NODE_ID"

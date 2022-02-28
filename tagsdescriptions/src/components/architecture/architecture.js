@@ -1,9 +1,7 @@
 const createArchitecture = (arquitectura=[])=>{
-  console.log("la arquitectura es ", arquitectura)
   //const arquitectura =[]
   let equipos=[]
   let conexiones=[]
-  console.log("Los equipos ", equipos, " y las conexiones ", conexiones)
   let item = {}
   if (arquitectura.nodes){
       //console.log("Tiene nodos")
@@ -25,14 +23,16 @@ const createArchitecture = (arquitectura=[])=>{
   let posx=0
 
   let color='#FFFFF'
+
+  let cName='#FFFFF'
   let posin='left'
   let posout=''
 
   let cant_area=[]
   let i=1
   while (i<27) { //inicializo el contador de equipos por area
-  cant_area[i]=0
-  i=i+1
+      cant_area[i]=0
+      i=i+1
   }
 
   equipos.forEach((eq)=>{ //cuento la cantidad de equipos por area
@@ -56,7 +56,7 @@ const createArchitecture = (arquitectura=[])=>{
   }
   })
 
-  const pasoy=80
+  const pasoy=120
   //Definiendo ubicaciones de equipos A
   let area2y=-0
   let area3y=cant_area[2]*pasoy + area2y
@@ -72,7 +72,7 @@ const createArchitecture = (arquitectura=[])=>{
 
   let xlevel0=600
   let pasolevelx=200
-  let ylevel1=50
+  let ylevel1=0
   
   //console.log(equipos)
   equipos.forEach((eq, i)=>{
@@ -84,76 +84,88 @@ const createArchitecture = (arquitectura=[])=>{
   switch (eq.area){
   case 1: posx=700
         posy=250
-        color='#6C6F11'
+        //color='#6C6F11'
         posin='right' //entre backbones
         posout='left'
+        cName = 'architecture_node_rackroom'
   break;
   case 2: posx=400
         posy=area2y  
         area2y=area2y+pasoy
-        color='#2494A4'
+       // color='#2494A4'
+       cName = 'architecture_node_recovery'
 
   break;  
   case 3: posx=400
         posy=area3y
         area3y=area3y+pasoy 
-        color='#00A800'
+       // color='#00A800'
+       cName = 'architecture_node_rackroom'
   break;  
   case 4: posx=400
         posy=area4y
         area4y=area4y+pasoy 
-        color='#FF4848'
+        //color='#FF4848'
         posout='left'
+        cName = 'architecture_node_dryer'
   break;  
   case 5: posx=100
         posy=area5y
         area5y=area5y+pasoy 
-        color='#FF4848'
+        //color='#FF4848'
+        cName = 'architecture_node_dryer'
   break;  
   case 6: posx=400
         posy=area6y
         area6y=area6y+pasoy 
-        color='#FF8000' 
+        //color='#FF8000' 
+        cName = 'architecture_node_fiber'
   break;  
   case 21:  posx=1000
           posy=250
-          color='#6C6F11'
+          //color='#6C6F11'
           posin='left' //entre backbones
           posout='right'
+          cName = 'architecture_node_rackroom'
   break;
   case 22:  posx=1300
           posy=area2yB  
           area2yB=area2yB+pasoy
-          color='#2494A4'
+          //color='#2494A4'
           posin='left'
           //posout='right' //agregue
+          cName = 'architecture_node_recovery'
   break;  
   case 23:  posx=1300
           posy=area3yB
           area3yB=area3yB+pasoy 
-          color='#00A800'
+          //color='#00A800'
           posin='left'
           //posout='right' //agregue
+          cName = 'architecture_node_rackroom'
   break;  
   case 24:  posx=1300
           posy=area4yB
           area4yB=area4yB+pasoy 
-          color='#FF4848'
+          //color='#FF4848'
           posin='left'
           posout='right'
+          cName = 'architecture_node_dryer'
   break;  
   case 25:  posx=1600
           posy=area5yB
           area5yB=area5yB+pasoy 
-          color='#FF4848'
+          //color='#FF4848'
           posin='left'
           //posout='right' //agregue
+          cName = 'architecture_node_dryer'
   break;  
   case 26:  posx=1300
           posy=area6yB
           area6yB=area6yB+pasoy 
-          color='#FF8000' 
+          //color='#FF8000' 
           posin='left'
+          cName = 'architecture_node_fiber'
           //posout='right' //agregue
   break;
   default: console.log('No esta definida el area para realizar el dibujo')  
@@ -164,18 +176,18 @@ const createArchitecture = (arquitectura=[])=>{
       switch (eq.level){ //el switch:
             case 0:     posx=xlevel0
                         xlevel0=xlevel0+200
-                        posy=ylevel1+40
+                        posy=ylevel1 - 100
                         posin='top' // no se por que no le da bola al top
             break;
             case 1:     posx=400
-                        ylevel1=ylevel1+100
                         posy=ylevel1
+                        ylevel1=ylevel1+180
                         xlevel0=600
                         posin='left'
                         posout='right'
             break;
-            case 2:     posx=200
-                        posy=250 //ver si lo ubicamos en el medio (contando la cantidad de equipos de level1)
+            case 2:     posx=100
+                        posy=0 //ver si lo ubicamos en el medio (contando la cantidad de equipos de level1)
                         posout='right'
             break;
       }
@@ -193,11 +205,10 @@ const createArchitecture = (arquitectura=[])=>{
       //default: color='#D5B048'
   }
 
-  //console.log(draweq)
   //console.log("El equipo es: ", eq.node, " y El tipo es: ",eq.devicetype, " y el level es: ", eq.level)
   //Nodos
   draweq.push({
-  id: eq.id, type: 'Botones', sourcePosition: 'right', targetPosition: 'left',data: { color: color, equipo: eq.node, posin: posin, posout: posout, devicetype: eq.devicetype},position: { x: posx, y: posy }, style: { background: color}
+  id: eq.id, type: 'Botones', sourcePosition: 'right', targetPosition: 'left',data: { cName: cName, equipo: eq.node, posin: posin, posout: posout, devicetype: eq.devicetype, area:eq.area, img:eq.url},position: { x: posx, y: posy }, style: { background: ''}
   })
   })
 

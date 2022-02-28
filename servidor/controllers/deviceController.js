@@ -221,6 +221,34 @@ exports.getDeviceTypes = async (req,res)=>{
     }
 }
 
+exports.getDeviceID = async (req,res)=>{
+    //console.log("ACA")
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+
+    try {
+        const {deviceName} = req.query; //del params levanto el dato del device
+        //otra forma: req.query.networknode
+        console.log("El device es", req.query)
+        //const idnetworknodeconsulta = await NetworkNode.find({nodeName:'PMSWSE221A'})
+        const devices = await Device.find({deviceName: deviceName})
+        //console.log(idnetworknodeconsulta)
+        const idDevice = devices[0]._id
+        if (!idDevice){
+            console.log("No existe el device");
+            return res.status(404).send("No existe el device")
+        }
+                
+        res.json({idDevice})//envío el id del nodo
+    } catch ({error}) {
+        console.log(error);
+        res.status(500).send({msg:"No se pudo obtener el dispositivo, contacte a un administrador"})
+        
+    }
+}
+
 exports.getDevice = async (req,res)=>{
     //console.log("ACA")
     const errors = validationResult(req);

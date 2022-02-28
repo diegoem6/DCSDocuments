@@ -11,7 +11,8 @@ import {
     GET_DEVICE_TYPE,
     RESET_MESSAGE,
     GET_DEVICE_STATUS,
-    SEARCH_DEVICE
+    SEARCH_DEVICE,
+    GET_DEVICE_NODE_ID
     } from '../../types/index'
 
 export default (state,action)=>{
@@ -88,6 +89,11 @@ export default (state,action)=>{
             return({
                 ...state,
                 devicetype: action.payload
+            })
+        case GET_DEVICE_NODE_ID:
+            return({
+                ...state,
+                deviceID: action.payload
             })
         case GET_DEVICE_STATUS:
             return({

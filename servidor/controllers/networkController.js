@@ -380,16 +380,16 @@ exports.getArchitectureNodes = async (req, res)=>{
         const networkNodes = await NetworkNode.find()
 
         let nodes = [];
-
         for (const nn of networkNodes){
             let newNn = {};
             newNn.id = nn.nodeName;
             newNn.node = nn.nodeName;
             newNn.area = nn.area;
-            let tipodevice = await DeviceType.findById(nn.deviceType); //Busco Devicetypes cada
-            //console.log(tipodevice)
-            newNn.devicetype = tipodevice.type
+            const networkModel = await NetworkModel.findById(nn.nodeModel); //Busco Devicetypes cada
+            newNn.url = networkModel.url
+            newNn.devicetype = "Switch"
             nodes.push(newNn)
+            
         }
         const connectionsArray = await Connection.find({type:'core'})
         let connections = [];
@@ -399,7 +399,6 @@ exports.getArchitectureNodes = async (req, res)=>{
             new_connection.ids = cc.source;
             new_connection.idt = cc.target;
             new_connection.description = cc.description;
-            
             connections.push(new_connection)
         }
         let coreArchitecture ={}
@@ -446,6 +445,11 @@ exports.getArchitectureDevices = async (req, res)=>{
         newNn.node = networkNode;
         //newNn.devicetype = "Switch"
         newNn.level = 2;
+        const nNode = await NetworkNode.find({nodeName:networkNode})
+        const networkModel = await NetworkModel.findById(nNode[0].nodeModel); //Busco Devicetypes cada
+        newNn.url = networkModel.url
+        newNn.devicetype = "Switch"
+
         //newNn.area = 21 //el area es para el color de los dispositivos y para indicar donde se tienen que mostrar los dispositivos
         nodes.push(newNn);
         //let tipodevice = await DeviceType.find() //levanto todos
@@ -464,6 +468,7 @@ exports.getArchitectureDevices = async (req, res)=>{
                 //let tipodevice = await DeviceType.findById(nn[0].deviceType); //Busco Devicetypes cada
                 //console.log(tipodevice)
                 newNn.devicetype = tipodevice.type;
+                newNn.url = tipodevice.url;
                 newNn.level = 1
                 //newNn.area = 22 //el area es para el color de los dispositivos y para indicar donde se tienen que mostrar los dispositivos
                 nodes.push(newNn)
@@ -479,11 +484,11 @@ exports.getArchitectureDevices = async (req, res)=>{
                         //console.log('Esta es la conexion: ',cc)
                         nn = await Device.find({deviceName:cc.target}) //levanto datos de los nodos
                         if(nn[0]){
-                            console.log("Este es el device", nn[0])
                             newNn.id = nn[0].deviceName;
                             newNn.node = nn[0].deviceName;
                             tipodevice = await DeviceType.findById(nn[0].deviceType); //Busco Devicetypes cada
                             newNn.devicetype = tipodevice.type;
+                            newNn.url = tipodevice.url;
                             newNn.level = 0
                             nodes.push(newNn)
                             newNn = null;
@@ -582,7 +587,6 @@ exports.getNetworkNodeID = async (req, res) => {
         const idnetworknodeconsulta = await NetworkNode.find({nodeName: networknode})
         //console.log(idnetworknodeconsulta)
         const idnetworknode = idnetworknodeconsulta[0]._id
-        console.log(idnetworknode)
         if (!idnetworknode){
             console.log("No existe el nodo");
             return res.status(404).send("No existe el nodo")
