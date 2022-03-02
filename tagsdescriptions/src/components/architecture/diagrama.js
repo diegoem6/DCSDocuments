@@ -114,7 +114,8 @@ const Diagrama = ({architecturedevice}) => {
               //zoomOnScroll={zoomOnScroll}
 
             >
-              <MiniMap //este es para el mapa de abajo a la derecha
+              
+              {/* <MiniMap //este es para el mapa de abajo a la derecha
                 nodeStrokeColor={(n) => {
                   if (n.style?.background) return n.style.background;
                   if (n.type === 'input') return '#0041d0';
@@ -129,7 +130,7 @@ const Diagrama = ({architecturedevice}) => {
                   return '#fff';
                 }}
                 nodeBorderRadius={2}
-              />
+              /> */}
               <Controls />
               <Background color="#aaa" gap={16} />
             </ReactFlow>

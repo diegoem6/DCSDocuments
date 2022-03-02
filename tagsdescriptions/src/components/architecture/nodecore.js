@@ -99,7 +99,7 @@ export default memo(({ data, isConnectable }) => {
         (null)
       }
       
-      {(((data.devicetype) === 'CF9' || (data.devicetype) === 'C300' || (data.devicetype) === 'PGM')) ?
+      {(((data.devicetype) === 'C300' || (data.devicetype) === 'PGM')) ?
           <input
           className={data.cName}
           type="button"

@@ -443,7 +443,6 @@ exports.getArchitectureDevices = async (req, res)=>{
         let newNn0 = {}; 
         newNn.id = networkNode;
         newNn.node = networkNode;
-        //newNn.devicetype = "Switch"
         newNn.level = 2;
         const nNode = await NetworkNode.find({nodeName:networkNode})
         const networkModel = await NetworkModel.findById(nNode[0].nodeModel); //Busco Devicetypes cada

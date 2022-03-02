@@ -195,10 +195,13 @@ const createArchitecture = (arquitectura=[])=>{
 
   switch (eq.devicetype){
       case 'CF9': color='#4EA235'
+                  cName='architecture_device_CF9'
       break;
       case 'C300': color='#1862CC'
+                   cName='architecture_device_C300'
       break;  
       case 'PGM': color='#7974CC'
+                  cName='architecture_device_PGM'
       break;
       case 'FDAP': color='#D5B048'
       break;
