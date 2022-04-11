@@ -12,7 +12,8 @@ import {
     RESET_MESSAGE,
     GET_DEVICE_STATUS,
     SEARCH_DEVICE,
-    GET_DEVICE_NODE_ID
+    GET_DEVICE_NODE_ID,
+    DESELECT_DEVICE_NODE_ID
     } from '../../types/index'
 
 export default (state,action)=>{
@@ -94,6 +95,11 @@ export default (state,action)=>{
             return({
                 ...state,
                 deviceID: action.payload
+            })
+        case DESELECT_DEVICE_NODE_ID:
+            return({
+                ...state,
+                deviceID: null
             })
         case GET_DEVICE_STATUS:
             return({

@@ -32,6 +32,7 @@ const NetworkStatus = () => {
     useEffect(() => {
             if (networkstatusID){
                 getNetworkNode(networkstatusID)
+                localStorage.setItem('networkstatusID','')
                 //console.log("El nodo seleccionado es: ",networkNodeSelected) //aca me quede no se por que no trae nada networkNodeSelected, pero si tiene...
                 }
             else{

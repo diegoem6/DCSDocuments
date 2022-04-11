@@ -31,8 +31,6 @@ const SearchTagDescriptor = () => {
     if (!systemSelected) return null
 
 
-   
-
     const onClickNewTagDescription = ()=>{
         deselectTagDescriptor();
         showForm();

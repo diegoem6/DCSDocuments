@@ -17,7 +17,8 @@ import {
     CREATE_NETWORK_SHOW_RUN,
     GET_ARCHITECTURE_NODES,
     GET_ARCHITECTURE_DEVICES,
-    GET_NETWORK_NODE_ID
+    GET_NETWORK_NODE_ID,
+    DESELECT_NETWORK_NODE_ID
     } from '../../types/index'
 
 import axiosClient from '../../config/axios'
@@ -295,6 +296,11 @@ const NetworkState = props=>{
         }      
     }
 
+    const deselectNetworkNodeId = () => {
+        dispatch({
+            type:DESELECT_NETWORK_NODE_ID
+        })
+    }
 
 
     return (
@@ -326,7 +332,8 @@ const NetworkState = props=>{
                 getAreas,
                 getNetworkArchitectureDevices,
                 getNetworkArchitectureNodes,
-                getNetworkNodeID
+                getNetworkNodeID,
+                deselectNetworkNodeId
             }}
         >
 

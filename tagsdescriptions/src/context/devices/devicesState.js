@@ -15,7 +15,8 @@ import {
     RESET_MESSAGE,
     GET_DEVICE_STATUS,
     SEARCH_DEVICE,
-    GET_DEVICE_NODE_ID
+    GET_DEVICE_NODE_ID,
+    DESELECT_DEVICE_NODE_ID
     } from '../../types/index'
 
 import axiosClient from '../../config/axios'
@@ -244,6 +245,12 @@ const DevicesState = props=>{
         }      
     }
 
+    const deselectDeviceId = () => {
+        dispatch({
+            type:DESELECT_DEVICE_NODE_ID
+        })
+    }
+
     return (
         <devicesContext.Provider
             value={{
@@ -270,7 +277,8 @@ const DevicesState = props=>{
                 resetMessage,
                 getDeviceStatus,
                 searchDevices,
-                getDeviceID
+                getDeviceID,
+                deselectDeviceId
                 
             }}
         >

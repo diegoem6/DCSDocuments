@@ -51,7 +51,6 @@ const Login = (props) => {
      };
 
   return (
-    
     <div className="form-usuario">
      
      {alert? (<div className={`alerta ${alert.category}`}>{alert.msg} </div>)
@@ -97,7 +96,8 @@ const Login = (props) => {
         </form>
         <Link 
             to={'/newuser'}
-            className="enlace-cuenta">        
+            className="enlace-cuenta">
+        >
             Obtener cuenta
         </Link>
       </div>

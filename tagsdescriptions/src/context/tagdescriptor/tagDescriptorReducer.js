@@ -19,6 +19,7 @@ import {
     GET_AYE,
     GET_FOTOS} from '../../types/index'
 
+
 export default (state,action)=>{
     switch(action.type){
         case FORM_TAGDESCRIPTOR:

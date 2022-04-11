@@ -178,6 +178,7 @@ const createArchitecture = (arquitectura=[])=>{
                         xlevel0=xlevel0+200
                         posy=ylevel1 - 100
                         posin='top' // no se por que no le da bola al top
+                        cName = ''
             break;
             case 1:     posx=400
                         posy=ylevel1
@@ -185,23 +186,22 @@ const createArchitecture = (arquitectura=[])=>{
                         xlevel0=600
                         posin='left'
                         posout='right'
+                        cName = ''
             break;
             case 2:     posx=100
                         posy=0 //ver si lo ubicamos en el medio (contando la cantidad de equipos de level1)
                         posout='right'
+                        cName = ''
             break;
       }
   }
 
   switch (eq.devicetype){
       case 'CF9': color='#4EA235'
-                  cName='architecture_device_CF9'
       break;
       case 'C300': color='#1862CC'
-                   cName='architecture_device_C300'
       break;  
       case 'PGM': color='#7974CC'
-                  cName='architecture_device_PGM'
       break;
       case 'FDAP': color='#D5B048'
       break;

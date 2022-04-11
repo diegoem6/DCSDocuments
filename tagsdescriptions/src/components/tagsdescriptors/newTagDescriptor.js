@@ -191,7 +191,7 @@ const NewTagDescriptor = () => {
                                 name="description"
                                 setOptions={{
                                     height: 300,
-                                    buttonList: buttonList.complex //contains most of the buttons
+                                    buttonList: buttonList.complex 
                                 }}
                                 setContents ={description}
                                 onChange = {onChangeRichText}
@@ -199,7 +199,61 @@ const NewTagDescriptor = () => {
                                 
                             /> 
                             
+                            {/* <Editor
+                                initialValue={description}
+                                tinymceScriptSrc='/public/js/tinymce/tinymce.min.js'
+                                init={{
+                                height: 500,
+                                menubar: 'file edit view insert format tools table help',
+                                plugins: [
+                                    'advlist autolink lists link image charmap print preview anchor',
+                                    'searchreplace visualblocks code fullscreen',
+                                    'insertdatetime media table paste code help wordcount'
+                                ],
+                                toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+                                toolbar_sticky: true,
+                                paste_retain_style_properties: "all"
+                                }
+                                }
+                                onEditorChange={onChangeRichText}
+                            /> 
+                            <Editor
+                                initialValue={description}
+                                apiKey='ak1az6sw8c9hjvqp8qt932v5wkgl29teq3qoys34bf11cjvo'
+                                tinymceScriptSrc='/js/tinymce/tinymce.min.js'
+                                init={{
+                                height: 500,
+                                menubar: 'file edit view insert format tools table help',
+                                plugins: [
+                                    'advlist autolink lists link image charmap print preview anchor',
+                                    'searchreplace visualblocks code fullscreen',
+                                    'insertdatetime media table paste code help wordcount'
+                                ],
+                                toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+                                toolbar_sticky: true,
+                                paste_retain_style_properties: "all"
+                                }
+                                }
+                                onEditorChange={onChangeRichText}
+                            />
+                                */}
 
+
+                            {/* TODO: attachments 
+                            <Files
+                                className='files-dropzone'
+                                onChange={onFilesChange}
+                                onError={onFilesError}
+                                accepts={['image/png', '.jpg', '.pdf', 'audio/*']}
+                                multiple
+                                maxFiles={3}
+                                maxFileSize={10000000}
+                                minFileSize={0}
+                                clickable
+                                >
+                                Drop files here or click to upload
+                            </Files>
+                            */}
                             {(tagdescriptor !== null && tagdescriptor.length>0) ?
                         
                                 (<input 

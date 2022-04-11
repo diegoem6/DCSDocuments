@@ -19,7 +19,7 @@ const Tagsdescriptors = () => {
     const {form} = tContext
 
     const sContext = useContext(systemContext)
-    const {deselectSystem, systemSelected} = sContext
+    const {deselectSystem} = sContext
 
     const aContext = useContext(alertContext)
     const {alert} = aContext
@@ -43,11 +43,8 @@ const Tagsdescriptors = () => {
                   <Header/>
                   
                   <main>
-                    {form ?
-                      (null)
-                      :
                       <SearchTagDescriptor/>
-                    }
+                      
                       <div className="contenedor-tareas">
                           
                             {form ?

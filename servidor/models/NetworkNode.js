@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
 
 const NetworkNodeSchema = mongoose.Schema({
-    _id:{
-        type: String     
-    },
     nodeName:{
         type:String,
         require:true,

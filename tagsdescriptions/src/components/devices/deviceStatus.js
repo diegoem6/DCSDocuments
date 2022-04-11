@@ -16,6 +16,7 @@ const DeviceStatus = () => {
         if (devicestatusID){
             getDevice(devicestatusID)
             getDeviceStatus(devicestatusID)
+            localStorage.setItem('devicestatusID','')
             //console.log("El nodo seleccionado es: ",networkNodeSelected) //aca me quede no se por que no trae nada networkNodeSelected, pero si tiene...
             }
         else{

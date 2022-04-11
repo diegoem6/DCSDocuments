@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect, useContext } from 'react';
 import NodeCore from './nodecore';
-import Architecture from './architecture';
+import { Link } from 'react-router-dom'
 import networkContext from "../../context/network/networkContext";
 
-import architectureDevices from './architecturedevices'
 import architecture from './architecture'
 
 import ReactFlow, {
@@ -19,7 +18,7 @@ import ReactFlow, {
 import Header from '../../layout/header';
 
 
-const Diagrama = ({architecturedevice}) => {
+const Diagrama = () => {
 
   
   //const architecturedevice=localStorage.getItem('architecturedevice');
@@ -30,11 +29,9 @@ const Diagrama = ({architecturedevice}) => {
   
    useEffect(()=>{
     if(networkArchitectureDevices.length !== 0){ //si el array no esta vacío, carga devices
-      console.log("Entro ", networkArchitectureDevices)
       //hay que hacer este use Effect en architecture
       //architecture(networkArchitectureDevices)
       setElements(architecture(networkArchitectureDevices))
-      //console.log("Los elementos son: ",elements)
     }
     else{
       //console.log("ELSE")
@@ -45,14 +42,15 @@ const Diagrama = ({architecturedevice}) => {
   
 
   useEffect(() => {
-    console.log("Entro")
     getNetworkArchitectureNodes()
     // eslint-disable-next-line
   }, [])
 
   useEffect(()=>{
-    console.log("Los nodos son: ",networkArchitectureNodes)
+    //console.log("Los nodos son: ",networkArchitectureNodes)
     if(networkArchitectureNodes.nodes){ //verifico si trajo algun nodo
+      //console.log(networkArchitectureNodes.nodes.length)
+      setElements(null)
       setElements(architecture(networkArchitectureNodes))
       //architecture(networkArchitectureNodes)
     }
@@ -61,9 +59,6 @@ const Diagrama = ({architecturedevice}) => {
     }
   },[networkArchitectureNodes]) //poner entre corchetes
   
-  useEffect(()=>{
-    //console.log("Los elementos son: ",elements)
-  }, elements)
 
   const initBgColor = '#1A192B';
 
@@ -72,8 +67,9 @@ const Diagrama = ({architecturedevice}) => {
   };
 
   const onLoad = (reactFlowInstance) => {
-    console.log('flow loaded:', reactFlowInstance);
+    
     reactFlowInstance.fitView();
+    //reactFlowInstance.setCenter(0,0)
   };
 
   
@@ -87,9 +83,10 @@ const Diagrama = ({architecturedevice}) => {
   //del customNode:
   const onNodeDragStop = (event, node) => console.log('drag stop', node);
   const onElementClick = (event, element) => console.log('click', element);
-
-
-
+  const back = ()=>{
+    window.open("/architecture", "_self")
+  }
+  
   return (
     
     /*<h1>Hola</h1>*/
@@ -108,37 +105,25 @@ const Diagrama = ({architecturedevice}) => {
               onElementClick={onElementClick}
               onNodeDragStop={onNodeDragStop}
               nodeTypes={nodeTypes}
-              //connectionLineStyle={connectionLineStyle}
-              //snapToGrid={true}
-              //snapGrid={[150, 150]}
-              //zoomOnScroll={zoomOnScroll}
-
             >
-              
-              {/* <MiniMap //este es para el mapa de abajo a la derecha
-                nodeStrokeColor={(n) => {
-                  if (n.style?.background) return n.style.background;
-                  if (n.type === 'input') return '#0041d0';
-                  if (n.type === 'output') return '#ff0072';
-                  //if (n.type === 'selectorNode') return '#cccccc';
-                  if (n.type === 'default') return '#1a192b';
-
-                  return '#eee';
-                }}
-                nodeColor={(n) => {
-                  if (n.style?.background) return n.style.background;
-                  return '#fff';
-                }}
-                nodeBorderRadius={2}
-              /> */}
               <Controls />
               <Background color="#aaa" gap={16} />
             </ReactFlow>
           :
             <p>No hay nada para mostrar</p>
-            //(getNetworkArchitectureNodes())
-            //(funcionBorrar())
           }
+
+          <div className="link-arq-div">
+            <Link 
+                to={'/menu'}
+                className="link-menu">
+            &#60;
+                Menu
+            </Link>
+            <a onClick={back} className="link-menu"> &#60; Architecture </a>
+          </div>
+          
+
         </div>
     </div>
   );

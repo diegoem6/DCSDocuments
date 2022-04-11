@@ -64,8 +64,9 @@ exports.updateNetworkNode = async (req,res)=>{
             console.log("No existe el asset");
             return res.status(404).send({msg:"No existe el asset"})
         }*/
-
+        //console.log(req.params.id)
         let networkNodeUpdated = await NetworkNode.findById(req.params.id)
+        //console.log(networkNodeUpdated)
         if (!networkNodeUpdated){
             console.log("No existe el sistema");
             return res.status(404).send({msg:"No existe el nodo de red"})
@@ -179,6 +180,7 @@ exports.getNetworkNode = async (req,res)=>{
     }
 
     try {
+        const community = "PM"
         //revisar el id
         const idNodo = req.params.id
         //console.log('El ID es: ',idNodo)
@@ -226,16 +228,17 @@ exports.getNetworkNode = async (req,res)=>{
                 oid_alias="1.3.6.1.2.1.31.1.1.1.18.1000" + x
                 oid_duplex="1.3.6.1.2.1.10.7.2.1.19.1000" + x
             }
-            item.interface = await getSNMP_Sync(network_get.nodeIP,"public",[oid_name])
-            item.description = await getSNMP_Sync(network_get.nodeIP,"public",[oid_desc])
-            item.state = await getSNMP_Sync(network_get.nodeIP,"public",[oid_state])
+            //console.log(network_get.nodeIP,community,[oid_name]);
+            item.interface = await getSNMP_Sync(network_get.nodeIP,community,[oid_name])
+            item.description = await getSNMP_Sync(network_get.nodeIP,community,[oid_desc])
+            item.state = await getSNMP_Sync(network_get.nodeIP,community,[oid_state])
             item.state === "1" ? item.state = "up" : item.state = "down"
-            item.speed = await getSNMP_Sync(network_get.nodeIP,"public",[oid_speed])
+            item.speed = await getSNMP_Sync(network_get.nodeIP,community,[oid_speed])
             item.speed = parseInt(item.speed)/1000000
-
-            item.vlan = await getSNMP_Sync(network_get.nodeIP,"public",[oid_vlan])
-            item.duplex = await getSNMP_Sync(network_get.nodeIP,"public",[oid_duplex])
-
+            
+            item.vlan = await getSNMP_Sync(network_get.nodeIP,community,[oid_vlan])
+            item.duplex = await getSNMP_Sync(network_get.nodeIP,community,[oid_duplex])
+            //console.log("termine consultas snmp")
             x+=1
             network_get.status.push(item);
             item = {
@@ -269,15 +272,15 @@ exports.getNetworkNode = async (req,res)=>{
                 oid_duplex="1.3.6.1.2.1.10.7.2.1.19.1010" + x
             }
 
-            item.interface = await getSNMP_Sync(network_get.nodeIP,"public",[oid_name])
-            item.description = await getSNMP_Sync(network_get.nodeIP,"public",[oid_desc])
-            item.state = await getSNMP_Sync(network_get.nodeIP,"public",[oid_state])
+            item.interface = await getSNMP_Sync(network_get.nodeIP,community,[oid_name])
+            item.description = await getSNMP_Sync(network_get.nodeIP,community,[oid_desc])
+            item.state = await getSNMP_Sync(network_get.nodeIP,community,[oid_state])
             item.state === "1" ? item.state = "up" : item.state = "down"
-            item.speed = await getSNMP_Sync(network_get.nodeIP,"public",[oid_speed])
+            item.speed = await getSNMP_Sync(network_get.nodeIP,community,[oid_speed])
             item.speed = parseInt(item.speed)/1000000
 
-            item.vlan = await getSNMP_Sync(network_get.nodeIP,"public",[oid_vlan])
-            item.duplex = await getSNMP_Sync(network_get.nodeIP,"public",[oid_duplex])
+            item.vlan = await getSNMP_Sync(network_get.nodeIP,community,[oid_vlan])
+            item.duplex = await getSNMP_Sync(network_get.nodeIP,community,[oid_duplex])
             
             x+=1
             network_get.status.push(item);
@@ -343,8 +346,9 @@ exports.createNetworkNodeShowRun = async (req, res)=>{
 
         const {data} = req.query
         const {ip, tipo} = JSON.parse(data)
-        
-        const hostname = await getSNMP_Sync(ip,"public",['1.3.6.1.2.1.1.5.0'])
+        const community = "PM"
+        let hostname = await getSNMP_Sync(ip,community,['1.3.6.1.2.1.1.5.0'])
+        hostname = hostname.split(".")[0]
         if (!hostname){
             console.log("No existe el nodo de red solicitado");
             return res.status(404).send("No existe el nodo de red solicitado")
@@ -443,6 +447,7 @@ exports.getArchitectureDevices = async (req, res)=>{
         let newNn0 = {}; 
         newNn.id = networkNode;
         newNn.node = networkNode;
+        //newNn.devicetype = "Switch"
         newNn.level = 2;
         const nNode = await NetworkNode.find({nodeName:networkNode})
         const networkModel = await NetworkModel.findById(nNode[0].nodeModel); //Busco Devicetypes cada
@@ -581,7 +586,7 @@ exports.getNetworkNodeID = async (req, res) => {
     try {
         const {networknode} = req.query; //del params levanto el dato del networknode
         //otra forma: req.query.networknode
-        console.log("El nodo es", networknode)
+        //console.log("El nodo es", networknode)
         //const idnetworknodeconsulta = await NetworkNode.find({nodeName:'PMSWSE221A'})
         const idnetworknodeconsulta = await NetworkNode.find({nodeName: networknode})
         //console.log(idnetworknodeconsulta)

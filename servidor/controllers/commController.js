@@ -97,14 +97,16 @@ exports.connectTelnetShow = (hostname, ip, tipo)=>{
     comando="show tech\r"
   }
   
+  
   //  et(`${ip}#:23`, [  
   et(`${ip}:23`, [
       //{expect: "Password", send: "hw.mdp.2014\r"},
-      //{expect: "Username:", send: "epksadmin\r"},
+      {expect: "Username:", send: "epksadmin\r"},
       {expect: "Password:", send: "hw.mdp.2014\r"},
-      {expect: `>`, send: "enable\r"},
+      //{expect: `>`, send: "enable\r"},
+      
       //{expect: "Password", send: "hw.mdp.2014\r"},
-      {expect: "Password:", send: "hw.mdp.2014\r"},
+      //{expect: "Password:", send: "hw.mdp.2014\r"},
       {expect: `${hostname}#` , send: "terminal length 0\r"}, //para que no compagine y no aparezca el --More--
       {expect: `${hostname}#` , send: comando},
       //{expect: "#" , send: "show run\r"},
@@ -173,7 +175,7 @@ exports.getOPC = async(ip, domain, user, pass, clsid, opc_route)=>{
       const item = itemsList[i];
 
       if (resItem[0] !== 0) {
-        console.log ("El resitem es: ",resItem)  
+        //console.log ("El resitem es: ",resItem)  
         return null
 
           //node.error(`Error adding item '${itemsList[i].itemID}': ${errorMessage(resItem[0])}`);
@@ -190,7 +192,7 @@ exports.getOPC = async(ip, domain, user, pass, clsid, opc_route)=>{
     for (let i = 0; i < resAddItems.length; i++) {
       const resItem = resAddItems[i];
       if (resItem[0] !== 0) {
-        console.log ("El resitem es: ",resItem)
+        //console.log ("El resitem es: ",resItem)
         return null //node.error(`Error adding item '${itemsList[i].itemID}': ${errorMessage(resItem[0])}`);
       } else {
         resultado[i].itemID = resItem[1].itemID

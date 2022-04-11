@@ -4,8 +4,6 @@ const {validationResult} = require('express-validator');
 const Entities = require('html-entities').XmlEntities;
 const connSQL = require('../config/sql');
 const sql = require('mssql');
-const { Console } = require('console');
-const {findServer} = require('./commonController')
 
 exports.createTagDescriptor = async (req, res)=>{
     //valido errores
@@ -103,7 +101,24 @@ exports.createDocument = async (req,res)=>{
             if (err) throw err;
         });
 
-        
+        // const pdf = require('html-pdf');
+
+        // let content = `
+        // <h1>Tags descriptors del sistema ${system_created_document.name}</h1>
+        // <br>
+        // <br>
+        // `;
+        // tagsdescriptors.map((tg)=>{
+        //     content = content + "<h1>" + tg.tagname +"</h1><br>"
+        //     content = content + tg.description + "<br><hr><hr>"
+        // })
+        // pdf.create(content).toFile(`../tagsdescriptions/public/files/descriptors_${system_created_document.name}.pdf`, function(err, res) {
+        //     if (err){
+        //         return res.status(500).send("Error al crear el documento en PDF")
+        //     } else {
+        //         console.log(res);
+        //     }
+        // })
         res.json(`descriptors_${system_created_document.name}.docx`)
 
     } catch (error) {
@@ -169,7 +184,8 @@ exports.getTagDescriptor = async (req,res)=>{
         tagdescriptor_temp[0].description = entities.encodeNonUTF(tagdescriptor_temp[0].description)
         tagdescriptor.tagname = tagdescriptor_temp[0].tagname;
         tagdescriptor.description = tagdescriptor_temp[0].description;
-        tagdescriptor._id = tagdescriptor_temp[0]._id
+        tagdescriptor._id = tagdescriptor_temp[0]._id;
+
         const tagsDescriptors_related = await TagDescriptor.find({"description":{ $regex : new RegExp(tagdescriptor_temp[0].tagname, "i") } })
         //console.log(tagsDescriptors_related)
         tagdescriptor.tagsDescriptors_related = tagsDescriptors_related;
@@ -297,7 +313,6 @@ exports.getInterlock = async (req, res)=>{
         const servidor = findServer(TAG);
         //servidor='localhost';
         //console.log('El server es:', servidor);
-        
         const conn = await connSQL.conectarSQL(servidor);
         let pool = await conn.connect();
         
@@ -348,7 +363,7 @@ exports.getAlarmasyEventos = async (req, res)=>{
         
         const idTagDescriptor = req.params.id
         const tag_descriptor = await TagDescriptor.findById(idTagDescriptor)
-            // console.log(tag_descriptor.tagname)
+        //console.log(tag_descriptor.tagname)
         if (!tag_descriptor){
             console.log("No existe el tag descriptor");
             return res.status(404).send("No existe el tag descriptor")
@@ -359,15 +374,15 @@ exports.getAlarmasyEventos = async (req, res)=>{
         //servidor='localhost';
         //console.log('El server es:', servidor);
         
-        //const conn = await connSQL.conectarSQL(servidor);
-        const conn = await connSQL.conectarSQL('localhost');
+        const conn = await connSQL.conectarSQL(servidor);
+        //const conn = await connSQL.conectarSQL('localhost');
         let pool = await conn.connect();
         resp = await pool.request()
             /*.query(`SELECT AreaName, Source AS Tagname, Block, AlarmLimit, ConditionName, Description, Action, Priority, Actor, Value, [EMSEvents].dbo.UTCFILETIMEToDateTime(LocalTime) as Fecha FROM [EMSEvents].dbo.Events where Source like '${TAG}'
             AND dbo.UTCFILETIMEToDateTime(LocalTime) >= DATEADD(day, -1, GETDATE())`)*/
-            .query(`SELECT AreaName, Source AS Tagname, Block, AlarmLimit, ConditionName, Description, Action, Priority, Actor, Value, [EMSEvents].dbo.UTCFILETIMEToDateTime(LocalTime) as Fecha FROM [EMSEvents].dbo.Events where Source like '${TAG}'`)
-        
-        
+            .query(`SELECT top 1000 AreaName, Source AS Tagname, Block, AlarmLimit, ConditionName, Description, Action, Priority, Actor, Value, [EMSEvents].dbo.UTCFILETIMEToDateTime(LocalTime) as Fecha FROM [EMSEvents].dbo.Events where Source like '${TAG}' order by localtime desc`)
+        //console.log (`SELECT AreaName, Source AS Tagname, Block, AlarmLimit, ConditionName, Description, Action, Priority, Actor, Value, [EMSEvents].dbo.UTCFILETIMEToDateTime(LocalTime) as Fecha FROM [EMSEvents].dbo.Events where Source like '${TAG}'`)        
+        //console.log(resp)    
         if (!resp.recordset[0]){
             resp = json_error;
             res.json({resp});
@@ -376,6 +391,7 @@ exports.getAlarmasyEventos = async (req, res)=>{
         }
         resp =  resp.recordset;
         res.json({resp});
+        
         conn.close();
         return;
         
@@ -387,3 +403,22 @@ exports.getAlarmasyEventos = async (req, res)=>{
 
 
 
+const findServer=(TAG) => {
+    const area=parseInt(TAG.substring(0, 3),10);
+    let servidor;
+    if ((area<200) || (area==403) || (area==402) || (area==600)){
+        //console.log('PMCLS001');
+        return ('10.11.2.101');
+    }
+    else if ((area<250) && (area>=200)){
+        //console.log('PMCLS005');
+        return ('10.11.2.114');
+    }
+    else if (area>250){
+        //console.log('PMCLS006');
+        return ('10.11.2.109');        
+    }
+    else{
+        return;    
+    }
+}

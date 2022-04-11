@@ -14,7 +14,8 @@ import {
     CREATE_NETWORK_SHOW_RUN,
     GET_ARCHITECTURE_NODES,
     GET_ARCHITECTURE_DEVICES,
-    GET_NETWORK_NODE_ID
+    GET_NETWORK_NODE_ID,
+    DESELECT_NETWORK_NODE_ID
     } from '../../types/index'
 
 export default (state,action)=>{
@@ -74,6 +75,11 @@ export default (state,action)=>{
                 networkNodeSelected: state.networkNodes.filter( /*networkNodes tiene el listado de switches*/
                     networkNode => networkNode._id === action.payload),
                 error:false
+            })
+        case DESELECT_NETWORK_NODE_ID:
+            return ({
+                ...state,
+                networkNodeID:null
             })
         case UPDATE_NETWORK_NODE:
             return({

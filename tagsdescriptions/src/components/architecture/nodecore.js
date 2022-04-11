@@ -10,32 +10,35 @@ export default memo(({ data, isConnectable }) => {
   //console.log(data.posin, data.posout.uno)
   
   const tContext = useContext(networkContext)
-  const {getNetworkNodeID, networkNodeID, getNetworkArchitectureDevices, networkArchitectureDevices} = tContext //getNetworkNode 
+  const {deselectNetworkNodeId, getNetworkNodeID, networkNodeID, getNetworkArchitectureDevices, networkArchitectureDevices} = tContext //getNetworkNode 
   
   const dContext = useContext(deviceContext)
-  const {getDeviceID, deviceID} = dContext //getNetworkNode 
+  const {deselectDeviceId, getDeviceID, deviceID} = dContext //getNetworkNode 
 
-  useEffect(()=>{
-    if(networkArchitectureDevices){
-      console.log("Entro 25 veces!!!!")
-      //<Diagrama />
-    }
-  }, [networkArchitectureDevices])
+  // useEffect(()=>{
+  //   if(networkArchitectureDevices){
+  //     console.log("Entro 25 veces!!!!")
+  //     //<Diagrama />
+  //   }
+  // }, [networkArchitectureDevices])
 
   useEffect(()=>{ //para mostrar el status:
-    if ((networkNodeID  !== localStorage.getItem('devicestatusID')) && networkNodeID){ //si no agrego la comparacion con lo que habia antes, entra 24 veces! que onda el useEffect, hace lo que quiere...
-      localStorage.setItem('devicestatusID',networkNodeID)
-      window.open('/networkstatus')
+    if ((networkNodeID  !== localStorage.getItem('networkstatusID')) && networkNodeID){
+      //si no agrego la comparacion con lo que habia antes, entra 24 veces! que onda el useEffect, hace lo que quiere...
+      localStorage.setItem('networkstatusID',networkNodeID)
+      deselectNetworkNodeId();
+      window.open('/networkstatus', "_blank")
     }
   },[networkNodeID])
   
   useEffect(()=>{ //para mostrar el status:
     if ((deviceID  !== localStorage.getItem('devicestatusID')) && deviceID){ //si no agrego la comparacion con lo que habia antes, entra 24 veces! que onda el useEffect, hace lo que quiere...
       localStorage.setItem('devicestatusID',deviceID)
-      window.open('/devicestatus')
+      deselectDeviceId()
+      window.open('/devicestatus', "_blank")
     }
   },[deviceID])
-
+  
   return (
     <>
       {(data.posin) ?
@@ -60,7 +63,8 @@ export default memo(({ data, isConnectable }) => {
           <img className="img_architecture_device" src={data.img}/>
         }
       </div>
-        {((data.devicetype) === 'Switch') ?
+      <div className='div_buttons_architecture'>
+        {((data.devicetype) === 'Switch') && data.equipo !=="PMSWSY001A" && data.equipo !=="PMSWSY001B" ?
           <input
             className={data.cName}
             type="button"
@@ -82,7 +86,7 @@ export default memo(({ data, isConnectable }) => {
           className={data.cName}
           type="button"
           //style="background-color: black; color : white;"
-          value="       Status       "
+          value="Status"
           defaultValue={data.color}
           onClick={()=>
             {   
@@ -98,8 +102,10 @@ export default memo(({ data, isConnectable }) => {
       :
         (null)
       }
-      
-      {(((data.devicetype) === 'C300' || (data.devicetype) === 'PGM')) ?
+      </div>
+
+
+      {(((data.devicetype) === 'CF9' || (data.devicetype) === 'C300' || (data.devicetype) === 'PGM')) ?
           <input
           className={data.cName}
           type="button"
