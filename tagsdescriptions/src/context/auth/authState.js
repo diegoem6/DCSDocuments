@@ -17,6 +17,7 @@ const AuthState = (props) => {
     const initialState ={
         token: localStorage.getItem('token'),
         authenticated: null,
+        user_is_created: null,
         user: null,
         message:null,
         loading:true
@@ -31,7 +32,7 @@ const AuthState = (props) => {
                 payload:res.data
             })
 
-            getUser()
+            //getUser()
         } catch (error) {
             console.log(error);
             const alert = {
@@ -111,6 +112,7 @@ const AuthState = (props) => {
             user:state.user,
             message:state.message,
             loading:state.loading,
+            user_is_created:state.user_is_created,
             createUser,
             loginUser,
             getUser,

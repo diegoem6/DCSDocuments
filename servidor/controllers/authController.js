@@ -20,6 +20,10 @@ exports.authUser = async (req, res) =>{
             return res.status(400).send({msg:'No existe el usuario registrado'})
         }
 
+        if (user.state === "INACTIVE"){
+            return res.status(400).send({msg:'El usuario no está activo'})
+        }
+        
         const passwordOk = await bcryptjs.compare(password,user.password)
 
         if (!passwordOk){

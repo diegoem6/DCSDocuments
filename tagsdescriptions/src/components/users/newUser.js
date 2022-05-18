@@ -7,6 +7,7 @@ const Newuser = (props) => {
     const [user, setuser] = useState({
         name:"", 
         email: "" ,
+        rol:"",
         password: "",
         rpassword:""
       });
@@ -16,13 +17,16 @@ const Newuser = (props) => {
       const {alert, showAlert} = aContext
 
       const auContext = useContext(authContext)
-      const {authenticated, message, createUser, resetMessage} = auContext
+      const {authenticated, message, createUser, resetMessage, user_is_created} = auContext
 
-      const {name, email, password, rpassword} = user;
+      const {name, email, rol, password, rpassword} = user;
     
 
       useEffect(()=>{
           if(authenticated){
+             props.history.push('/')
+          }
+          if (user_is_created){
             props.history.push('/')
           }
           if (message){
@@ -44,6 +48,7 @@ const Newuser = (props) => {
         e.preventDefault();
         if (name.trim()===""||
             email.trim()===""||
+            rol.trim()===""||
             password.trim()===""||
             rpassword.trim()===""){
                 
@@ -63,7 +68,8 @@ const Newuser = (props) => {
         createUser({
           name,
           email,
-          password
+          password,
+          rol
         })
       };
     
@@ -100,7 +106,21 @@ const Newuser = (props) => {
                   value={email}
                 />
               </div>
-    
+
+              <div className="campo-form">
+                <label htmlFor="rol">Permisos</label>
+                <select 
+                  className="rol"
+                  onChange={onChange}
+                  name="rol"
+                  value={rol} //esto es para que se mantenga seleccionado lo que elegi en el combo, sino vuelve al que estaba antes
+                >
+                  <option key="empty" value="">Seleccione un rol</option>
+                  <option key="SYSADMIN" value="SYSADMIN">Administrador</option>
+                  <option key="ENGINEER" value="ENGINEER">Ingeniero</option>
+                </select>
+              </div>
+              
               <div className="campo-form">
                 <label htmlFor="password">Password</label>
                 <input

@@ -17,6 +17,15 @@ const UserSchema = mongoose.Schema({
         required: true,
         trim: true
     },
+    rol: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    state: {
+        type: String,
+        default: "INACTIVE",
+    },
     createddate: {
         type: Date,
         default: Date.now()

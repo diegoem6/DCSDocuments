@@ -333,6 +333,21 @@ aside  {
 .estado {
   margin-right: 1rem;
 }
+.user-estado{
+  margin-right: 1rem;
+  width: 6rem;
+}
+.user-estado button, 
+.mensaje {
+  font-weight: 900;
+  font-family: var(--textFont);
+  font-size: 1rem;
+  padding: .5rem;
+  border-radius: .5rem;
+  cursor: pointer;
+  border: none;
+}
+
 .estado button, 
 .mensaje {
   font-weight: 900;
@@ -443,8 +458,19 @@ aside  {
   align-items: center;
   justify-content: center;
 }
+
+.container-userList{
+  background-color: var(--gris1);
+  height: 100vh;
+  min-height: 100%;
+  margin:3rem;
+  /* display: flex; */
+  justify-content: center;
+}
 .contenedor-form {
     padding: 5rem 3rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
     max-width: 500px;
     width: 95%;
     background-color: var(--blanco);
@@ -469,6 +495,12 @@ aside  {
   border: 1px solid #e1e1e1;
   padding: 1rem;
   flex: 1;
+}
+
+.rol{
+    border: 1px solid #e1e1e1;
+    padding: 1rem;
+    flex: 1;
 }
 
 .enlace-cuenta {

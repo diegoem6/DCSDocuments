@@ -8,6 +8,7 @@ const Menu = () => {
             <Fragment>
             <Header />
                 <div className="form-menu">
+                    
                     <div className="contenedor-form sombra-dark">
                         <div className="campo-form"> 
                 
@@ -18,6 +19,18 @@ const Menu = () => {
                                 Estructura MdP
                             </Link>
                         </div>
+                        <div className="campo-form"> 
+                
+                            <Link 
+                                to={'/users'}
+                                className="btn btn-block btn-primario"
+                            >
+                                Usuarios
+                            </Link>
+                        </div>
+                    </div>
+
+                    <div className="contenedor-form sombra-dark">
                         <div className="campo-form">
                             <Link 
                                 to={'/tagsdescriptors'}
@@ -51,6 +64,9 @@ const Menu = () => {
                             </Link>
                         </div>
                     </div>
+
+
+                    
                 </div>
             </Fragment>
         

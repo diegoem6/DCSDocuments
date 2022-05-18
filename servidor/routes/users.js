@@ -1,8 +1,9 @@
 //Rutas para crear usuarios
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController')
-const {check} = require ('express-validator')
+const userController = require('../controllers/userController');
+const auth = require('../middlewares/auth');
+const {check} = require ('express-validator');
 
 // crea un usuario 
 // api/usuarios
@@ -13,6 +14,16 @@ router.post('/',
         check('password', 'La contraseña tiene que tener al menos 6 caracteres').isLength({min:6})
     ],
     userController.createUser);
+router.get('/',
+    auth,
+    userController.getUsers) ;
 
+router.put('/:id',
+    auth,
+    userController.updateUser) ;
+
+router.delete('/:id',
+    auth,
+    userController.deleteUser) ;
 
 module.exports = router;

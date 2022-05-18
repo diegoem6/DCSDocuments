@@ -10,11 +10,20 @@ import {
 export default (state,action)=>{
     switch(action.type){
         case LOGIN_SUCCESS:
-        case CREATE_USER_SUCCESS:
             localStorage.setItem('token',action.payload.token)
             return({
                 ...state,
                 authenticated:true,
+                user_is_created: false,
+                message:null,
+                loading:false
+            })
+        case CREATE_USER_SUCCESS:
+            localStorage.removeItem('token')
+            return({
+                ...state,
+                authenticated:false,
+                user_is_created: true,
                 message:null,
                 loading:false
             })
@@ -22,6 +31,7 @@ export default (state,action)=>{
             return ({
                 ...state,
                 authenticated: true,
+                user_is_created: false,
                 user: action.payload,
                 loading:false
             })
@@ -34,6 +44,7 @@ export default (state,action)=>{
                 token:null,
                 user: null,
                 authenticated: false,
+                user_is_created: false,
                 message:action.payload,
                 loading:false
             })
