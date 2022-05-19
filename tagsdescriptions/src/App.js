@@ -31,6 +31,7 @@ import PrivateRoute from './components/routes/privateRoute'
 import authToken from '../src/config/token'
 import Diagrama from './components/architecture/diagrama';
 
+import ChangePassword from './components/users/changePassword';
 
 
 
@@ -63,6 +64,7 @@ function App() {
                           <PrivateRoute exact path="/importDevices" component={ImportDevices}/>
                           <PrivateRoute exact path="/architecture" component={Diagrama}/>
                           <PrivateRoute exact path="/users" component={Users}/>
+                          <PrivateRoute exact path="/changePassword" component={ChangePassword}/>
                         </Switch>
                       </Router>
                     </UserState>

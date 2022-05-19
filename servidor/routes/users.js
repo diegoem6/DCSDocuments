@@ -18,9 +18,13 @@ router.get('/',
     auth,
     userController.getUsers) ;
 
-router.put('/:id',
+router.put('/changeState/:id',
     auth,
     userController.updateUser) ;
+
+router.put('/changePassword/',
+    auth,
+    userController.changePassword) ;
 
 router.delete('/:id',
     auth,

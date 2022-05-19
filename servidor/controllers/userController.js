@@ -107,6 +107,40 @@ exports.updateUser = async (req,res)=>{
     }
 }
 
+exports.changePassword = async (req,res)=>{
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+
+    try {
+        //existe el asset?
+        let user_updated = await User.findById(req.user.id)
+
+        if (!user_updated){
+            console.log("No existe el user");
+            return res.status(404).send({msg:"No existe el user"})
+        }
+        
+        const {password} = req.body
+
+        //Hashear el password
+        if (password!==null){
+            const salt = await bcryptjs.genSalt(10);
+            user_updated.password = await bcryptjs.hash(password, salt);
+        }
+        user_updated = await User.findOneAndUpdate({_id:user_updated._id},user_updated,{new:true});
+        res.json({user_updated})
+
+
+    } catch ({error}) {
+        console.log(error);
+        res.status(500).send({msg:"Error actualizando el sistema"})
+        
+    }
+}
+
 
 exports.deleteUser = async (req,res)=>{
     const errors = validationResult(req);

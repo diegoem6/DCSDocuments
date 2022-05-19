@@ -2,7 +2,9 @@ import {
     GET_USERS_SUCCESS,
     GET_USERS_ERROR,
     UPDATE_USER_ERROR,
-    RESET_MESSAGE
+    RESET_MESSAGE,
+    CHANGE_PASSWORD_SUCCESS,
+    CHANGE_PASSWORD_ERROR
     } from '../../types/index'
 
 export default (state,action)=>{
@@ -19,6 +21,7 @@ export default (state,action)=>{
                 users: [],
                 message:action.payload,
             })
+        
         case UPDATE_USER_ERROR:
             return({
                 ...state,

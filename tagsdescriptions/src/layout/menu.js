@@ -1,35 +1,42 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
 import { Link } from 'react-router-dom'
-import Header from './header';
+import HeaderMenu from './headerMenu';
+import authContext from '../context/auth/authContext'
 
 const Menu = () => {
+    const auContext = useContext(authContext)
+    const {user} = auContext;
+    if (!user) return null;
     return ( 
 
             <Fragment>
-            <Header />
+            <HeaderMenu />
                 <div className="form-menu">
                     
-                    <div className="contenedor-form sombra-dark">
-                        <div className="campo-form"> 
-                
-                            <Link 
-                                to={'/assets'}
-                                className="btn btn-block btn-primario"
-                            >
-                                Estructura MdP
-                            </Link>
-                        </div>
-                        <div className="campo-form"> 
-                
-                            <Link 
-                                to={'/users'}
-                                className="btn btn-block btn-primario"
-                            >
-                                Usuarios
-                            </Link>
-                        </div>
-                    </div>
-
+                    {user.rol === "SYSADMIN" ?
+                        (<div className="contenedor-form sombra-dark">
+                            <div className="campo-form"> 
+                    
+                                <Link 
+                                    to={'/assets'}
+                                    className="btn btn-block btn-primario"
+                                >
+                                    Estructura MdP
+                                </Link>
+                            </div>
+                            <div className="campo-form"> 
+                    
+                                <Link 
+                                    to={'/users'}
+                                    className="btn btn-block btn-primario"
+                                >
+                                    Usuarios
+                                </Link>
+                            </div>
+                        </div>)
+                        :
+                        null
+                    }
                     <div className="contenedor-form sombra-dark">
                         <div className="campo-form">
                             <Link 

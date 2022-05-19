@@ -11,7 +11,9 @@ import {
     UPDATE_USER_ERROR,
     DELETE_USER_SUCCESS,
     DELETE_USER_ERROR,
-    RESET_MESSAGE
+    RESET_MESSAGE,
+    CHANGE_PASSWORD_SUCCESS,
+    CHANGE_PASSWORD_ERROR
     } from '../../types/index'
 
 const UserState = (props) => {
@@ -46,11 +48,10 @@ const UserState = (props) => {
     }
 
 
-    // TODO 
     const updateUser = async (user) =>{
         try {
             
-            await axiosClient.put(`/api/users/${user._id}`,user)
+            await axiosClient.put(`/api/users/changeState/${user._id}`,user)
             
             dispatch({
                 type:UPDATE_USER_SUCCESS
@@ -71,7 +72,6 @@ const UserState = (props) => {
         }
     }
     
-    // TODO 
     const deleteUser = async (user) =>{
         try {
             const id = user._id
@@ -96,6 +96,29 @@ const UserState = (props) => {
         }
     }
 
+    const changePassword = async (password) =>{
+        try {
+            console.log("fumo?")
+            await axiosClient.put(`/api/users/changePassword`,password)
+            
+            dispatch({
+                type:CHANGE_PASSWORD_SUCCESS
+            })
+
+            getUsers()
+        } catch (error) {
+            console.log(error);
+            const alert = {
+                msg: error.response.data.msg,
+                category: 'alerta-error'
+            }
+            dispatch({
+                type:CHANGE_PASSWORD_ERROR,
+                payload:alert
+            })
+            
+        }
+    }
     
     const resetMessage = ()=>{
         dispatch({
@@ -112,6 +135,7 @@ const UserState = (props) => {
             updateUser,
             deleteUser,
             resetMessage,
+            changePassword
         }}>
             {props.children}
         </userContext.Provider>

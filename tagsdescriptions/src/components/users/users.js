@@ -1,5 +1,4 @@
 import React, {useContext, Fragment, useEffect, useLayoutEffect} from 'react';
-import systemContext from '../../context/system/systemContext'
 import userContext from '../../context/user/userContext'
 import User from './user'
 import Header from '../../layout/header'
@@ -10,8 +9,6 @@ import alertContext from '../../context/alerts/alertContext';
 
 const Users = () => {
 
-    const sContext = useContext(systemContext)
-    const {systems} = sContext
     const uContext = useContext(userContext)
     const {getUsers, users, message,resetMessage} = uContext
 

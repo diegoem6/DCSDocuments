@@ -224,6 +224,13 @@ aside  {
   margin-right: 2rem;
 }
 
+.nav-principal{
+  display:flex;
+}
+.nav-principal button{
+  margin-left: 2rem
+}
+
 /** Formulario crear y editar tareas **/
 .formulario {
   background-color: var(--gris3);
