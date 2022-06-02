@@ -7,11 +7,11 @@ const C300 = ({deviceSelected}) => {
     const renderSwitch = (param) => {
         console.log(param)
         switch(param) {
-            case 0: return <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-            case 1: return <img src = "/img/icon_yellow.svg.png" className="img_status_interface"/>
-            case 2: return <img src = "/img/icon_red.svg.png" className="img_status_interface"/>
-            case 3: return <img src = "/img/icon_grey.svg.png" className="img_status_interface"/>
-            default: return <img src = "/img/icon_grey.svg.png" className="img_status_interface"/>
+            case 0: return <img alt="icon_green" src = "/img/icon_green.svg.png" className="img_status_interface"/>
+            case 1: return <img alt="icon_yellow" src = "/img/icon_yellow.svg.png" className="img_status_interface"/>
+            case 2: return <img alt="icon_red" src = "/img/icon_red.svg.png" className="img_status_interface"/>
+            case 3: return <img alt="icon_grey" src = "/img/icon_grey.svg.png" className="img_status_interface"/>
+            default: return <img alt="icon_grey" src = "/img/icon_grey.svg.png" className="img_status_interface"/>
         }
     }
 
@@ -36,8 +36,8 @@ const C300 = ({deviceSelected}) => {
                                             <td width="50%"><b>{datos.label}</b></td>
                                             {datos.type === "icon" ?
                                                 (datos.value === 0 ? 
-                                                    <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                                                    : (<img src = "/img/icon_red.svg.png" className="img_status_interface"/>))
+                                                    <img alt="icon_green" src = "/img/icon_green.svg.png" className="img_status_interface"/>
+                                                    : (<img alt="icon_red" src = "/img/icon_red.svg.png" className="img_status_interface"/>))
                                             :
                                                 null
                                             }
@@ -69,8 +69,8 @@ const C300 = ({deviceSelected}) => {
                                                 <td width="50%"><b>{failure.label}</b></td>
                                                 {failure.type === "icon" ?
                                                     (failure.value === 0 ? 
-                                                        <img src = "/img/icon_green.svg.png" className="img_status_interface"/>
-                                                        : (<img src = "/img/icon_red.svg.png" className="img_status_interface"/>))
+                                                        <img alt="icon_green" src = "/img/icon_green.svg.png" className="img_status_interface"/>
+                                                        : (<img alt="icon_red" src = "/img/icon_red.svg.png" className="img_status_interface"/>))
                                                 :
                                                     null
                                                 }

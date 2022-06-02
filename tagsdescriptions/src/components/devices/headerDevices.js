@@ -1,11 +1,9 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import assetContext from '../../context/asset/assetContext';
-import { useHistory } from "react-router-dom";
 import deviceContext from '../../context/devices/devicesContext';
 
 
 const HeaderDevice = () => {
-    const history = useHistory();
     
     const dContext = useContext(deviceContext)
     const {showForm, searchDevices} = dContext

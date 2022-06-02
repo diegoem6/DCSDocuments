@@ -1,18 +1,14 @@
 import React, {useContext} from 'react';
-import { Link } from 'react-router-dom'
 import devicesContext from "../../context/devices/devicesContext";
 import { confirmAlert } from 'react-confirm-alert';
-import DeviceStatus from './deviceStatus';
 
 
 //import 'react-confirm-alert/src/react-confirm-alert.css';
 
 const Device = ({device}) => {
     
-    
-
     const dContext = useContext(devicesContext)
-    const {deleteDevice, selectDevice, showForm, getDevice, getDeviceType} = dContext
+    const {deleteDevice, selectDevice, showForm} = dContext
     //console.log(device)
     
     

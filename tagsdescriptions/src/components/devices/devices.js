@@ -8,7 +8,6 @@ import HeaderDevice from '../devices/headerDevices';
 import SidebarDevices from '../../layout/sidebarDevices';
 import deviceContext from '../../context/devices/devicesContext';
 import authContext from '../../context/auth/authContext'
-import alertContext from '../../context/alerts/alertContext';
 import assetContext from '../../context/asset/assetContext';
 
 const Devices = ()=>{
@@ -17,13 +16,12 @@ const Devices = ()=>{
     const {getUser} = auContext;
     
     const dContext = useContext(deviceContext)
-    const {showForm, form} = dContext
+    const {form} = dContext
     
     const asContext = useContext(assetContext)
     const {deSelectAsset} = asContext
     
-    const aContext = useContext(alertContext)
-    const {alert} = aContext
+    
     
     
     useEffect(() => {

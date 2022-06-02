@@ -11,7 +11,7 @@ const DevicesList = () => {
     const {asset} = aContext
 
     const dContext = useContext(deviceContext)
-    const {getDevices, devices, devicesSearch} = dContext
+    const {getDevices, devicesSearch} = dContext
     
     // const tContext = useContext(tagDescriptorContext)
     // const {searchtagdescriptors, getTagsDescriptors} = tContext

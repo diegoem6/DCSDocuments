@@ -150,10 +150,10 @@ const DevicesState = props=>{
                 payload:res.data.device_type /*mismo nombre que devuelve el controller en el server*/
             })
         } catch (error) {
-            const alert = {
-                msg:"No existe el modelo del nodo de red",
-                category:"alerta-error"
-            }
+            // const alert = {
+            //     msg:"No existe el modelo del nodo de red",
+            //     category:"alerta-error"
+            // }
         }
     }
 

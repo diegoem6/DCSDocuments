@@ -1,5 +1,4 @@
 import React, {useContext} from 'react';
-import { Link } from 'react-router-dom'
 import tagDescriptorContext from "../../context/tagdescriptor/tagDescriptorContext";
 import { confirmAlert } from 'react-confirm-alert';
 

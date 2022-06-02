@@ -2,9 +2,7 @@ import {
     GET_USERS_SUCCESS,
     GET_USERS_ERROR,
     UPDATE_USER_ERROR,
-    RESET_MESSAGE,
-    CHANGE_PASSWORD_SUCCESS,
-    CHANGE_PASSWORD_ERROR
+    RESET_MESSAGE
     } from '../../types/index'
 
 export default (state,action)=>{

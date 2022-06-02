@@ -10,7 +10,6 @@ const NetworkStatus = () => {
     //let {nodeName, nodeDescription, nodeModel, nodeIP}="sss"
     const [nodeName, setnodeName]=useState("")
     const [nodeDescription, setnodeDescription]=useState("")
-    const [nodeModel, setnodeModel]=useState("")
     const [nodeIP, setnodeIP]=useState("")
 
     const [pag, setPag] = useState(
@@ -45,7 +44,6 @@ const NetworkStatus = () => {
         if(networkNodeSelected){
             setnodeName(networkNodeSelected.nodeName)
             setnodeDescription(networkNodeSelected.nodeDescription)
-            //setnodeModel(getNetworkModel(networkNodeSelected.nodeModel).model)
             getNetworkModel(networkNodeSelected.nodeModel) /* pido el networkmodelo */
             setnodeIP(networkNodeSelected.nodeIP)
             
@@ -57,17 +55,18 @@ const NetworkStatus = () => {
                      currentPage:0
                  })
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [networkNodeSelected])
 
 
 
-    useEffect(() => {
-        if(networkmodel){
-            setnodeModel(networkmodel.model)
-            console.log('El modelo es: ',networkmodel.model)
-            console.log(networkmodel.url)
-        }
-    }, [networkmodel])
+    // useEffect(() => {
+    //     if(networkmodel){
+    //         setnodeModel(networkmodel.model)
+    //         console.log('El modelo es: ',networkmodel.model)
+    //         console.log(networkmodel.url)
+    //     }
+    // }, [networkmodel])
     
     const handlePageClick = (e) => {
         const selectedPage = e.selected;
@@ -101,11 +100,11 @@ const NetworkStatus = () => {
                 : null
                 }
                 <div className = "download">
-                    <p>show run <a onClick={()=>onClickCreateShowRun("RUN")} target="_blank"><img className="download_icon" src="/img/download.png"/></a></p>
-                    <p>show tech <a onClick={()=>onClickCreateShowRun("TECH")} target="_blank"><img className="download_icon" src="/img/download.png"/></a></p>
+                    <p>show run <button className = "tagRelatedButton" onClick={()=>onClickCreateShowRun("RUN")} target="_blank"><img alt ="download_icon" className="download_icon" src="/img/download.png"/></button></p>
+                    <p>show tech <button className = "tagRelatedButton" onClick={()=>onClickCreateShowRun("TECH")} target="_blank"><img alt ="download_icon" className="download_icon" src="/img/download.png"/></button></p>
                 </div>
                 
-                <h2></h2>
+                <h2> </h2>
             
                 <table>
                     <tr>
@@ -123,9 +122,9 @@ const NetworkStatus = () => {
                         <td width="10%">
                             {
                                 inter.state === "up" ?
-                                    (<img src = "/img/icon_green.svg.png" className="img_status_interface"/>)
+                                    (<img alt ="green_icon" src = "/img/icon_green.svg.png" className="img_status_interface"/>)
                                     :
-                                    (<img src = "/img/icon_red.svg.png" className="img_status_interface"/>)
+                                    (<img alt ="red_icon" src = "/img/icon_red.svg.png" className="img_status_interface"/>)
                             }
                         </td>
                         <td width="5%">{inter.vlan}</td>

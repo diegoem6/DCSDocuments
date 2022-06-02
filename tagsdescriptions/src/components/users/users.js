@@ -1,8 +1,7 @@
-import React, {useContext, Fragment, useEffect, useLayoutEffect} from 'react';
+import React, {useContext, Fragment, useEffect} from 'react';
 import userContext from '../../context/user/userContext'
 import User from './user'
 import Header from '../../layout/header'
-import { confirmAlert } from 'react-confirm-alert';
 import alertContext from '../../context/alerts/alertContext';
 
 
@@ -18,24 +17,8 @@ const Users = () => {
     
     useEffect(() => {
         getUsers()
+        // eslint-disable-next-line
     }, []);
-
-    const showDialogConfirm = ()=>{
-        confirmAlert({
-            title: 'Eliminar asset',
-            message: 'Se eliminaran todos los sistemas y descriptores asociados al asset',
-            buttons: [
-              {
-                label: 'Yes',
-                onClick: () => console.log("si")//deleteAssetOnClick()
-              },
-              {
-                label: 'No',
-                onClick: () => console.log("no")
-              }
-            ]
-          });
-    }
 
     useEffect(() => {
         if (message){

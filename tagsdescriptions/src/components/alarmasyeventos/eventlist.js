@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import tagDescriptorContext from "../../context/tagdescriptor/tagDescriptorContext";
 import ReactPaginate from 'react-paginate';
-import { Fragment } from 'react';
 
 const Eventlist = () => {
     

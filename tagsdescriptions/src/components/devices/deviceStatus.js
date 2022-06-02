@@ -7,7 +7,7 @@ const DeviceStatus = () => {
     
     const devicestatusID=localStorage.getItem('devicestatusID');
     const dContext = useContext(deviceContext)
-    const {getDevice, getDeviceType, networkmodelo, deviceSelected, devicetype, getDeviceStatus, status} = dContext
+    const {getDevice, getDeviceType, deviceSelected, devicetype, getDeviceStatus, status} = dContext
 
     const [deviceTipo, setDeviceTipo] = useState('')
 
@@ -30,6 +30,7 @@ const DeviceStatus = () => {
             deviceSelected.status_=status
             getDeviceType(deviceSelected.deviceType);
         }
+        // eslint-disable-next-line
     }, [deviceSelected, status])
 
     useEffect(() => {
@@ -37,9 +38,9 @@ const DeviceStatus = () => {
             setDeviceTipo(devicetype.type)
             deviceSelected.type_desc =  devicetype
         }
+        // eslint-disable-next-line
     }, [devicetype])
 
-    console.log(deviceSelected)
     return ( 
         <Fragment>
             

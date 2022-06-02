@@ -113,13 +113,13 @@ export default (state,action)=>{
             return({
                 ...state,
                 error:false,
-                networkArchitectureDevices: action.payload
+                architectureDevices: action.payload
             })
             case GET_ARCHITECTURE_NODES:
                 return({
                     ...state,
                     error:false,
-                    networkArchitectureNodes: action.payload
+                    architectureNetworkNodes: action.payload
                 })
             case GET_NETWORK_NODE_ID:
                 return({

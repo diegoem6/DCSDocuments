@@ -2,8 +2,6 @@ import React, {useContext, useEffect} from 'react';
 import { Link } from 'react-router-dom'
 import assetContext from '../context/asset/assetContext'
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import tagDescriptorContext from '../context/tagdescriptor/tagDescriptorContext';
-import systemContext from '../context/system/systemContext';
 import Asset from '../components/assets/asset'
 
 
@@ -14,12 +12,6 @@ const SidebarNetwork = () => {
     const aContext = useContext(assetContext)
     const {assets, getAssets} = aContext
 
-    const tContext = useContext(tagDescriptorContext)
-    const {deselectTagDescriptor} = tContext
-
-    const sContext = useContext(systemContext)
-    const {selectSystem, deselectSystem} = sContext
-
     
     useEffect(() => {
         const initAssetTree = () =>{
@@ -29,11 +21,6 @@ const SidebarNetwork = () => {
         // eslint-disable-next-line
     }, [])
 
-    const selectSystemOnClick = (system)=>{
-        selectSystem(system);
-        deselectTagDescriptor();
-
-    }
 
     return ( 
         <aside>

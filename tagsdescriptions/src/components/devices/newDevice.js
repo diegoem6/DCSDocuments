@@ -47,18 +47,15 @@ const NewDevice = () => {
         // eslint-disable-next-line
     }, [deviceSelected])
 
-    // useEffect(() => {
-    //     console.log(devicetypes)
-    // }, [devicetypes])
 
     useEffect(() => { //para los errores
         if(message){
             showAlert(message.msg, message.category)
             resetMessage()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [message])
     
-    const [icon, seticon] = useState('')
       
  
     
@@ -126,7 +123,7 @@ const NewDevice = () => {
                             >
                             <input  
                                 type="text"
-                                className={`input-text${icon}`}
+                                className={`input-text`}
                                 placeholder="Device name"
                                 name="deviceName"
                                 value ={deviceName}
@@ -134,13 +131,13 @@ const NewDevice = () => {
                             />
                              <input  
                                 type="text"
-                                className={`input-text${icon}`}
+                                className={`input-text`}
                                 placeholder="Description"
                                 name="deviceDescription"
                                 value ={deviceDescription}
                                 onChange = {onChangeDeviceDescription}
                             />
-                             <select className={`input-text${icon}`}
+                             <select className={`input-text`}
                                 onChange={e => setDeviceType(e.target.value)}
                                 value={deviceType} //esto es para que se mantenga seleccionado lo que elegi en el combo, sino vuelve al que estaba antes
                              >
@@ -156,7 +153,7 @@ const NewDevice = () => {
                                 
                              <input  
                                 type="text"
-                                className={`input-text${icon}`}
+                                className={`input-text`}
                                 placeholder="IP Address"
                                 name="deviceIP"
                                 value ={deviceIP}
@@ -164,7 +161,7 @@ const NewDevice = () => {
                             />
                             <input 
                                 type="text"
-                                className={`input-text${icon}`}
+                                className={`input-text`}
                                 placeholder="URL OPC"
                                 name="deviceURLOPC"
                                 value={deviceURLOPC}

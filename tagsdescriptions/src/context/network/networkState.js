@@ -37,8 +37,8 @@ const NetworkState = props=>{
         areas:[],
         networkmodel:null,
         urlDoc:null,
-        networkArchitectureDevices:{},
-        networkArchitectureNodes:[]
+        architectureDevices:{},
+        architectureNetworkNodes:[]
     }
 
     //Dispatch para ejecutar las acciones
@@ -173,10 +173,10 @@ const NetworkState = props=>{
                 payload:res.data.networkModel_get /*mismo nombre que devuelve el controller en el server*/
             })
         } catch (error) {
-            const alert = {
-                msg:"No existe el modelo del nodo de red",
-                category:"alerta-error"
-            }
+            // const alert = {
+            //     msg:"No existe el modelo del nodo de red",
+            //     category:"alerta-error"
+            // }
         }
     }
 
@@ -240,12 +240,11 @@ const NetworkState = props=>{
         }
     }
 
-    const getNetworkArchitectureDevices = async(networkNode) =>{
+    const getArchitectureDevices = async(networkNode) =>{
         try {
             //console.log(networknode)
             const res = await axiosClient.get('/api/architecture/getArchitectureDevices', {params:{networkNode}}) //networkNode se tiene que llamar igual de ambos lados
             //const res = await axiosClient.get('api/architecture/getArchitectureDevices?networkNode=PMSWSY011A')
-            console.log(res)
             dispatch({
                 type:GET_ARCHITECTURE_DEVICES,
                 payload:res.data.accessArchitecture //aca accedo a nodes y connections
@@ -258,11 +257,10 @@ const NetworkState = props=>{
         }
     }
 
-    const getNetworkArchitectureNodes = async() =>{
-        console.log("Entro en getNetworkArchitectureNodes")
+    const getArchitectureNetworkNodes = async() =>{
+        
         try {
             const res = await axiosClient.get('/api/architecture/getArchitectureNodes')
-            console.log(res)
             dispatch({
                 type:GET_ARCHITECTURE_NODES,
                 payload:res.data.coreArchitecture //aca accedo a nodes y connections
@@ -314,8 +312,8 @@ const NetworkState = props=>{
                 networkmodel: state.networkmodel,
                 urlDoc:state.urlDoc,
                 areas:state.areas,
-                networkArchitectureDevices: state.networkArchitectureDevices,
-                networkArchitectureNodes: state.networkArchitectureNodes,
+                architectureDevices: state.architectureDevices,
+                architectureNetworkNodes: state.architectureNetworkNodes,
                 networkNodeID: state.networkNodeID,
                 showForm, 
                 createNetworkNode,
@@ -330,8 +328,8 @@ const NetworkState = props=>{
                 resetMessage,
                 createNetworkNodeShowRun,
                 getAreas,
-                getNetworkArchitectureDevices,
-                getNetworkArchitectureNodes,
+                getArchitectureDevices,
+                getArchitectureNetworkNodes,
                 getNetworkNodeID,
                 deselectNetworkNodeId
             }}

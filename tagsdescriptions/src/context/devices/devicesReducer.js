@@ -52,6 +52,9 @@ export default (state,action)=>{
                 devices: state.devices.filter(
                     device=>device._id !== action.payload
                 ),
+                devicesSearch:state.devices.filter(
+                    device=>device._id !== action.payload
+                ),
                 deviceSelected: null,
                 error:false
             })
@@ -112,7 +115,7 @@ export default (state,action)=>{
             return ({
                 ...state,
                 devicesSearch: state.devices.filter(
-                    device=> device.deviceName.indexOf(action.payload) > -1
+                    device=> device.deviceName.toUpperCase().indexOf(action.payload.toUpperCase()) > -1
                 ),
                 message:null,
                 error: false,

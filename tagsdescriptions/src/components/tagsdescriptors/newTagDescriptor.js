@@ -283,11 +283,11 @@ const NewTagDescriptor = () => {
                                     }
                                     <ul>
                                     {
-                                        (related != null && related.length != 0) ?
+                                        (related !== null && related.length !== 0) ?
                                         (
                                             related.map( r => 
                                                     (<li className="itemRelated">
-                                                        <a onClick={()=>{goToRelated(r)}}> {r.tagname} </a>
+                                                        <button className="tagRelatedButton" onClick={()=>{goToRelated(r)}}> {r.tagname} </button>
                                                     </li>  
                                                     )
                                                 )

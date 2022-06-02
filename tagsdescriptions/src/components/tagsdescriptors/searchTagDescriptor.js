@@ -1,11 +1,10 @@
 import React, {useContext, useState, useEffect} from 'react';
 import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext' 
 import systemContext from '../../context/system/systemContext';
-import { useHistory } from "react-router-dom";
+//import { useHistory } from "react-router-dom";
 
 
 const SearchTagDescriptor = () => {
-    const history = useHistory();
     
     const tdContext = useContext(tagDescriptorContext)
     const {showForm, searchTagsDescriptors, createDocument, urlDoc, deselectTagDescriptor} = tdContext

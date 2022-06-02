@@ -55,10 +55,9 @@ const NewNodeNetwork = () => {
             showAlert(message.msg, message.category)
             resetMessage()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [message])
     
-    const [icon, seticon] = useState('')
-      
  
     
     if (!asset) return null
@@ -121,7 +120,7 @@ const NewNodeNetwork = () => {
                             >
                             <input  
                                 type="text"
-                                className={`input-text${icon}`}
+                                className={`input-text`}
                                 placeholder="Node name"
                                 name="nodeName"
                                 value ={nodeName}
@@ -129,13 +128,13 @@ const NewNodeNetwork = () => {
                             />
                              <input  
                                 type="text"
-                                className={`input-text${icon}`}
+                                className={`input-text`}
                                 placeholder="Description"
                                 name="nodeDescription"
                                 value ={nodeDescription}
                                 onChange = {onChangeNodeDescription}
                             />
-                             <select className={`input-text${icon}`}
+                             <select className={`input-text`}
                                 onChange={e => setNodeModel(e.target.value)}
                                 value={nodeModel} //esto es para que se mantenga seleccionado lo que elegi en el combo, sino vuelve al que estaba antes
                              >
@@ -150,7 +149,7 @@ const NewNodeNetwork = () => {
                              </select>
                              
                              
-                             <select className={`input-text${icon}`}
+                             <select className={`input-text`}
                                 onChange={e => setArea(e.target.value)}
                                 value={area} //esto es para que se mantenga seleccionado lo que elegi en el combo, sino vuelve al que estaba antes
                              >
@@ -167,7 +166,7 @@ const NewNodeNetwork = () => {
 
                              <input  
                                 type="text"
-                                className={`input-text${icon}`}
+                                className={`input-text`}
                                 placeholder="IP Address"
                                 name="nodeIP"
                                 value ={nodeIP}

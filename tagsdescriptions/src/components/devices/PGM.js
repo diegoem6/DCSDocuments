@@ -5,19 +5,19 @@ const PGM = ({deviceSelected}) => {
     
     const renderSwitch_icon3 = (param) => {
         switch(param) {
-            case "NOTLOADED": return (<div><td width="10%" key="icono"><img src = "/img/icon_grey.svg.png" className="img_status_interface"/></td><td width="40%" key="nombre"><span>Not Loaded</span></td></div>)
-            case "LOADED": return (<div><td width="10%" key="icono"><img src = "/img/icon_grey.svg.png" className="img_status_interface"/></td><td width="40%" key="nombre"><span>Loaded</span></td></div>)
-            case "ONLINE": return (<div><td width="10%" key="icono"><img src = "/img/icon_green.svg.png" className="img_status_interface"/></td><td width="40%" key="nombre"><span>On Line</span></td></div>)
-            default: return (<div><td width="10%" key="icono"><img src = "/img/icon_grey.svg.png" className="img_status_interface"/></td><td width="40%" key="nombre"><span>Error OPC</span></td></div>)
+            case "NOTLOADED": return (<div><td width="10%" key="icono"><img alt="icon_grey" src = "/img/icon_grey.svg.png" className="img_status_interface"/></td><td width="40%" key="nombre"><span>Not Loaded</span></td></div>)
+            case "LOADED": return (<div><td width="10%" key="icono"><img alt="icon_grey"  src = "/img/icon_grey.svg.png" className="img_status_interface"/></td><td width="40%" key="nombre"><span>Loaded</span></td></div>)
+            case "ONLINE": return (<div><td width="10%" key="icono"><img alt="icon_grey" src = "/img/icon_green.svg.png" className="img_status_interface"/></td><td width="40%" key="nombre"><span>On Line</span></td></div>)
+            default: return (<div><td width="10%" key="icono"><img alt="icon_grey" src = "/img/icon_grey.svg.png" className="img_status_interface"/></td><td width="40%" key="nombre"><span>Error OPC</span></td></div>)
         }
     }
     const renderSwitch_icon4 = (param) => {
         switch(param) {
-            case 0: return (<img src = "/img/icon_grey.svg.png" className="img_status_interface"/>)
-            case 1: return (<img src = "/img/icon_red.svg.png" className="img_status_interface"/>)
-            case 2: return (<img src = "/img/icon_green.svg.png" className="img_status_interface"/>)
-            case 3: return (<img src = "/img/icon_yellow.svg.png" className="img_status_interface"/>)
-            default: return (<img src = "/img/icon_grey.svg.png" className="img_status_interface"/>)
+            case 0: return (<img alt="icon_grey" src = "/img/icon_grey.svg.png" className="img_status_interface"/>)
+            case 1: return (<img alt="icon_red" src = "/img/icon_red.svg.png" className="img_status_interface"/>)
+            case 2: return (<img alt="icon_green" src = "/img/icon_green.svg.png" className="img_status_interface"/>)
+            case 3: return (<img alt="icon_yellow" src = "/img/icon_yellow.svg.png" className="img_status_interface"/>)
+            default: return (<img alt="icon_grey" src = "/img/icon_grey.svg.png" className="img_status_interface"/>)
         }
     }
 
@@ -41,8 +41,8 @@ const PGM = ({deviceSelected}) => {
                                             <td width="50%"><b>{datos.label}</b></td>
                                             {datos.type === "icon" ?
                                                 (datos.value === 0 ? 
-                                                    <img src = "/img/icon_red.svg.png" className="img_status_interface"/>
-                                                    : (<img src = "/img/icon_green.svg.png" className="img_status_interface"/>))
+                                                    <img alt="icon_red" src = "/img/icon_red.svg.png" className="img_status_interface"/>
+                                                    : (<img alt="icon_green" src = "/img/icon_green.svg.png" className="img_status_interface"/>))
                                             :
                                                 null
                                             }
@@ -72,8 +72,8 @@ const PGM = ({deviceSelected}) => {
                                                 <td width="50%"><b>{failure.label}</b></td>
                                                 <td width="50%" key="nombre">
                                                     {failure.value === 0 ? 
-                                                        <img src = "/img/icon_green.svg.png" className="img_status_interface"/>:
-                                                        <img src = "/img/icon_red.svg.png" className="img_status_interface"/>
+                                                        <img alt="icon_green" src = "/img/icon_green.svg.png" className="img_status_interface"/>:
+                                                        <img alt="icon_red" src = "/img/icon_red.svg.png" className="img_status_interface"/>
                                                     }
                                                     
                                                 </td>
@@ -90,7 +90,7 @@ const PGM = ({deviceSelected}) => {
             </div>
             <div className="device_grid">
                 {deviceSelected.type_desc?
-                    <img className="device_img" src=''/>
+                    <img alt="icon_none" className="device_img" src=''/>
                 : console.log("deviceSelected es null")
                 }
                 {deviceSelected.status_.pgm ? 

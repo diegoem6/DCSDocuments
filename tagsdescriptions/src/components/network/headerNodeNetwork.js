@@ -1,27 +1,16 @@
-import React, {useContext, useState, useEffect} from 'react';
-import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext' 
+import React, {useContext} from 'react';
 import assetContext from '../../context/asset/assetContext';
-import systemContext from '../../context/system/systemContext';
-import { useHistory } from "react-router-dom";
 import networkContext from '../../context/network/networkContext';
 
 
 const HeaderNodeNetwork = () => {
-    const history = useHistory();
     
     const asContext = useContext(networkContext)
     const {showForm} = asContext
 
-    const sContext = useContext(systemContext)
-    const {systemSelected} = sContext
-
     const aContext = useContext(assetContext)
     const {asset} = aContext
 
-    
-    const [search, setSearch ] = useState('')
-
-    
     if (!asset) return null
 
     const onClickNewNode = ()=>{

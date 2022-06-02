@@ -408,6 +408,17 @@ aside  {
   color: var(--blanco);
 }
 
+.tagRelatedButton{
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  /*optional*/
+  /*font-family: arial, sans-serif;*/
+  /*input has OS specific font-family*/
+  color: #069;
+  /*text-decoration: underline;*/
+  cursor: pointer;
+}
 
 .tarea-enter,
 
@@ -822,7 +833,7 @@ input[type="file"] {
 .custom-file-input::before {
   content: 'Seleccionar archivo';
   display: inline-block;
-  background: linear-gradient(top, #f9f9f9, #e3e3e3);
+  /*background: linear-gradient(top, #f9f9f9, #e3e3e3);*/
   border: 1px solid #999;
   border-radius: 3px;
   padding: 5px 8px;
@@ -1186,7 +1197,10 @@ th:last-child {
   height: 75vh; 
   width: 100%;
 }
-
+.contenedor_networkDevices{
+  height: 75vh; 
+  width: 100%;
+}
 .boton{
   border: '1px solid #777';
   padding: 10;

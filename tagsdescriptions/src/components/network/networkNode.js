@@ -1,5 +1,4 @@
 import React, {useContext} from 'react';
-import { Link } from 'react-router-dom'
 import networkContext from "../../context/network/networkContext";
 import { confirmAlert } from 'react-confirm-alert';
 
@@ -11,7 +10,7 @@ const NetworkNode = ({networkNode}) => {
     //console.log(networkNode)
     
     const tContext = useContext(networkContext)
-    const {deleteNetworkNode, selectNetworkNode, showForm, getNetworkNode} = tContext
+    const {deleteNetworkNode, selectNetworkNode, showForm} = tContext
     
     const editNetworkNode = (networkNode)=>{ 
         //console.log(networkNode)

@@ -11,9 +11,6 @@ const Header = () => {
         // eslint-disable-next-line
     }, [])
     
-    const changePassword = () => {
-
-    }
     return (  
         <header className="app-header">
             {user ? <p className="nombre-usuario">Hola <span>{user.name}</span></p> : null}

@@ -5,7 +5,6 @@ import NewNodeNetwork from '../network/newNodeNetwork';
 import NodesList from'../network/NodesList'
 import HeaderNodeNetwork from '../network/headerNodeNetwork';
 import SidebarNetwork from '../../layout/sidebarNetwork';
-import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext';
 import alertContext from '../../context/alerts/alertContext';
 import assetContext from '../../context/asset/assetContext';
 import networkContext from '../../context/network/networkContext';
@@ -17,7 +16,7 @@ const Netowrk = () => {
     const {getUser} = auContext;
 
     const nContext = useContext(networkContext)
-    const {showForm, form} = nContext
+    const {form} = nContext
 
     const asContext = useContext(assetContext)
     const {deSelectAsset} = asContext

@@ -2,7 +2,6 @@ import React, {useReducer} from 'react';
 import userContext from './userContext'
 import userReducer from './userReducer'
 import axiosClient from '../../config/axios'
-import tokenAuth from '../../config/token'
 
 import {
     GET_USERS_SUCCESS,
