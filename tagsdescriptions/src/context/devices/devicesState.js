@@ -114,6 +114,26 @@ const DevicesState = props=>{
         }
     }
 
+    const getDevicesAll = async (asset) =>{
+        try {
+            const res = await axiosClient.get('/api/devices/all')
+            dispatch({
+                type:GET_DEVICES,
+                payload: res.data.devices //devices esta definida en la respuesta del server
+            })
+
+        } catch (error) {
+            const alert = {
+                msg: error.response.data.msg,
+                category: 'alerta-error'
+            }
+            dispatch({
+                type:SHOW_ERROR,
+                payload:alert
+            })
+        }
+    }
+
     const showError = () =>{
         dispatch({
             type: SHOW_ERROR
@@ -267,6 +287,7 @@ const DevicesState = props=>{
                 showForm, 
                 createDevice,
                 getDevices,
+                getDevicesAll,
                 getDevice,
                 updateDevice,
                 showError,

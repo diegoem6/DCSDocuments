@@ -28,7 +28,6 @@ const NewDevice = () => {
     useEffect(() => { /*tuve que meterlo en un useeffect porque en una funcion entraba dos veces*/
         //console.log(deviceSelected)
         getDeviceTypes()
-        console.log(devicetypes)
         if (deviceSelected !== null && deviceSelected.length>0){
             //console.log(deviceSelected)
             const [currentnetDevice] = deviceSelected
@@ -95,7 +94,6 @@ const NewDevice = () => {
         newDevice.deviceType = deviceType;
         newDevice.deviceIP = deviceIP;
         newDevice.deviceURLOPC = deviceURLOPC;
-        console.log(deviceURLOPC)
         newDevice.asset = asset[0]._id;
         //console.log(newDevice)
         if(deviceSelected===null) /*Nuevo*/
@@ -103,7 +101,6 @@ const NewDevice = () => {
         else{ /*update*/ 
             //console.log("Entro Update");
             newDevice._id=deviceSelected[0]._id; /* le agrego el ID porque es existente */
-            console.log(newDevice)
             updateDevice(newDevice)
         }
         //}

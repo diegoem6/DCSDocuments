@@ -16,6 +16,10 @@ router.get('/',
     auth,
     deviceController.getDevices) ;
 
+router.get('/all',
+    auth,
+    deviceController.getDevicesAll) ;
+
 router.get('/:id',
     auth,
     deviceController.getDevice) ;

@@ -64,6 +64,14 @@ const Menu = () => {
                         </div>
                         <div className="campo-form">
                             <Link 
+                                to={'/connections'}
+                                className="btn btn-block btn-primario"
+                            >
+                                Conexiones
+                            </Link>
+                        </div>
+                        <div className="campo-form">
+                            <Link 
                                 to={'/architecture'}
                                 className="btn btn-block btn-primario"
                             >

@@ -55,7 +55,6 @@ exports.addDevice = async (req,res)=>{
 
 exports.updateDevice = async (req,res)=>{
     const errors = validationResult(req);
-    console.log(req.body)
     if (!errors.isEmpty()){
         return res.status(400).json({errors:errors.array()});
     }
@@ -113,6 +112,35 @@ exports.updateDevice = async (req,res)=>{
     }
 }
 
+
+exports.getDevicesAll = async (req,res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+
+    try {
+        
+        const oldDevices = await Device.find().sort({creado:-1})
+       
+        let devices = []
+
+        for (const dev of oldDevices){
+            const typeDesc = await this.igetDeviceType(dev.deviceType)
+            let newDev = dev.toObject();
+            newDev.deviceTypeDesc = typeDesc
+            devices.push(newDev)
+        }
+        
+        res.json({devices})
+        //console.log(networkNodes)
+
+    } catch ({error}) {
+        console.log(error);
+        res.status(500).send({msg:"No se pudo obtener los dispositivos para este asset"})
+        
+    }
+}
 
 exports.getDevices = async (req,res)=>{
     const errors = validationResult(req);

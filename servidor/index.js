@@ -36,6 +36,7 @@ app.use('/api/devicestypes', require('./routes/devicestypes'));
 app.use('/api/files', require('./routes/files'));
 app.use('/api/areas', require('./routes/areas'));
 app.use('/api/architecture', require('./routes/architecture'));
+app.use('/api/connections', require('./routes/connections'));
 
 app.listen (PORT, ()=>{
     console.log(`El server esta levantando en el puerto ${PORT}`)

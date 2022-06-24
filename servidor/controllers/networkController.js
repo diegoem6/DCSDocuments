@@ -128,6 +128,24 @@ exports.getNetworkNodes = async (req,res)=>{
     }
 }
 
+exports.getNetworkNodesAll = async (req,res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+
+    try {
+        
+        const networkNodes = await NetworkNode.find().sort({creado:-1})
+        res.json({networkNodes})
+
+    } catch ({error}) {
+        console.log(error);
+        res.status(500).send({msg:"No se pudo obtener los nodos de red para este asset"})
+        
+    }
+}
+
 exports.getNetworkNodeModels = async (req,res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()){

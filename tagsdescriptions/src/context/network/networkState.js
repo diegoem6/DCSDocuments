@@ -118,6 +118,26 @@ const NetworkState = props=>{
         }
     }
 
+    const getNetworkNodesAll = async (asset) =>{
+        try {
+            const res = await axiosClient.get('/api/network/all')
+            dispatch({
+                type:GET_NETWORK_NODES,
+                payload: res.data.networkNodes
+            })
+
+        } catch (error) {
+            const alert = {
+                msg: error.response.data.msg,
+                category: 'alerta-error'
+            }
+            dispatch({
+                type:SHOW_ERROR,
+                payload:alert
+            })
+        }
+    }
+
     const showError = () =>{
         dispatch({
             type: SHOW_ERROR
@@ -319,6 +339,7 @@ const NetworkState = props=>{
                 createNetworkNode,
                 getNetworkNodes,
                 getNetworkNode,
+                getNetworkNodesAll,
                 updateNetworkNode,
                 showError,
                 selectNetworkNode,

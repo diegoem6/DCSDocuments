@@ -174,6 +174,9 @@ aside  {
   color: var(--gris2);
 }
 
+.connection-list{
+  width:100%;
+}
 
 .proyectos {
   margin-top: 10rem;
@@ -485,6 +488,15 @@ aside  {
   /* display: flex; */
   justify-content: center;
 }
+
+.container-List{
+  background-color: var(--gris1);
+  height: 100vh;
+  min-height: 100%;
+  margin:3rem;
+  /* display: flex; */
+  justify-content: center;
+}
 .contenedor-form {
     padding: 5rem 3rem;
     margin-left: 1.5rem;
@@ -493,6 +505,16 @@ aside  {
     width: 95%;
     background-color: var(--blanco);
     border-radius: 1rem;
+}
+
+.contenedor-form-connections {
+  padding: 5rem 3rem;
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  height: 95%;
+  width: 95%;
+  background-color: var(--blanco);
+  border-radius: 1rem;
 }
 
 .campo-form {

@@ -15,6 +15,10 @@ router.post('/',
 router.get('/',
     auth,
     networkController.getNetworkNodes) ;
+    
+router.get('/all',
+    auth,
+    networkController.getNetworkNodesAll) ;
 
 router.get('/:id',
     auth,
