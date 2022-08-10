@@ -5,6 +5,7 @@ import networkContext from '../../context/network/networkContext';
 import Connection from './connection';
 import connectionContext from '../../context/connection/connectionContext';
 import ReactPaginate from 'react-paginate';
+import { Link } from 'react-router-dom'
 
 const Connections = () => {
     
@@ -135,7 +136,7 @@ const Connections = () => {
                 <div className="container-List">
                     
                     <div className="campo-form"> 
-                        <select className={`input-text`}
+                        <select className={`input-text-2`}
                             onChange={e => setSource(e.target.value)}
                             value={source} //esto es para que se mantenga seleccionado lo que elegi en el combo, sino vuelve al que estaba antes
                             >
@@ -149,7 +150,7 @@ const Connections = () => {
                             }
                         </select>
                         {/* &#60;---&#62; */}
-                        <select className={`input-text`}
+                        <select className={`input-text-2`}
                             onChange={e => setTarget(e.target.value)}
                             value={target} //esto es para que se mantenga seleccionado lo que elegi en el combo, sino vuelve al que estaba antes
                             >
@@ -166,13 +167,13 @@ const Connections = () => {
                     <div className="campo-form"> 
                         <input  
                             type="text"
-                            className={`input-text`}
+                            className={`input-text-2`}
                             placeholder="Description"
                             name="description"
                             value ={description}
                             onChange = {e => setDescription(e.target.value)}
                         />
-                        <select className={`input-text`}
+                        <select className={`input-text-2`}
                             onChange={e => setType(e.target.value)}
                             value={type} //esto es para que se mantenga seleccionado lo que elegi en el combo, sino vuelve al que estaba antes
                             >
@@ -183,7 +184,7 @@ const Connections = () => {
                     </div>
                     <div className="campo-form">
                             <button 
-                                className="btn btn-block btn-primario"
+                                className="btn btn-block-1 btn-primario"
                                 onClick={createConnectionOnClick}
                             >
                                 Crear conexión
@@ -192,7 +193,7 @@ const Connections = () => {
                     <div className="campo-form">
                         <input  
                             type="text"
-                            className={`input-text`}
+                            className={`input-text-2`}
                             placeholder="Buscar conexiones"
                             name="findConnection"
                             value = {search}
@@ -212,7 +213,7 @@ const Connections = () => {
                             } 
                             
                         </ul>
-                        <div>
+                        <div className='pag-menu'>
                             <ReactPaginate
                                 previousLabel={"<"}
                                 nextLabel={">"}
@@ -225,6 +226,12 @@ const Connections = () => {
                                 containerClassName={"pagination"}
                                 subContainerClassName={"pages pagination"}
                                 activeClassName={"active"}/>
+                            <Link 
+                                to={'/menu'}
+                                className="link-menu">
+                            &#60;
+                                Menu
+                            </Link>
                         </div>
                     </div>
                 </div>
