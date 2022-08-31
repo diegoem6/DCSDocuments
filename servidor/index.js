@@ -8,8 +8,8 @@ const app = express();
 //me conecto a la base
 conectarDB()
 
-app.use (express.json({extended:true}));
-app.use (cors());
+app.use(express.json({ extended: true }));
+app.use(cors());
 
 
 app.use(express.static('public'));
@@ -37,8 +37,10 @@ app.use('/api/files', require('./routes/files'));
 app.use('/api/areas', require('./routes/areas'));
 app.use('/api/architecture', require('./routes/architecture'));
 app.use('/api/connections', require('./routes/connections'));
+app.use('/api/cabinets', require('./routes/cabinets'));
+app.use('/api/cabinetfiles', require('./routes/cabinetfiles'));
 
-app.listen (PORT, ()=>{
+app.listen(PORT, () => {
     console.log(`El server esta levantando en el puerto ${PORT}`)
 })
 
