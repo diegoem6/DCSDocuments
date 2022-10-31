@@ -73,6 +73,7 @@ const Diagram_Networking = () => {
             <ReactFlow
               elements={elements}
               onElementsRemove={onElementsRemove}
+              
               onConnect={onConnect}
               onLoad={onLoad}
               

@@ -29,23 +29,6 @@ const Connection = ({connection}) => {
     }
 
 
-// <li className="tarea sombra">
-//     <p>PMSWSY001A</p>
-//     <p>251C1A</p>
-//     <button
-//         type="button"
-//         className="btn btn-secundario"
-//     >Eliminar</button>
-// </li>
-// <li className="tarea sombra">
-//     <p>PMSWSY001</p>
-//     <p>251C1</p>
-//     <button
-//         type="button"
-//         className="btn btn-secundario"
-//     >Eliminar</button>
-// </li>
-
     return ( 
         <li className="tarea sombra">
         <p>{connection.source}</p>

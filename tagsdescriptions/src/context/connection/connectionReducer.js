@@ -3,7 +3,7 @@ import {
     GET_CONNECTIONS,
     DELETE_CONNECTION,
     SEARCH_CONNECTIONS,
-
+    SHOW_ERROR,
     RESET_MESSAGE
     } from '../../types/index'
 
@@ -42,7 +42,8 @@ export default (state,action)=>{
         case RESET_MESSAGE:
             return ({
                 ...state,
-                message:null
+                message:null,
+                error:false
             })
         
         case SEARCH_CONNECTIONS:
@@ -57,6 +58,13 @@ export default (state,action)=>{
                 message:null,
                 error: false,
             })
+        case SHOW_ERROR:
+            return ({
+                ...state,
+                message:action.payload,
+                error:true
+            })
+            
         default:
             return state;
     }

@@ -24,7 +24,8 @@ exports.createConnection = async (req, res) =>{
             }
         );
         if (connection !== null){
-            return res.status(400).json({msg: 'La conexión ya existe'})
+            console.log("error")
+            return res.status(500).send("La conexion ya existe");
         }
         connection = new Connection(req.body);
         await connection.save();
