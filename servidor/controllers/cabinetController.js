@@ -24,7 +24,6 @@ exports.addCabinet = async (req, res) => {
             return res.status(404).send({ msg: "No existe el asset" })
         }
 
-
         const newCabinet = new Cabinet(req.body);
 
         await newCabinet.save()
@@ -47,7 +46,7 @@ exports.updateCabinet = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
     //Extraer los datos del cuerpo de la petición
-    const { cabinetName, cabinetDescription, cabinetLatitude, cabinetLongitude, cabineteSize, area, _id } = req.body;
+    const { cabinetName, cabinetDescription, cabinetLatitude, cabinetLongitude, cabinetSize, area, _id } = req.body;
 
     try {
         //Buscar el gabinete a actualizar
@@ -63,7 +62,8 @@ exports.updateCabinet = async (req, res) => {
         cabinetUpdate.cabinetDescription = cabinetDescription;
         cabinetUpdate.cabinetLatitude = cabinetLatitude;
         cabinetUpdate.cabinetLongitude = cabinetLongitude;
-        cabinetUpdate.cabineteSize = cabineteSize;
+        cabinetUpdate.cabinetSize = cabinetSize;
+        console.log("El tamaño del gabinete es: ",cabinetSize)
         cabinetUpdate.area = area;
         await cabinetUpdate.save();
         // cabinetUpdate = await Cabinet.findOneAndUpdate({ _id: req.params.id }, cabinetUpdate, { new: true });
@@ -113,7 +113,7 @@ exports.getCabinets = async (req, res) => {
         }
 
         //busco todos los gabinetes 
-        const cabinets = await Cabinet.find({ asset: asset_updated._id }).sort({ creado: -1 });
+        const cabinets = await Cabinet.find({ asset: asset_updated._id }).sort({ cabinetName: 1 });
         res.json({ cabinets });
     } catch (error) {
         console.log(error);

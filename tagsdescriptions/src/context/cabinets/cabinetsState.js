@@ -18,7 +18,8 @@ import {
     UPLOAD_FILE_CABINETS_SUCCESS,
     DELETE_FILE_CABINETS,
     // DELETE_FILE_CABINETS_SUCCESS,
-    RESET_MESSAGE_CABINET
+    RESET_MESSAGE_CABINET,
+    DESELECT_CABINET
 
 } from '../../types/index'
 
@@ -103,12 +104,11 @@ const CabinetState = ({ children }) => {
         }
     }
     const deleteCabinet = async (id) => {
-
         try {
             const result = await axiosClient.delete(`/api/cabinets/${id}`)
             dispatch({
                 type: DELETE_CABINET,
-                payload: result._id
+                payload: id
             })
         } catch (error) {
             const alert = {
@@ -120,6 +120,7 @@ const CabinetState = ({ children }) => {
                 payload: alert
             })
         }
+        
     }
     const selectCabinet = (cabinetID) => {
         getCabinet(cabinetID)
@@ -132,7 +133,7 @@ const CabinetState = ({ children }) => {
         try {
             const options = {
                 maxSizeMB: 1,
-                maxWidthOrHeight: 400,
+                maxWidthOrHeight: 1000,
                 useWebWorker: true
             }
 
@@ -197,6 +198,14 @@ const CabinetState = ({ children }) => {
         })
     }
 
+
+    const deSelectCabinet = async ()=>{
+        dispatch({
+            type: DESELECT_CABINET,
+            payload: null
+        })
+    }
+
     const deleteFileCabinet = async (idCabinet, fileNameDeleted) => {
 
         try {
@@ -239,6 +248,7 @@ const CabinetState = ({ children }) => {
             uploadFileCabinet,
             updateCabinet,
             selectCabinet,
+            deSelectCabinet,
             deleteFileCabinet
         }}>
             {children}

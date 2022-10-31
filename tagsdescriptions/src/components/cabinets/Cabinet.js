@@ -1,12 +1,20 @@
 /* eslint-disable no-undef */
 import React, { useContext } from 'react'
+import { useEffect } from 'react';
 import { confirmAlert } from 'react-confirm-alert';
 import CabinetsContext from '../../context/cabinets/cabinetsContext';
+import CabinetStatus from './CabinetStatus';
 
 const Cabinet = ({ cabinet }) => {
 
     const cabContext = useContext(CabinetsContext)
-    const { deleteCabinet, showForm, selectCabinet } = cabContext
+    const { deleteCabinet, showForm, selectCabinet, getCabinet, cabinetSelected } = cabContext
+
+    useEffect(()=>{
+        if(cabinetSelected){
+            console.log(cabinetSelected.files)
+        }
+    }, [cabinetSelected])
 
     const delCabinet = () => {
         deleteCabinet(cabinet._id)
@@ -64,8 +72,10 @@ const Cabinet = ({ cabinet }) => {
                     type="button"
                     className="btn btn-secundario"
                     onClick={() => {
+                        //getCabinet(cabinet._id)
+                        console.log(cabinet._id)
                         localStorage.setItem('cabinetstatusID', cabinet._id) //guardo en el localstorage una variable tagdescriptorID con el dato tagdescriptor._id
-                        window.open('/cabinetstatus') // /events esta definido en app.js
+                        window.open('/CabinetStatus') // /events esta definido en app.js
                     }
                         /*<NetworkStatus />*/
                     }
@@ -75,9 +85,9 @@ const Cabinet = ({ cabinet }) => {
                     className="btn btn-secundario"
                     onClick={showDialogConfirm}
                 >Confirm</button> */}
-
             </div>
         </li>
+        
     )
 }
 

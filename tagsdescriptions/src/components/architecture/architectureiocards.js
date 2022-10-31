@@ -69,13 +69,13 @@ const createArchitectureDevices = (arquitectura=[])=>{
             switch (eq.level){ //elementos conectados al switch: CF9, Thin Clients, servidores 
                   case 0:     posx=xlevel0
                               xlevel0=xlevel0+250
-                              posy=ylevel1 - 150
+                              posy=ylevel1 - 100
                               posin='top' // no se por que no le da bola al top
                               cName = ''
                     break;
                   case 1:     posx=400 // los devices (conexiones al CF9: C300, PGM, etc)
                               posy=ylevel1
-                              ylevel1=ylevel1+230
+                              ylevel1=ylevel1+180
                               xlevel0=600
                               posin='left'
                               posout='right'

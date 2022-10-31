@@ -20,7 +20,7 @@ router.get('/',
     auth,
     cabinetController.getCabinets);
 router.get('/:id',
-    auth,
+    //auth,
     cabinetController.getCabinet);
 router.put('/:id',
     auth,

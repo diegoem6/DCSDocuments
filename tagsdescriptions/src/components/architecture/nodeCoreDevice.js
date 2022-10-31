@@ -89,7 +89,7 @@ export default memo(({ data, isConnectable }) => {
       </div>
 
 
-      {(((data.devicetype) === 'CF9' || (data.devicetype) === 'C300' || (data.devicetype) === 'PGM')) ?
+      {(((data.devicetype) === 'CF9' || (data.devicetype) === 'PGM')) ?
           <input
           className={data.cName}
           type="button"
@@ -105,7 +105,44 @@ export default memo(({ data, isConnectable }) => {
       :
         (null)
       }
-
+      
+      {((data.devicetype) === 'C300')?
+        <div className="div_buttons_architecture_devices" //aca tengo que poner una clase para que un boton quede abajo del otro
+        > 
+          <input
+            className={data.cName}
+            type="button"
+            //style="background-color: black; color : white;"
+            value="Connections"
+            defaultValue={data.color}
+            onClick={()=>
+              {   console.log("Hola loco")
+                  getNetworkNodeID(data.equipo)
+                  //getNodeID(data.equipo) //levanto el id del nodo
+                  //localStorage.setItem('devicestatusID',networkNodeID) //guardo en el localstorage una variable networkstatusID con el dato networkNode._id
+                  //window.open('/networkstatus') // /events esta definido en app.js
+              }
+              /*<NetworkStatus />*/
+            }
+          />
+          <input
+            className={data.cName}
+            type="button"
+            //style="background-color: black; color : white;"
+            value="       Status       "
+            defaultValue={data.color}
+            onClick={()=>
+              {   
+                  getDeviceID(data.equipo)
+              }
+            }
+          />
+        </div>
+        :
+          (null)
+      }
+      
+      
       {(data.posout) ?
         <Handle
           type="source"

@@ -86,6 +86,14 @@ const Menu = () => {
                             Gabinetes
                         </Link>
                     </div>
+                    <div className="campo-form">
+                        <Link
+                            to={'/iocards'}
+                            className="btn btn-block btn-primario"
+                        >
+                            Tarjetas I/O
+                        </Link>
+                    </div>
                 </div>
 
 

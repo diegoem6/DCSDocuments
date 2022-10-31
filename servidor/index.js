@@ -12,7 +12,7 @@ app.use(express.json({ extended: true }));
 app.use(cors());
 
 
-app.use(express.static('public'));
+app.use(express.static('cabinetsFiles')); //la carpeta publica del servidor
 // seteo el puerto donde levanta el server != de 3000
 const PORT = process.env.PORT || 4000;
 
@@ -39,6 +39,7 @@ app.use('/api/architecture', require('./routes/architecture'));
 app.use('/api/connections', require('./routes/connections'));
 app.use('/api/cabinets', require('./routes/cabinets'));
 app.use('/api/cabinetfiles', require('./routes/cabinetfiles'));
+app.use('/api/iocards', require('./routes/iocards'));
 
 app.listen(PORT, () => {
     console.log(`El server esta levantando en el puerto ${PORT}`)

@@ -4,12 +4,12 @@ import authContext from '../../context/auth/authContext'
 import alertContext from '../../context/alerts/alertContext';
 import assetContext from '../../context/asset/assetContext';
 import CabinetsContext from '../../context/cabinets/cabinetsContext';
-
+import CabinetImages from './CabinetImages';
 
 const CabinetStatus = () => {
 
     const cabContext = useContext(CabinetsContext)
-    const { selectCabinet, cabinetSelected } = cabContext
+    const { selectCabinet, cabinetSelected, getCabinet } = cabContext
     const aContext = useContext(alertContext)
     const { alert } = aContext
     const asContext = useContext(assetContext)
@@ -25,10 +25,13 @@ const CabinetStatus = () => {
     const [cabinetDescription, setCabinetDescription] = useState('')
     const [cabinetLatitude, setCabinetLatitude] = useState('')
     const [cabinetLongitude, setCabinetLongitude] = useState('')
-    const [cabinetSize, setCabinetSize] = useState('')
+    const [cabinetSize, setCabinetSize] = useState('') //ver....
+    const [files, setFiles] = useState([])
 
     useEffect(() => {
         if (cabinetstatusID) {
+            getCabinet(cabinetstatusID)
+            console.log(cabinetstatusID)
             selectCabinet(cabinetstatusID)
             localStorage.setItem('cabinetstatusID', '')
 
@@ -48,7 +51,7 @@ const CabinetStatus = () => {
                 setCabinetLongitude(cabinetSelected.cabinetLongitude)
                 setCabinetSize(cabinetSelected.cabinetSize)
                 setCabinetDescription(cabinetSelected.cabinetDescription)
-
+                setFiles(cabinetSelected.files)
             }
             else {
                 setCabinetName('');
@@ -57,18 +60,21 @@ const CabinetStatus = () => {
                 setCabinetLongitude('');
                 setCabinetSize('');
                 setCabinetDescription('');
+                setFiles([]);
             }
         }
         // eslint-disable-next-line
     }, [cabinetSelected])
     //const { cabinetName, cabinetArea, cabinetLatitude, cabinetLongitude, cabinetSize, cabinetDescription } = this;
 
-    console.log(cabinetstatusID)
     return (
         <>
             <div className="divHeaderNetwork">
                 <h1>{cabinetName}</h1>
             </div>
+            <CabinetImages 
+                imgs={files}
+            />
         </>
     )
 }

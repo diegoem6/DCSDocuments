@@ -22,14 +22,16 @@ const CabinetsList = () => {
 
 
     useEffect(() => {
-        if (asset) {
-            getCabinets(asset[0]._id)
+        const listCabinets=()=>{
+            if (asset) {
+                getCabinets(asset[0]._id)
+            }
         }
-
+        listCabinets()
     }, [asset])
 
     useEffect(() => {
-        if (cabinets) {
+        if (asset) {
 
             setPag(
                 {

@@ -5,6 +5,7 @@ import alertContext from '../../context/alerts/alertContext';
 import { useDropzone } from 'react-dropzone'
 import { Fragment } from 'react';
 import { confirmAlert } from 'react-confirm-alert';
+import QRCode from "react-qr-code";
 
 const NewCabinets = () => {
     //Obtengo el state para los gabinetes
@@ -41,7 +42,6 @@ const NewCabinets = () => {
     useEffect(() => {
         getAreas();
         if (cabinetSelected) {
-
             setCabinetName(cabinetSelected.cabinetName);
             setCabinetArea(cabinetSelected.area)
             setCabinetLatitude(cabinetSelected.cabinetLatitude)
@@ -215,9 +215,9 @@ const NewCabinets = () => {
                     : null
             }
 
-            <div className="formDescriptor">
-                <div className="descriptor">
-                    <h2>Nuevo Gabinete</h2>
+            <div className="formNode">
+                <div className="node">
+                    <h2>Gabinete en el asset: {asset[0].name}</h2>
                     <form
                         className="formulario-nuevo-proyecto"
                         onSubmit={onSubmitNewCabinet}
@@ -274,7 +274,7 @@ const NewCabinets = () => {
                             <option value="2">Tamaño 2</option>
                             <option value="3">Tamaño 3</option>
                         </select>
-                        <textarea name="cabinetDescription" cols="30" rows="10"
+                        <textarea name="cabinetDescription" cols="30" rows="2"
                             className={`input-text`}
                             placeholder="Descripción del Gabinete"
                             value={cabinetDescription}
@@ -306,6 +306,14 @@ const NewCabinets = () => {
                                     {filesSaved}
                                 </ul>
                             </aside>
+                            <div style={{ height: "auto", margin: "0 auto", maxWidth: 140, width: "100%" }}>
+                                <QRCode
+                                    size={256}
+                                    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                                    value={`localhost:3000/cabinets/qr/${cabinetName}`}
+                                    viewBox={`0 0 256 256`}
+                                />
+                            </div>
                         </Fragment>
 
                         <input type="submit" className="btn btn-primario btn-block" value={cabinetSelected ? 'Guardar Gabinete' : 'Crear Gabinete'} />

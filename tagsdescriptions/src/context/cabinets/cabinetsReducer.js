@@ -14,6 +14,7 @@ import {
     //UPLOAD_FILE_CABINETS_ERROR,
     DELETE_FILE_CABINETS,
     DELETE_FILE_CABINETS_SUCCESS,
+    DESELECT_CABINET
     //DELETE_FILE_CABINETS_ERROR,
 } from '../../types';
 
@@ -65,6 +66,12 @@ export default (state, action) => {
                 error: false,
                 message: null
             }
+        case DESELECT_CABINET:
+            return ({
+                ...state,
+                cabinetSelected: null,
+                message:null
+            })
         case UPDATE_CABINETS:
             return {
                 ...state,
