@@ -24,7 +24,6 @@ const Diagram_Devices = () => {
 
   const networkNodeName = localStorage.getItem('networkNodeName');
 
-  console.log(architectureDevices)
   useEffect(() => {
 
     console.log(architectureDevices)

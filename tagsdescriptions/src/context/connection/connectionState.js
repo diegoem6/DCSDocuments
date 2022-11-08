@@ -6,7 +6,7 @@ import {
     GET_CONNECTIONS,
     DELETE_CONNECTION,
     SEARCH_CONNECTIONS,
-
+    
     SHOW_ERROR,
     RESET_MESSAGE
     } from '../../types/index'
@@ -39,8 +39,9 @@ const ConnectionState = props=>{
                 payload: res.data.connection
             })
         } catch (error) {
+            console.log(error.response.data)
             const alert = {
-                msg: error.response.data.msg,
+                msg: error.response.data,
                 category: 'alerta-error'
             }
             dispatch({
@@ -116,14 +117,14 @@ const ConnectionState = props=>{
                 connections: state.connections,
                 error: state.error,
                 connectionsSearch: state.connectionsSearch,
-                
+                message: state.message,
+
                 createConnection,
                 getConnections,
                 resetMessage,
                 showError,
                 deleteConnection,
                 searchConnections
-                
             }}
         >
 

@@ -5,10 +5,14 @@ import networkContext from '../../context/network/networkContext';
 import Connection from './connection';
 import connectionContext from '../../context/connection/connectionContext';
 import ReactPaginate from 'react-paginate';
+import alertContext from '../../context/alerts/alertContext';
 import { Link } from 'react-router-dom'
 
 const Connections = () => {
     
+
+    const aContext = useContext(alertContext)
+    const {alert, showAlert} = aContext
 
     const dContext = useContext(deviceContext)
     const {getDevicesAll, devicesSearch} = dContext
@@ -17,7 +21,7 @@ const Connections = () => {
     const {getNetworkNodesAll, networkNodes} = nContext
 
     const cContext = useContext(connectionContext)
-    const {getConnections, searchConnections, createConnection, connectionsSearch} = cContext
+    const {getConnections, searchConnections, createConnection, connectionsSearch, message, resetMessage} = cContext
 
     const [source, setSource] = useState('')
     const [target, setTarget] = useState('')
@@ -35,6 +39,14 @@ const Connections = () => {
         })
     
     
+    
+    useEffect(() => { //para los errores
+        if(message){
+            showAlert(message.msg, message.category)
+            resetMessage()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [message])
     
     useEffect(() => {
         //if (connectionsSearch)
@@ -97,19 +109,20 @@ const Connections = () => {
      const createConnectionOnClick = (e) =>{
         
         if (source === ""){
-            alert("completa bien nabo")
+            //alert("completa bien nabo")
+            showAlert('El origen es obligatorio', "alerta-error")
             return;
         }
         if (target === ""){
-            alert("completa bien nabo")
+            showAlert('El destino es obligatorio', "alerta-error")
             return;
         }
         if (type === ""){
-            alert("completa bien nabo")
+            showAlert('El tipo es obligatorio', "alerta-error")
             return;
         }
         if (source === target){
-            alert("completa bien nabo")
+            showAlert('El origen y el destino no pueden ser el mismo nodo', "alerta-error")
             return;
         }
         
@@ -131,8 +144,10 @@ const Connections = () => {
         <Fragment>
             <Header/>
             
-                {/* {alert? (<div className={`alerta ${alert.category}`}>{alert.msg} </div>)
-                    :null} */}
+                {
+                    alert ? (<div className={`alerta ${alert.category}`}>{alert.msg} </div>)
+                    :null
+                } 
                 <div className="container-List">
                     
                     <div className="campo-form"> 
