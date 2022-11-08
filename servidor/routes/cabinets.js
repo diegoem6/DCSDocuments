@@ -16,6 +16,10 @@ router.post('/',
     ],
     cabinetController.addCabinet);
 
+router.get('/cabinetname/:cabinetname',
+    //auth,
+    cabinetController.getCabinetbyName);
+
 router.get('/',
     auth,
     cabinetController.getCabinets);

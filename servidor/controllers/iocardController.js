@@ -25,7 +25,7 @@ exports.addIOCard = async (req,res)=>{
             return res.status(404).send({msg:"No existe el asset"})
         }
 
-        const {tagname, type, iolink, deviceIndex, redundant, cabinet, location, controllerA, controllerB} = req.body //recibo por el body todos los campos de la iocard y me quedo solo con el tagname
+        const {tagname, type, iolink, deviceIndex, cabinet, location, controllerA} = req.body //recibo por el body todos los campos de la iocard y me quedo solo con el tagname
         //const exist_iocard = await IOCard.find({tagname:tagname}) //campo:valor
         console.log(tagname)
         const exist_iocard = await IOCard.find({tagname:tagname}) //campo:valor
@@ -40,6 +40,26 @@ exports.addIOCard = async (req,res)=>{
         //verifico que se ingrese bien la ubicacion:----------------------------
         const tipoIO = await DeviceTypeCabinet.find({_id:type}) // accedo al tamaño de la IO
         //console.log(tipoIO)
+        
+        //verificar controlador si es redundante o simple
+        let controllerB=null
+        const controladorA_all = await Device.findById(controllerA)
+        const controladorA = controladorA_all.deviceName
+        console.log(controladorA);
+        if (controladorA.slice(-1) === "A"){
+            const controladorB = controladorA.substring(0, controladorA.length - 1) + "B"
+            console.log("El controlador B es: ", controladorB)
+            const controladorB_all = await Device.find({deviceName:controladorB})
+            console.log(controladorB_all)
+            if (controladorB_all.length){ //si length tiene algo distinto de 0 entonces hay algo en el array
+                console.log("Hay controlador redundante")
+                controllerB = controladorB_all[0]._id
+                console.log("El ID del controlador B es: ",controllerB)
+            }
+        }
+        ///************************************* */
+
+        //verificar ubicacion:------------------------------------
         const sizeIO = tipoIO[0].size
         const ioCabinet = await IOCard.aggregate([{ //aggregate agrega capas antes de enviar el resultado
             $lookup:{ //se encarga del join
@@ -55,10 +75,11 @@ exports.addIOCard = async (req,res)=>{
         //const ioCabinet = await IOCard.find({cabinet: cabinet}).sort({side:-1})
         
         const gabinete = await Cabinet.find({_id: cabinet}) // accedo a todas las propiedades del gabinete
-        const sizeCabinet = gabinete[0].size; //levanto el tamaño del gabinete
+        const sizeCabinet = gabinete[0].cabinetSize; //levanto el tamaño del gabinete
         
         let newLocation = verifyLocation(sizeIO, location, ioCabinet, sizeCabinet)
-        
+        //------------------------------------------------------------------------------------------------------------------------------------------------
+
         if (newLocation.error==="Error1"){
             return res.status(500).send({msg:"La ubicación debe contener LB, RB o MB"})
         }
@@ -107,7 +128,7 @@ exports.updateIOCard = async (req,res)=>{
             //console.log("No existe el dispositivo");
             return res.status(404).send({msg:"No existe la tarjeta IO"})
         }
-        const {tagname, type, iolink, deviceIndex, redundant, cabinet, location, controllerA, controllerB} = req.body //recibo por el body todos los campos de la iocard y me quedo solo con el tagname
+        const {tagname, type, iolink, deviceIndex, cabinet, location, controllerA} = req.body //recibo por el body todos los campos de la iocard y me quedo solo con el tagname
         
         //verifico que el tagname no se encuentre repetido:
         iocardUpdate.tagname = tagname
@@ -115,14 +136,29 @@ exports.updateIOCard = async (req,res)=>{
         iocardUpdate.type = type
         iocardUpdate.iolink = iolink
         iocardUpdate.deviceIndex = deviceIndex
-        iocardUpdate.redundant = redundant
         iocardUpdate.location = location
         iocardUpdate.cabinet = cabinet
         iocardUpdate.controllerA = controllerA
-        if (controllerB!==null){
-            iocardUpdate.controllerB = controllerB
-        }        
-        console
+        
+        //verificar controlador si es redundante o simple
+        let controllerB=null
+        const controladorA_all = await Device.findById(controllerA)
+        const controladorA = controladorA_all.deviceName
+        console.log(controladorA);
+        if (controladorA.slice(-1) === "A"){
+            const controladorB = controladorA.substring(0, controladorA.length - 1) + "B"
+            console.log("El controlador B es: ", controladorB)
+            const controladorB_all = await Device.find({deviceName:controladorB})
+            console.log(controladorB_all)
+            if (controladorB_all.length){ //si length tiene algo distinto de 0 entonces hay algo en el array
+                console.log("Hay controlador redundante")
+                controllerB = controladorB_all[0]._id
+                console.log("El ID del controlador B es: ",controllerB)
+            }
+        }
+        iocardUpdate.controllerB = controllerB
+        ///************************************* */
+        
         //verifico que se ingrese bien la ubicacion:----------------------------
         const tipoIO = await DeviceTypeCabinet.find({_id:type}) // accedo al tamaño de la IO
         //console.log(tipoIO)
@@ -144,7 +180,7 @@ exports.updateIOCard = async (req,res)=>{
         ])
         //console.log("BOOLOOLOLOLO", ioCabinet)
         const gabinete = await Cabinet.find({_id: cabinet}) // accedo a todas las propiedades del gabinete
-        const sizeCabinet = gabinete[0].size; //levanto el tamaño del gabinete
+        const sizeCabinet = gabinete[0].cabinetSize; //levanto el tamaño del gabinete
         
         //console.log( sizeIO,"-", location,"-", ioCabinet,"-", sizeCabinet)
         let newLocation = verifyLocation(sizeIO, location, ioCabinet, sizeCabinet)
@@ -169,7 +205,6 @@ exports.updateIOCard = async (req,res)=>{
             iocardUpdate = await IOCard.findOneAndUpdate({_id:req.params.id},iocardUpdate,{new:true});
             return res.json({iocardUpdate})
         }
-        //res.json("HOLA")
     } catch ({error}) {
         console.log(error);
         res.status(500).send({msg:"No se pudo crear la tarjeta con ese tagname, contacte a un administrador"})
@@ -342,7 +377,7 @@ exports.getIOCardControllersAll = async (req,res)=>{ //levanto todos los control
     }
 }
 
-exports.getIOCardControllersA = async (req,res)=>{ //levanto todos los controladores excepto los que terminan en B
+exports.getIOCardControllers_sinB = async (req,res)=>{ //levanto todos los controladores excepto los que terminan en B
     //console.log("En el controllerA")
     const errors = validationResult(req);
     
@@ -629,5 +664,6 @@ const verifyLocation = (sizeIO, location, ioCabinet, sizeCabinet) => {
     return ({side, position})
 }
 
+//const getIDControllerB
 
 

@@ -25,7 +25,10 @@ const CabinetImages=({imgs})=>{
     const [index, setIndex] = useState(0)
   
     useEffect(()=>{
-        setIndex(0)
+      console.log("HOLLLLLLA", imgs)  
+      setIndex(0)
+      console.log(index)
+      console.log('Las imagenes son: ',imgs)
     },[])
 
     const next =() => {
@@ -45,17 +48,17 @@ const CabinetImages=({imgs})=>{
     }
 /*👈👉*/
     return( 
-      {imgs} ?
-        (<div className='img_contenedor'>
-          <img className='img_mainImg' src={`http://localhost:4000//${imgs[index]}`} />
-          <div className='img_actions'>
-            <button onClick={prev} className="btn btn-primario">Anterior</button>
-            <button onClick={next} className="btn btn-primario">Siguiente</button>
-          </div>
-          <Thumbnail arr={imgs} image={setIndex} index={index}/>
-        </div>
-        )
-        : 
+       {imgs} ?
+         (<div className='img_contenedor'>
+           <img className='img_mainImg' src={`http://localhost:4000//${imgs[index]}`} />
+           <div className='img_actions'>
+             <button onClick={prev} className="btn btn-primario">Anterior</button>
+             <button onClick={next} className="btn btn-primario">Siguiente</button>
+           </div>
+           <Thumbnail arr={imgs} image={setIndex} index={index}/>
+         </div>
+         )
+         : 
           (<h2>No hay imagenes para mostrar</h2>)
     )
 }

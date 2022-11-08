@@ -80,7 +80,7 @@ function App() {
                                 <PrivateRoute exact path="/changePassword" component={ChangePassword} />
                                 <PrivateRoute exact path="/connections" component={Connections} />
                                 <PrivateRoute exact path="/cabinets" component={Cabinets} />
-                                <Route exact path="/cabinetStatus" component={CabinetStatus} />
+                                <Route exact path="/cabinetStatus/:cabinetNameParam" component={CabinetStatus} />
                                 <PrivateRoute exact path="/iocards" component={IOCards}/>
                               </Switch>
                             </Router>

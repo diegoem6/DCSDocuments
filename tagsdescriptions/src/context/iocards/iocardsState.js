@@ -18,7 +18,8 @@ import {
     GET_IOCARD_NODE_ID,
     GET_IOCARD_CONTROLLERS,
     GET_IOCARD_CABINETS,
-    DESELECT_IOCARD_NODE_ID
+    DESELECT_IOCARD_NODE_ID,
+    GET_IOCARD_CONTROLLERS_SINB
     } from '../../types/index'
 
 import axiosClient from '../../config/axios'
@@ -196,6 +197,28 @@ const IOCardsState = props=>{
             })
         }
     }
+
+
+    const getIOCardControllers_sinB = async () =>{ //levanta todos los C300 menos los B
+        try{
+            const res = await axiosClient.get('/api/iocards/iocardcontrollerssinB')
+            dispatch({
+                type: GET_IOCARD_CONTROLLERS_SINB,
+                payload: res.data.allControllers /*mismo nombre que devuelve el controller en el server*/
+            })
+        }
+        catch(error){
+            const alert = {
+                msg: error.response.data.msg,
+                category: 'alerta-error'
+            }
+            dispatch({
+                type:SHOW_ERROR,
+                payload:alert
+            })
+        }
+    }
+
 
     const getIOCardCabinets = async () =>{ //levanta todos los C300
         try{
@@ -402,6 +425,7 @@ const IOCardsState = props=>{
                 getDeviceID,
                 deselectDeviceId,
                 getIOCardControllers,
+                getIOCardControllers_sinB,
                 getIOCardCabinets
                 
             }}

@@ -11,6 +11,7 @@ import {
     GET_IOCARD_TYPES,
     GET_IOCARD_TYPE,
     GET_IOCARD_CONTROLLERS,
+    GET_IOCARD_CONTROLLERS_SINB,
     GET_IOCARD_CABINETS,
     RESET_MESSAGE,
     GET_IOCARD_STATUS,
@@ -87,6 +88,7 @@ export default (state,action)=>{
                 form:!state.form,
                 error:false
             })
+        case GET_IOCARD_CONTROLLERS_SINB:
         case GET_IOCARD_CONTROLLERS: //levanta todos los C300
             return({
                 ...state,

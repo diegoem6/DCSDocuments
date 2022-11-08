@@ -39,8 +39,8 @@ const cabinets = () => {
 
     useEffect(() => {
         if (cabinetSelected){
-            console.log(cabinetSelected.files.length)
-            console.log(cabinetSelected.files)
+            //console.log(cabinetSelected.files.length)
+            //console.log(cabinetSelected.files)
             setSizeArray(cabinetSelected.files.length) //tarda en actualizar el sizeArray
             console.log("El array tiene: ",sizeArray)
         }

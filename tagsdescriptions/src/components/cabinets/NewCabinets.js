@@ -269,10 +269,9 @@ const NewCabinets = () => {
                             onChange={e => setCabinetSize(e.target.value)}
                             value={cabinetSize}
                         >
-                            <option value="">Seleccione Tamaño del Gabinete</option>
-                            <option value="1">Tamaño 1</option>
-                            <option value="2">Tamaño 2</option>
-                            <option value="3">Tamaño 3</option>
+                            <option value="">Seleccione Tamaño del Gabinete (Slots)</option>
+                            <option value="1">12</option>
+                            <option value="2">24</option>
                         </select>
                         <textarea name="cabinetDescription" cols="30" rows="2"
                             className={`input-text`}
@@ -310,7 +309,7 @@ const NewCabinets = () => {
                                 <QRCode
                                     size={256}
                                     style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                                    value={`localhost:3000/cabinets/qr/${cabinetName}`}
+                                    value={`localhost:3000/CabinetStatus/${cabinetName}`}
                                     viewBox={`0 0 256 256`}
                                 />
                             </div>
