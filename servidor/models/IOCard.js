@@ -25,10 +25,10 @@ const IOCardSchema = mongoose.Schema({
         type:Number,
         require:true
     },
-    redundant:{
+    /*redundant:{
         type:Boolean,
         default:false
-    },
+    },*/
     cabinet:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Cabinet' //hace referencia al id del modelo cabinet

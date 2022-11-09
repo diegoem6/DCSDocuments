@@ -3,6 +3,7 @@ import {
     CREATE_CABINET,
     GET_CABINETS,
     GET_CABINET,
+    GET_CABINETBYNAME,
     DELETE_CABINET,
     SELECT_CABINET,
     UPDATE_CABINETS,
@@ -44,12 +45,14 @@ export default (state, action) => {
                 message: null
             }
         case GET_CABINET:
+        case GET_CABINETBYNAME: //hacen lo mismo, solo cambia el payload
             return {
                 ...state,
                 cabinetSelected: action.payload,
                 error: false,
                 message: null
             }
+        
         case DELETE_CABINET:
             return {
                 ...state,

@@ -17,7 +17,7 @@ const NewIOCard = () => {
     const {deviceSelected, createDevice, updateDevice, devicetypes, getDeviceTypes} = dContext
 
     const iContext = useContext(iocardContext);
-    const {iocardsSelected, showForm, createIOCard, updateIOCard, message, resetMessage, getIOCardTypes, iocardtypes, getIOCardControllers, iocardcontrollers, getIOCardCabinets, iocardcabinets} = iContext
+    const {iocardsSelected, showForm, createIOCard, updateIOCard, message, resetMessage, getIOCardTypes, iocardtypes, getIOCardControllers, getIOCardControllers_sinB, iocardcontrollers, getIOCardCabinets, iocardcabinets} = iContext
 
     const aContext = useContext(alertContext)
     const {alert, showAlert} = aContext
@@ -41,7 +41,8 @@ const NewIOCard = () => {
         //console.log(deviceSelected)
         //agregar para los combos de gabinetes y 
         getIOCardTypes() //levanta todos los tipos de IOs
-        getIOCardControllers() //levanta todos los C300
+        //getIOCardControllers() //levanta todos los C300
+        getIOCardControllers_sinB() //levanta todos los C300 excepto los B
         getIOCardCabinets()
         //console.log("Aca estoy")
         console.log("Entrooooo", iocardcabinets)

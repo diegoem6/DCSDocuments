@@ -9,6 +9,7 @@ import {
     CREATE_CABINET,
     GET_CABINETS,
     GET_CABINET,
+    GET_CABINETBYNAME,
     DELETE_CABINET,
     //SELECT_CABINET,
     UPDATE_CABINETS,
@@ -103,6 +104,20 @@ const CabinetState = ({ children }) => {
             console.log(error);
         }
     }
+
+    const getCabinetbyName = async cabinetname => {
+        try {
+            const result = await axiosClient.get(`api/cabinets/cabinetname/${cabinetname}`)
+            // console.log(result.data.cabinet)
+            dispatch({
+                type: GET_CABINETBYNAME,
+                payload: result.data.cabinet
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const deleteCabinet = async (id) => {
         try {
             const result = await axiosClient.delete(`/api/cabinets/${id}`)
@@ -124,6 +139,10 @@ const CabinetState = ({ children }) => {
     }
     const selectCabinet = (cabinetID) => {
         getCabinet(cabinetID)
+    }
+
+    const selectCabinetbyName = (cabinetName) =>{
+        getCabinetbyName(cabinetName)
     }
 
     const uploadFileCabinet = async (cabinet, files) => {
@@ -240,6 +259,7 @@ const CabinetState = ({ children }) => {
             error: state.error,
             createCabinet,
             getCabinet,
+            getCabinetbyName,
             getCabinets,
             deleteCabinet,
             showForm,
@@ -248,6 +268,7 @@ const CabinetState = ({ children }) => {
             uploadFileCabinet,
             updateCabinet,
             selectCabinet,
+            selectCabinetbyName,
             deSelectCabinet,
             deleteFileCabinet
         }}>

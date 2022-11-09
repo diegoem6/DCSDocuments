@@ -8,7 +8,7 @@ import CabinetStatus from './CabinetStatus';
 const Cabinet = ({ cabinet }) => {
 
     const cabContext = useContext(CabinetsContext)
-    const { deleteCabinet, showForm, selectCabinet, getCabinet, cabinetSelected } = cabContext
+    const { deleteCabinet, showForm, selectCabinet, getCabinet, cabinetSelected, getCabinetbyName } = cabContext
 
     useEffect(()=>{
         if(cabinetSelected){
@@ -72,10 +72,15 @@ const Cabinet = ({ cabinet }) => {
                     type="button"
                     className="btn btn-secundario"
                     onClick={() => {
-                        //getCabinet(cabinet._id)
+                        /*
+                        getCabinet(cabinet._id)
                         console.log(cabinet._id)
                         localStorage.setItem('cabinetstatusID', cabinet._id) //guardo en el localstorage una variable tagdescriptorID con el dato tagdescriptor._id
-                        window.open('/CabinetStatus') // /events esta definido en app.js
+                        window.open('/CabinetStatus/' + cabinet._id) // /events esta definido en app.js
+                        */
+                        getCabinetbyName(cabinet.cabinetName)
+                        window.open('/CabinetStatus/' + cabinet.cabinetName) // /events esta definido en app.js
+                        
                     }
                         /*<NetworkStatus />*/
                     }

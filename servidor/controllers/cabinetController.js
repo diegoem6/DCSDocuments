@@ -96,6 +96,22 @@ exports.getCabinet = async (req, res) => {
     }
 } //end getCabinet
 
+exports.getCabinetbyName = async (req, res) => {
+    //console.log(req.params.cabinetname);
+    try {
+        const cabinet = await Cabinet.find({cabinetName: req.params.cabinetname});
+        if (!cabinet) {
+            console.log('No existe el gabinete');
+            return res.status(404).send({ msg: 'No Existe el Gabinete' });
+        }
+        res.json({ cabinet });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Hubo un error');
+    }
+} //end getCabinet
+
+
 exports.getCabinets = async (req, res) => {
     //controlo que no haya errores de validación
     const errors = validationResult(req);

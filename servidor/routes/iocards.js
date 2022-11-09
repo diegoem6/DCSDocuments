@@ -12,7 +12,7 @@ router.post('/',
         check('iolink','El iolink debe ser 1 o 2').isNumeric(),
         check('deviceIndex','El deviceIndex de la iocard no puede estar vacío').not().isEmpty(),
         check('deviceIndex','El deviceIndex debe ser un número').isNumeric(),
-        check('redundant','La redundancia de la iocard no puede estar vacío').not().isEmpty(),
+        //check('redundant','La redundancia de la iocard no puede estar vacío').not().isEmpty(),
         check('cabinet','El gabinete donde se encuentra la iocard no puede estar vacío').not().isEmpty(),
         check('location','El formato de la ubicacion debe ser, por ej:  MB-10').not().isEmpty(),
         check('location','El formato de la ubicacion debe ser, por ej:  MB-10').contains("-"), //tiene que contener el "-"
@@ -31,8 +31,8 @@ router.get('/all',
     //auth,
     iocardController.getIOCardsAll) ;
 
-router.get('/controllersA/',
-    iocardController.getIOCardControllersA);
+router.get('/iocardcontrollerssinB/',
+    iocardController.getIOCardControllers_sinB);
 
 
 router.put('/:id',
@@ -43,7 +43,7 @@ router.put('/:id',
         check('iolink','El iolink debe ser 1 o 2').isNumeric(),
         check('deviceIndex','El deviceIndex de la iocard no puede estar vacío').not().isEmpty(),
         check('deviceIndex','El deviceIndex debe ser un número').isNumeric(),
-        check('redundant','La redundancia de la iocard no puede estar vacío').not().isEmpty(),
+        //check('redundant','La redundancia de la iocard no puede estar vacío').not().isEmpty(),
         check('cabinet','El gabinete donde se encuentra la iocard no puede estar vacío').not().isEmpty(),
         check('location','El formato de la ubicacion debe ser, por ej:  MB-10').not().isEmpty(),
         check('location','El formato de la ubicacion debe ser, por ej:  MB-10').contains("-"), //tiene que contener el "-"
