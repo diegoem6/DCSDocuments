@@ -1319,11 +1319,31 @@ th:last-child {
   align-items: center;
   padding: 2rem 2rem;
 }
+
 /*.img_active{
   border: 2px solid #01db9b;
   transform: scale(1.3);
   transition: all 300ms;
 }*/
+.lista-horizontal{
+  display:inline;
+     padding-left:3px;
+     padding-right:3px;
+}
+.contenedor-img{
+  display:flex;
+  flex-wrap: wrap;
+}
+.contenedor-flex div{
+  flex-basis:33%;
+  padding: 10px 0;
+  text-align:center;
+}
+@media (max-width:500px){
+ .contenedor-flex div {
+   flex-basis:100%;
+  }
+}
 .img_slideshow{
   /*position: relative;
   width: 100%;

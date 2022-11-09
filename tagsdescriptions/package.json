@@ -31,7 +31,9 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "react-simple-tree-menu": "^1.1.15",
-    "suneditor-react": "^2.10.1"
+    "react-viewerjs": "^0.1.9",
+    "suneditor-react": "^2.10.1",
+    "viewerjs": "^1.11.0"
   },
   "scripts": {
     "start": "react-scripts start",

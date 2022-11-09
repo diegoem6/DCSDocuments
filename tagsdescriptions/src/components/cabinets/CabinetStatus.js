@@ -5,6 +5,7 @@ import alertContext from '../../context/alerts/alertContext';
 import assetContext from '../../context/asset/assetContext';
 import CabinetsContext from '../../context/cabinets/cabinetsContext';
 import CabinetImages from './CabinetImages';
+import { MultiImageViewer2, MultiImageViewer } from './MultiImageViewer';
 
 const CabinetStatus = () => {
 
@@ -72,8 +73,11 @@ const CabinetStatus = () => {
             <div className="divHeaderNetwork">
                 <h1>{cabinetName}</h1>
             </div>
-            <CabinetImages 
+            {/*<CabinetImages
                 imgs={files}
+            />*/}
+            <MultiImageViewer
+                arr={files}
             />
         </>
     )
