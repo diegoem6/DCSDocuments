@@ -10,11 +10,11 @@ const Cabinet = ({ cabinet }) => {
     const cabContext = useContext(CabinetsContext)
     const { deleteCabinet, showForm, selectCabinet, getCabinet, cabinetSelected, getCabinetbyName } = cabContext
 
-    useEffect(()=>{
-        if(cabinetSelected){
-            console.log(cabinetSelected.files)
-        }
-    }, [cabinetSelected])
+    // useEffect(()=>{
+    //     if(cabinetSelected){
+    //         console.log(cabinetSelected.files)
+    //     }
+    // }, [cabinetSelected])
 
     const delCabinet = () => {
         deleteCabinet(cabinet._id)
@@ -80,7 +80,7 @@ const Cabinet = ({ cabinet }) => {
                         */
                         getCabinetbyName(cabinet.cabinetName)
                         window.open('/CabinetStatus/' + cabinet.cabinetName) // /events esta definido en app.js
-                        
+
                     }
                         /*<NetworkStatus />*/
                     }
@@ -92,7 +92,7 @@ const Cabinet = ({ cabinet }) => {
                 >Confirm</button> */}
             </div>
         </li>
-        
+
     )
 }
 

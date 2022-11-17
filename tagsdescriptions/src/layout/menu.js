@@ -37,6 +37,7 @@ const Menu = () => {
                     :
                     null
                 }
+
                 <div className="contenedor-form sombra-dark">
                     <div className="campo-form">
                         <Link
@@ -70,6 +71,10 @@ const Menu = () => {
                             Conexiones
                         </Link>
                     </div>
+                </div>
+
+                <div className="contenedor-form sombra-dark">
+
                     <div className="campo-form">
                         <Link
                             to={'/architecture'}

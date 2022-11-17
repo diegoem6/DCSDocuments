@@ -1,13 +1,12 @@
 import React from 'react'
 import { RViewer, RViewerTrigger } from 'react-viewerjs';
 
-const MultiImageViewer = ({ arr }) => {
+const MultiImageViewerButton = ({ arr }) => {
     //let sourceUrl = arr; //["./imgs/1.jpg", "./imgs/2.jpg", "./imgs/3.jpg", "./imgs/4.jpg", "./imgs/5.jpg"]
-    let sourceUrl = [
-        'http://localhost:4000//k9Wsoq8_c.jpeg',
-        'http://localhost:4000//1J6BY17Ag.jpeg',
+    let sourceUrl = arr.map(pic => {
+        return `${process.env.REACT_APP_BACKEND_URL}//${pic}`
+    });
 
-    ]
     //console.log(sourceUrl);
     return (
         <div className='architecture_node_div'>
@@ -19,41 +18,47 @@ const MultiImageViewer = ({ arr }) => {
         </div>
     )
 }
-const MultiImageViewer2 = ({ arr }) => {
-    let sourceImageUrls = [
-        'http://localhost:4000//k9Wsoq8_c.jpeg',
-        'http://localhost:4000//1J6BY17Ag.jpeg',
+const MultiImageViewerSimple = ({ arr }) => {
+    // console.log(arr)
+    let sourceImageUrls = arr.map(pic => {
+        return `${process.env.REACT_APP_BACKEND_URL}//${pic}`
+    });
 
-    ]
-    let thumbImageUrls = sourceImageUrls;//In reality, the thumbnail and the original may not be the same, which are set to be equal, just for the sake of a simple demonstration
+    //let thumbImageUrls = sourceImageUrls;//In reality, the thumbnail and the original may not be the same, which are set to be equal, just for the sake of a simple demonstration
     return (
         <div className='architecture_node_div'>
             <RViewer imageUrls={sourceImageUrls}>
                 <ul>
-                    {arr.map((pic, index) => {
-                        return (
-                            <li key={index} className="lista-horizontal">
 
-                                {/*By default, the index value is 0,So it is necessary to set the index prop*/}
-                                <RViewerTrigger index={index}>
-                                    <img
 
-                                        src={`http://localhost:4000//${pic}`}
-                                        style={{ width: "350px", verticalAlign: "middle" }}
-                                        alt="Img not found"
-                                    />
-                                </RViewerTrigger>
-                            </li>
-                        )
-                    })
-                    }
+                    <li className="lista-horizontal">
+
+                        {/*By default, the index value is 0,So it is necessary to set the index prop*/}
+                        <RViewerTrigger>
+
+                            <img
+
+                                src={sourceImageUrls[0]}
+                                style={{ width: "350px", verticalAlign: "middle" }}
+                                alt="Img not found"
+                            />
+
+
+                        </RViewerTrigger>
+                        <div>
+                            <label>*Haga click para ver visor con las demás fotos</label>
+                        </div>
+                    </li>
+
+
+
                 </ul>
             </RViewer>
         </div>
     )
 };
 export {
-    MultiImageViewer2,
-    MultiImageViewer
+    MultiImageViewerSimple,
+    MultiImageViewerButton
 
 } 

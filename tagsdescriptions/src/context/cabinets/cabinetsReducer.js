@@ -52,7 +52,7 @@ export default (state, action) => {
                 error: false,
                 message: null
             }
-        
+
         case DELETE_CABINET:
             return {
                 ...state,
@@ -73,7 +73,7 @@ export default (state, action) => {
             return ({
                 ...state,
                 cabinetSelected: null,
-                message:null
+                message: null
             })
         case UPDATE_CABINETS:
             return {
@@ -109,6 +109,7 @@ export default (state, action) => {
                 message: null,
                 error: false
             })
+
         case UPLOAD_FILE_CABINETS_SUCCESS:
         case DELETE_FILE_CABINETS_SUCCESS:
             return ({

@@ -24,7 +24,7 @@ const cabinets = () => {
     const auContext = useContext(authContext)
     const { getUser } = auContext;
 
-    const [sizeArray, setSizeArray] = useState(0)
+    // const [sizeArray, setSizeArray] = useState(0)
 
     useEffect(() => {
         deSelectAsset();
@@ -37,14 +37,14 @@ const cabinets = () => {
         }
     }, [asset])
 
-    useEffect(() => {
-        if (cabinetSelected){
-            //console.log(cabinetSelected.files.length)
-            //console.log(cabinetSelected.files)
-            setSizeArray(cabinetSelected.files.length) //tarda en actualizar el sizeArray
-            console.log("El array tiene: ",sizeArray)
-        }
-    }, [cabinetSelected]); //cada vez que cambia la cantidad de imagenes
+    // useEffect(() => {
+    //     if (cabinetSelected) {
+    //         console.log(cabinetSelected)
+    //         console.log(cabinetSelected[0].files.length)
+    //         setSizeArray(cabinetSelected[0].files.length) //tarda en actualizar el sizeArray
+    //         console.log("El array tiene: ", sizeArray)
+    //     }
+    // }, [cabinetSelected]); //cada vez que cambia la cantidad de imagenes
 
 
     return (

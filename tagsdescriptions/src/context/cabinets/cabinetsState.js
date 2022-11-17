@@ -31,6 +31,7 @@ const CabinetState = ({ children }) => {
     const initialState = {
         cabinets: [],
         cabinetSelected: null,
+        //files: [],
         //filesSelected: [],
         form: false,
         message: null,
@@ -71,6 +72,7 @@ const CabinetState = ({ children }) => {
     const getAreas = async () => {
         try {
             const result = await axiosClient.get('/api/areas')
+
             dispatch({
                 type: GET_AREAS,
                 payload: result.data.areas
@@ -135,13 +137,13 @@ const CabinetState = ({ children }) => {
                 payload: alert
             })
         }
-        
+
     }
     const selectCabinet = (cabinetID) => {
         getCabinet(cabinetID)
     }
 
-    const selectCabinetbyName = (cabinetName) =>{
+    const selectCabinetbyName = (cabinetName) => {
         getCabinetbyName(cabinetName)
     }
 
@@ -218,7 +220,7 @@ const CabinetState = ({ children }) => {
     }
 
 
-    const deSelectCabinet = async ()=>{
+    const deSelectCabinet = async () => {
         dispatch({
             type: DESELECT_CABINET,
             payload: null
@@ -230,6 +232,7 @@ const CabinetState = ({ children }) => {
         try {
 
             const res = await axiosClient.delete(`api/cabinetfiles/${idCabinet}`, { params: { fileNameDeleted } });
+            console.log(res.data)
             dispatch({
                 type: DELETE_FILE_CABINETS,
                 payload: res.data.cabinetUpdate

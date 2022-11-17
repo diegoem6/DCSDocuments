@@ -34,13 +34,15 @@ const NewCabinets = () => {
     const [cabinetLongitude, setCabinetLongitude] = useState('')
     const [cabinetSize, setCabinetSize] = useState('')
     const [files, setFiles] = useState([]);
-
+    const [filesToDelete, setFilesToDelete] = useState([]);
 
 
 
     //Cargo las áreas para el select
     useEffect(() => {
         getAreas();
+        console.log("Cargando areas");
+        console.log(areas);
         if (cabinetSelected) {
             setCabinetName(cabinetSelected.cabinetName);
             setCabinetArea(cabinetSelected.area)
@@ -58,10 +60,11 @@ const NewCabinets = () => {
             setCabinetDescription('');
 
         }
-
         //getCabinets();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cabinetSelected])
+
+
 
     useEffect(() => { //para los errores
         if (message) {
@@ -104,7 +107,7 @@ const NewCabinets = () => {
             cabinetSize,
             asset: asset[0]._id
         }
-        console.table(newCabinet)
+        //console.table(newCabinet)
         if (!cabinetSelected) {
             createCabinet(newCabinet); //nuevo gabinete
             //alert('NewCabinets');
@@ -120,20 +123,7 @@ const NewCabinets = () => {
         }
 
     }
-    // const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
-    //     // Disable click and keydown behavior
 
-    //     getFilesFromEvent: event => myCustomFileGetter(event)
-    // });
-    // const { getRootProps, getInputProps, open } = useDropzone({
-    //     // Disable click and keydown behavior
-
-    //     onDrop: acceptedFiles => {
-    //         setFiless(acceptedFiles.map(file => Object.assign(file, {
-    //             preview: URL.createObjectURL(file)
-    //         })));
-    //     }
-    // });
 
     const onDrop = useCallback(acceptedFiles => {
         // Do something with the files
@@ -149,6 +139,8 @@ const NewCabinets = () => {
         if (saved) {
 
             deleteFileCabinet(idCabinet, fileNameDeleted)
+            setFilesToDelete([...filesToDelete, fileNameDeleted])
+
         } else {
 
             const newAttachs = files.filter(file => file.name !== fileNameDeleted.name)
@@ -158,27 +150,63 @@ const NewCabinets = () => {
     }
 
     //const { acceptedFiles, getRootProps, getInputProps } = useDropzone()
-    const filesSaved = cabinetSelected ? cabinetSelected.files.map(file => {
+    const filesSaved = cabinetSelected
+        ? cabinetSelected.files
+            ? cabinetSelected.files.map(file => {
+                if (filesToDelete.length > 0) {
+                    if (filesToDelete.includes(file)) {
+                        return null
+                    } else {
 
-        return (
-            <li className="tarea sombra"
-                key={file}
-            >
-                {file} <button
-                    type="button"
-                    className="btn btn-terciario"
-                    onClick={() => showDialogConfirm(cabinetSelected._id, file, true)}
-                >Eliminar</button>
-            </li>
-        )
-    }) : null;
+                        return (
+                            <li className="tarea sombra"
+                                key={file}
+                            >
+                                <img
+                                    alt={file}
+                                    src={`${process.env.REACT_APP_BACKEND_URL}//${file}`}
+                                    style={{ width: '100px', height: '100px' }}
+                                />
+                                {/*file*/}
+                                <button
+                                    type="button"
+                                    className="btn btn-terciario"
+                                    onClick={() => showDialogConfirm(cabinetSelected._id, file, true)}
+                                >Eliminar</button>
+                            </li>
+                        )
+                    }
+                } else {
+                    return (
+                        <li className="tarea sombra"
+                            key={file}
+                        >
+                            <img
+                                alt={file}
+                                src={`${process.env.REACT_APP_BACKEND_URL}//${file}`}
+                                style={{ width: '100px', height: '100px' }}
+                            />
+                            {/*file*/} <button
+                                type="button"
+                                className="btn btn-terciario"
+                                onClick={() => showDialogConfirm(cabinetSelected._id, file, true)}
+                            >Eliminar</button>
+                        </li>
+                    )
+                }
+            }) : null : null;
 
 
     const filesTemp = files.map(file => (
         <li className="tarea sombra"
             key={file.path}
         >
-            {file.path} <button
+            <img
+                alt={file.path}
+                src={`${process.env.REACT_APP_BACKEND_URL}//${file.path}`}
+                style={{ width: '100px', height: '100px' }}
+            />
+            <button
                 type="button"
                 className="btn btn-terciario"
                 onClick={() => showDialogConfirm(cabinetSelected._id, file, false)}
@@ -187,8 +215,8 @@ const NewCabinets = () => {
     ));
 
     const showDialogConfirm = (idCabinet, file, saved) => {
-        console.log(idCabinet)
-        console.log(file)
+        // console.log(idCabinet)
+        // console.log(file)
         confirmAlert({
             title: 'Confirmar',
             message: '¿Estás seguro de eliminar el adjunto?',
