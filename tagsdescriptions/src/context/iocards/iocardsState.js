@@ -426,7 +426,8 @@ const IOCardsState = props=>{
                 deselectDeviceId,
                 getIOCardControllers,
                 getIOCardControllers_sinB,
-                getIOCardCabinets
+                getIOCardCabinets,
+                getCabinets
                 
             }}
         >

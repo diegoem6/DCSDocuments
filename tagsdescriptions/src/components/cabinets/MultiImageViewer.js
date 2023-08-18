@@ -46,7 +46,7 @@ const MultiImageViewerSimple = ({ arr }) => {
 
                         </RViewerTrigger>
                         <div>
-                            <label>*Haga click para ver visor con las demás fotos</label>
+                            <label>*Haga click para ver más fotos</label>
                         </div>
                     </li>
 

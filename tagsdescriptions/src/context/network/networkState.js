@@ -262,9 +262,7 @@ const NetworkState = props => {
 
     const getArchitectureDevices = async (networkNode) => {
         try {
-            //console.log(networknode)
             const res = await axiosClient.get('/api/architecture/getArchitectureDevices', { params: { networkNode } }) //networkNode se tiene que llamar igual de ambos lados
-            //const res = await axiosClient.get('api/architecture/getArchitectureDevices?networkNode=PMSWSY011A')
             dispatch({
                 type: GET_ARCHITECTURE_DEVICES,
                 payload: res.data.accessArchitecture //aca accedo a nodes y connections

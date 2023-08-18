@@ -1,14 +1,12 @@
 /* eslint-disable no-undef */
 import React, { useContext } from 'react'
-import { useEffect } from 'react';
 import { confirmAlert } from 'react-confirm-alert';
 import CabinetsContext from '../../context/cabinets/cabinetsContext';
-import CabinetStatus from './CabinetStatus';
 
 const Cabinet = ({ cabinet }) => {
 
     const cabContext = useContext(CabinetsContext)
-    const { deleteCabinet, showForm, selectCabinet, getCabinet, cabinetSelected, getCabinetbyName } = cabContext
+    const { deleteCabinet, showForm, selectCabinet, getCabinetbyName } = cabContext
 
     // useEffect(()=>{
     //     if(cabinetSelected){

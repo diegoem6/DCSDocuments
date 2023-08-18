@@ -1,9 +1,7 @@
 import React,{Fragment, useState, useContext, useEffect} from 'react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import alertContext from '../../context/alerts/alertContext';
-import devicesContext from '../../context/devices/devicesContext';
 import assetContext from '../../context/asset/assetContext';
-//import Files from 'react-files'
 import iocardContext from '../../context/iocards/iocardsContext';
 
 const NewIOCard = () => {
@@ -12,12 +10,8 @@ const NewIOCard = () => {
     const asContext = useContext(assetContext)
     const {asset} = asContext
 
-    const dContext = useContext(devicesContext)
-    //const {deviceSelected, showForm, createDevice, updateDevice, devicetypes, getDeviceTypes, message, resetMessage} = dContext
-    const {deviceSelected, createDevice, updateDevice, devicetypes, getDeviceTypes} = dContext
-
     const iContext = useContext(iocardContext);
-    const {iocardsSelected, showForm, createIOCard, updateIOCard, message, resetMessage, getIOCardTypes, iocardtypes, getIOCardControllers, getIOCardControllers_sinB, iocardcontrollers, getIOCardCabinets, iocardcabinets} = iContext
+    const {iocardsSelected, showForm, createIOCard, updateIOCard, message, resetMessage, getIOCardTypes, iocardtypes, getIOCardControllers_sinB, iocardcontrollers, getIOCardCabinets, iocardcabinets} = iContext
 
     const aContext = useContext(alertContext)
     const {alert, showAlert} = aContext

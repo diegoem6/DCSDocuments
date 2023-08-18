@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const DeviceTypeCabinetSchema = mongoose.Schema({
+const IOCardType = mongoose.Schema({
     type:{
         type:String,
         require:true,
@@ -12,4 +12,4 @@ const DeviceTypeCabinetSchema = mongoose.Schema({
     }
 })
 
-module.exports = mongoose.model('DeviceTypeCabinet', DeviceTypeCabinetSchema);
+module.exports = mongoose.model('IOCardType', IOCardType);

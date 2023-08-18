@@ -6,6 +6,7 @@ const NetworkNode = require('../models/NetworkNode');
 const TagDescriptor = require('../models/TagDescriptor')
 const Device = require('../models/Device');
 const Connection = require('../models/Connection');
+const Cabinet = require('../models/Cabinet');
 
 const multerConfiguration = {
     limits: { fileSize: 20 * 1024 * 1024 },
@@ -86,7 +87,15 @@ const processRow = async (model, headers, values) => {
         }
 
         await tagdescriptor.save();
-
+    }
+    if (model === "cabinets") {
+        //console.log(obj)
+        //console.log(obj.files)
+        let files_append = []
+        obj.files.split(",").forEach((img_src) => files_append.push(img_src));
+        obj.files = files_append.reverse()
+        const new_Cabinet = new Cabinet(obj);
+        await new_Cabinet.save()
     }
 
 }

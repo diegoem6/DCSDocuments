@@ -36,13 +36,17 @@ const NewCabinets = () => {
     const [files, setFiles] = useState([]);
     const [filesToDelete, setFilesToDelete] = useState([]);
 
+   
+    const img = {
+        display: 'block',
+        width: 'auto',
+        height: '100%'
+    };
 
 
     //Cargo las áreas para el select
     useEffect(() => {
         getAreas();
-        console.log("Cargando areas");
-        console.log(areas);
         if (cabinetSelected) {
             setCabinetName(cabinetSelected.cabinetName);
             setCabinetArea(cabinetSelected.area)
@@ -124,6 +128,12 @@ const NewCabinets = () => {
 
     }
 
+
+    useEffect(() => {
+        // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
+        return () => files.forEach(file => URL.revokeObjectURL(file.preview));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const onDrop = useCallback(acceptedFiles => {
         // Do something with the files
@@ -298,8 +308,8 @@ const NewCabinets = () => {
                             value={cabinetSize}
                         >
                             <option value="">Seleccione Tamaño del Gabinete (Slots)</option>
-                            <option value="1">12</option>
-                            <option value="2">24</option>
+                            <option value="12">12</option>
+                            <option value="24">24</option>
                         </select>
                         <textarea name="cabinetDescription" cols="30" rows="2"
                             className={`input-text`}
@@ -333,6 +343,7 @@ const NewCabinets = () => {
                                     {filesSaved}
                                 </ul>
                             </aside>
+                            
                             <div style={{ height: "auto", margin: "0 auto", maxWidth: 140, width: "100%" }}>
                                 <QRCode
                                     size={256}
@@ -340,7 +351,7 @@ const NewCabinets = () => {
                                     value={`localhost:3000/CabinetStatus/${cabinetName}`}
                                     viewBox={`0 0 256 256`}
                                 />
-                            </div>
+                            </div> 
                         </Fragment>
 
                         <input type="submit" className="btn btn-primario btn-block" value={cabinetSelected ? 'Guardar Gabinete' : 'Crear Gabinete'} />

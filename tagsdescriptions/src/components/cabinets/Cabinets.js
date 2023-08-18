@@ -1,7 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'
-// Compare this snippet from src\network\network.js:  
+import React, { useContext, useEffect } from 'react';
 import authContext from '../../context/auth/authContext'
 import alertContext from '../../context/alerts/alertContext';
 import SidebarCabibinets from '../../layout/sidebarCabinets';
@@ -11,12 +9,11 @@ import HeaderCabinets from './HeaderCabinets';
 import Header from '../../layout/header'
 import NewCabinets from './NewCabinets';
 import CabinetsList from './CabinetsList';
-import ImageSlider from '../imageslider/imageslider';
 
 const cabinets = () => {
 
     const cabContext = useContext(CabinetsContext)
-    const { form, showForm, cabinetSelected } = cabContext
+    const { form, showForm } = cabContext
     const aContext = useContext(alertContext)
     const { alert } = aContext
     const asContext = useContext(assetContext)
@@ -29,22 +26,17 @@ const cabinets = () => {
     useEffect(() => {
         deSelectAsset();
         getUser();
+        
+        // eslint-disable-next-line
     }, [])
 
     useEffect(() => {
         if (form) {
             showForm();
         }
+        
+        // eslint-disable-next-line
     }, [asset])
-
-    // useEffect(() => {
-    //     if (cabinetSelected) {
-    //         console.log(cabinetSelected)
-    //         console.log(cabinetSelected[0].files.length)
-    //         setSizeArray(cabinetSelected[0].files.length) //tarda en actualizar el sizeArray
-    //         console.log("El array tiene: ", sizeArray)
-    //     }
-    // }, [cabinetSelected]); //cada vez que cambia la cantidad de imagenes
 
 
     return (

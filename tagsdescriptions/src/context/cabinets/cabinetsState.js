@@ -50,7 +50,6 @@ const CabinetState = ({ children }) => {
     }
 
     const createCabinet = async cabinet => {
-        // console.log(cabinet)
         try {
             const result = await axiosClient.post('/api/cabinets', cabinet)
             dispatch({
@@ -58,7 +57,6 @@ const CabinetState = ({ children }) => {
                 payload: result.data
             })
         } catch (error) {
-            console.log(error)
             const alert = {
                 msg: error.response.data.msg,
                 category: 'alerta-error'
@@ -97,7 +95,6 @@ const CabinetState = ({ children }) => {
     const getCabinet = async id => {
         try {
             const result = await axiosClient.get(`api/cabinets/${id}`)
-            // console.log(result.data.cabinet)
             dispatch({
                 type: GET_CABINET,
                 payload: result.data.cabinet
@@ -122,7 +119,7 @@ const CabinetState = ({ children }) => {
 
     const deleteCabinet = async (id) => {
         try {
-            const result = await axiosClient.delete(`/api/cabinets/${id}`)
+            await axiosClient.delete(`/api/cabinets/${id}`)
             dispatch({
                 type: DELETE_CABINET,
                 payload: id
@@ -148,9 +145,7 @@ const CabinetState = ({ children }) => {
     }
 
     const uploadFileCabinet = async (cabinet, files) => {
-        // console.log("Llamo a la funcion uploadFileCabinet")
-        // console.log(files.length)
-
+        
         try {
             const options = {
                 maxSizeMB: 1,
@@ -159,17 +154,11 @@ const CabinetState = ({ children }) => {
             }
 
             for (let i = 0; i < files.length; i++) {
-                // console.log("llamo upload 3")
-                // console.log(files[i])
                 const compressedFile = await imageCompression(files[i], options)
-                // console.log("llamo upload 4")
                 const formData = new FormData()
                 formData.append('cabinetsFiles', compressedFile)
-                // console.log("llamo upload 5 " + cabinet._id)
                 const result = await axiosClient.post(`api/cabinetfiles/${cabinet._id}`, formData)
-                // console.log("llamo upload 6")
                 uploadFileCabinetSuccess(result.data.cabinet)
-                // console.log("llamo upload 7")
             }
 
         } catch (error) {
@@ -189,9 +178,6 @@ const CabinetState = ({ children }) => {
             payload: cabinet
         })
     }
-    // const uploadFileCabinetError = (error) => {
-    //     console.log(error)
-    // }
 
     const updateCabinet = async (cabinet) => {
         try {
@@ -232,14 +218,12 @@ const CabinetState = ({ children }) => {
         try {
 
             const res = await axiosClient.delete(`api/cabinetfiles/${idCabinet}`, { params: { fileNameDeleted } });
-            console.log(res.data)
             dispatch({
                 type: DELETE_FILE_CABINETS,
                 payload: res.data.cabinetUpdate
             })
 
         } catch (error) {
-            console.log(error.response.data.msg);
             const alert = {
                 msg: error.response.data.msg,
                 category: 'alerta-error'

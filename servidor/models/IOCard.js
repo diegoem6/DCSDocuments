@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const DeviceTypeCabinet = require ('../models/DeviceTypeCabinet');
 
 const IOCardSchema = mongoose.Schema({
     tagname:{
@@ -12,11 +11,11 @@ const IOCardSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         require:true
     },
-    /*controller:{
+    controller:{
         type:String,
         require:true,
         trim:true
-    },*/
+    },
     iolink:{
         type:Number, //iolink 1 o 2
         require:true
@@ -25,10 +24,10 @@ const IOCardSchema = mongoose.Schema({
         type:Number,
         require:true
     },
-    /*redundant:{
-        type:Boolean,
-        default:false
-    },*/
+    // redundant:{
+    //     type:Boolean,
+    //     default:false
+    // },
     cabinet:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Cabinet' //hace referencia al id del modelo cabinet
