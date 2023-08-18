@@ -11,10 +11,11 @@ export default memo(({ data, isConnectable }) => {
   const {deselectNetworkNodeId, getNetworkNodeID, networkNodeID} = tContext //getNetworkNode 
   
   const dContext = useContext(deviceContext)
-  const {deselectDeviceId, getDeviceID, deviceID} = dContext //getNetworkNode 
+  const {getDeviceID} = dContext //getNetworkNode 
 
 
   useEffect(()=>{ //para mostrar el status:
+    console.log("AAAAAAAAAA")
     if ((networkNodeID  !== localStorage.getItem('networkstatusID')) && networkNodeID){
       //si no agrego la comparacion con lo que habia antes, entra 24 veces! que onda el useEffect, hace lo que quiere...
       localStorage.setItem('networkstatusID',networkNodeID)
@@ -24,14 +25,14 @@ export default memo(({ data, isConnectable }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[networkNodeID])
   
-  useEffect(()=>{ //para mostrar el status:
+  /*useEffect(()=>{ //para mostrar el status:
     if ((deviceID  !== localStorage.getItem('devicestatusID')) && deviceID){ //si no agrego la comparacion con lo que habia antes, entra 24 veces! que onda el useEffect, hace lo que quiere...
       localStorage.setItem('devicestatusID',deviceID)
       deselectDeviceId()
       window.open('/devicestatus', "_blank")
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[deviceID])
+  },[deviceID])*/
   
   return (
     <>
@@ -62,7 +63,6 @@ export default memo(({ data, isConnectable }) => {
             className={data.cName}
             type="button"
             value="Connections"
-            
             defaultValue={data.color}
           />
         :
@@ -97,7 +97,7 @@ export default memo(({ data, isConnectable }) => {
           defaultValue={data.color}
           onClick={()=>
             {   
-                getDeviceID(data.equipo)
+                //getDeviceID(data.equipo)
             }
           }
           />
@@ -109,6 +109,8 @@ export default memo(({ data, isConnectable }) => {
       {((data.devicetype) === 'C300')?
         <div className="div_buttons_architecture_devices" //aca tengo que poner una clase para que un boton quede abajo del otro
         > 
+         
+          {/* TODO: hacer las conexiones del c300 a las io
           <input
             className={data.cName}
             type="button"
@@ -122,9 +124,10 @@ export default memo(({ data, isConnectable }) => {
                   //localStorage.setItem('devicestatusID',networkNodeID) //guardo en el localstorage una variable networkstatusID con el dato networkNode._id
                   //window.open('/networkstatus') // /events esta definido en app.js
               }
-              /*<NetworkStatus />*/
-            }
-          />
+              /*<NetworkStatus />
+            />
+            */
+          }
           <input
             className={data.cName}
             type="button"

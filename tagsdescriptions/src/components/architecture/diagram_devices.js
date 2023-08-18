@@ -4,6 +4,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import NodeCore from './nodeCoreDevice';
 import { Link } from 'react-router-dom'
 import networkContext from "../../context/network/networkContext";
+import deviceContext from '../../context/devices/devicesContext'
+
 
 //import architecture from './architectureDevices'
 import architecture from './architecturedevices'
@@ -21,6 +23,10 @@ const Diagram_Devices = () => {
   const tContext = useContext(networkContext)
   const { getArchitectureDevices, architectureDevices } = tContext
   const [elements, setElements] = useState(architecture);
+
+
+  const dContext = useContext(deviceContext)
+  const {deselectDeviceId} = dContext //getNetworkNode 
 
   const networkNodeName = localStorage.getItem('networkNodeName');
 
@@ -60,7 +66,13 @@ const Diagram_Devices = () => {
   const onConnect = (params) => setElements((els) => addEdge(params, els));
 
   const onNodeDragStop = (event, node) => console.log('drag stop', node);
-  const onElementClick = (event, element) => console.log('click', element);
+  const onElementClick = (event, element) => {
+    if ((element.data.idMongo  !== localStorage.getItem('devicestatusID')) && element.data.idMongo){ //si no agrego la comparacion con lo que habia antes, entra 24 veces! que onda el useEffect, hace lo que quiere...
+      localStorage.setItem('devicestatusID',element.data.idMongo)
+      window.open('/devicestatus', "_blank")
+      deselectDeviceId()
+    }
+  }
   const back = () => {
     window.open("/architecture", "_self")
   }

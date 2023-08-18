@@ -464,6 +464,7 @@ exports.getArchitectureDevices = async (req, res)=>{
         let newNn = {}; 
         let newNn0 = {}; 
         newNn.id = networkNode;
+        newNn.idMongo = networkNode;
         newNn.node = networkNode;
         //newNn.devicetype = "Switch"
         newNn.level = 2;
@@ -483,6 +484,8 @@ exports.getArchitectureDevices = async (req, res)=>{
             
             if (nn[0]){
                 //console.log("Entro.....")
+                newNn.idMongo = nn[0]._id;
+                //console.log(nn[0]._id)
                 newNn.id = nn[0].deviceName;
                 newNn.node = nn[0].deviceName;
                 //console.log(nn[0].deviceType) //deviceType
@@ -507,6 +510,7 @@ exports.getArchitectureDevices = async (req, res)=>{
                         nn = await Device.find({deviceName:cc.target}) //levanto datos de los nodos
                         if(nn[0]){
                             newNn.id = nn[0].deviceName;
+                            newNn.idMongo = nn[0]._id;
                             newNn.node = nn[0].deviceName;
                             tipodevice = await DeviceType.findById(nn[0].deviceType); //Busco Devicetypes cada
                             newNn.devicetype = tipodevice.type;
@@ -541,7 +545,7 @@ exports.getArchitectureDevices = async (req, res)=>{
         accessArchitecture.connections = connections;
         res.json({accessArchitecture})
 
-        //console.log(networkNodes)
+        console.log(accessArchitecture)
 
     } catch ({error}) {
         console.log(error);

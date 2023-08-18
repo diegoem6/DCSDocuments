@@ -95,12 +95,14 @@ exports.createDocument = async (req,res)=>{
         })
         content = content + '</body></html>'
         //content = content.replace("<tbody><tr","<tbody><tr class='header-table'")
-        //console.log(content)
+        const d = new Date();
+        const filename = system_created_document.name + d.getTime()
+        
+
         let docx = HtmlDocx.asBlob(content);
-        fs.writeFile(`../tagsdescriptions/public/files/descriptors_${system_created_document.name}.docx`, docx, function(err) {
+        fs.writeFile(`../tagsdescriptions/public/files/descriptors_${filename}.docx`, docx, function(err) {
             if (err) throw err;
         });
-
         // const pdf = require('html-pdf');
 
         // let content = `
@@ -119,7 +121,8 @@ exports.createDocument = async (req,res)=>{
         //         console.log(res);
         //     }
         // })
-        res.json(`descriptors_${system_created_document.name}.docx`)
+        
+        res.json(`descriptors_${filename}.docx`)
 
     } catch (error) {
         console.log(error);

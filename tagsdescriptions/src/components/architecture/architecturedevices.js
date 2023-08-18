@@ -106,7 +106,7 @@ const createArchitectureDevices = (arquitectura=[])=>{
       //console.log("El equipo es: ", eq.node, " y El tipo es: ",eq.devicetype, " y el level es: ", eq.level)
       //Nodos
       draweq.push({
-      id: eq.id, type: 'Botones', sourcePosition: 'right', targetPosition: 'left',data: { cName: cName, equipo: eq.node, posin: posin, posout: posout, devicetype: eq.devicetype, area:eq.area, img:eq.url},position: { x: posx, y: posy }, style: { background: ''}
+      id: eq.id, type: 'Botones', sourcePosition: 'right', targetPosition: 'left',data: { idMongo: eq.idMongo, cName: cName, equipo: eq.node, posin: posin, posout: posout, devicetype: eq.devicetype, area:eq.area, img:eq.url},position: { x: posx, y: posy }, style: { background: ''}
       })
   })
 

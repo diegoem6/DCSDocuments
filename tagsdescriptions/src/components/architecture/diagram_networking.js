@@ -64,7 +64,6 @@ const Diagram_Networking = () => {
   
   return (
     
-    /*<h1>Hola</h1>*/
     <div>
       <Header />
       <h1>Arquitectura de red</h1>  
