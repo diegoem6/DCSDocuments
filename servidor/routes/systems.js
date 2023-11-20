@@ -15,8 +15,9 @@ router.post('/',
 router.get('/',
     auth,
     systemController.getSystems) ;
-
-
+    router.get('/:id',
+    auth,
+    systemController.getSystemAndAssetById) ;
 router.put('/:id',
     auth,
     systemController.updateSystem) ;

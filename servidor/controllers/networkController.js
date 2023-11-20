@@ -545,7 +545,7 @@ exports.getArchitectureDevices = async (req, res)=>{
         accessArchitecture.connections = connections;
         res.json({accessArchitecture})
 
-        console.log(accessArchitecture)
+       // console.log(accessArchitecture)
 
     } catch ({error}) {
         console.log(error);

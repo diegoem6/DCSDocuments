@@ -19,7 +19,9 @@ import {
     GET_IOCARD_CONTROLLERS,
     GET_IOCARD_CABINETS,
     DESELECT_IOCARD_NODE_ID,
-    GET_IOCARD_CONTROLLERS_SINB
+    GET_IOCARD_CONTROLLERS_SINB,
+    GET_IOCARDS_CONTROLLER_A,
+    GET_IOCARDS_CONTROLLER_B
     } from '../../types/index'
 
 import axiosClient from '../../config/axios'
@@ -385,6 +387,30 @@ const IOCardsState = props=>{
         })
     }
 
+    const getIoCardsContrllerA = async (idController)=>{
+        try {
+            const res = await axiosClient.get(`/api/iocards/iocardsA/${idController}`)
+            dispatch({
+                type:GET_IOCARDS_CONTROLLER_A,
+                payload: res.data.iocards //iocards esta definida en la respuesta del server
+            })
+        } catch (error) {
+            const alert = {
+                msg:"hubo un error con el device",
+                category:"alerta-error"
+            }
+            dispatch({
+                type:SHOW_ERROR,
+                payload: alert
+            })
+        }
+
+
+    }
+    const getIoCardsContrllerB =(idController)=>{
+
+
+    }
     return (
         <iocardsContext.Provider
             value={{
@@ -427,7 +453,9 @@ const IOCardsState = props=>{
                 getIOCardControllers,
                 getIOCardControllers_sinB,
                 getIOCardCabinets,
-                getCabinets
+                getCabinets,
+                getIoCardsContrllerA,
+                getIoCardsContrllerB
                 
             }}
         >

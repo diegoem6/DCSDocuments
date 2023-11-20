@@ -1,18 +1,16 @@
 import React, {useEffect, useContext, Fragment, useState} from 'react';
-import systemContext from '../../context/system/systemContext'
-import TagDescriptor from './tagDescriptor_MAL'
+import TagDescriptor from './tagDescriptorSearch'
 import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext';
 import ReactPaginate from 'react-paginate';
+import { Link } from 'react-router-dom'
 
 
-
-const TagDescriptorList = () => {
-
-    const sContext = useContext(systemContext)
-    const {systemSelected} = sContext
+const TagAllDescriptorList = () => {
+   
     
     const tContext = useContext(tagDescriptorContext)
-    const {searchtagdescriptors, getTagsDescriptors} = tContext
+    const {searchtagdescriptors, getAllTagDescriptor} = tContext
+    
 
     const [pag, setPag] = useState(
             {
@@ -25,17 +23,18 @@ const TagDescriptorList = () => {
     
 
     useEffect(() => {
+       
         const listTagsDescriptors = ()=>{
-            if (systemSelected){
-                getTagsDescriptors(systemSelected._id)
-            }
+           // if (systemSelected){
+            getAllTagDescriptor()
+           // }
         }
         listTagsDescriptors()
         // eslint-disable-next-line
-    }, [systemSelected])
+    }, [])
 
     useEffect(() => {
-        if (systemSelected){
+       // if (systemSelected){
             setPag(
                 {...pag,
                     pageCount: Math.ceil(searchtagdescriptors.length/pag.perPage),
@@ -44,18 +43,18 @@ const TagDescriptorList = () => {
                     currentPage:0
                 })
             
-        }
+        //}
         // eslint-disable-next-line
     }, [searchtagdescriptors])
 
-    if(!systemSelected) {
-        return <h2>Seleccione un sistema</h2>
+    /*if(!systemSelected) {
+        return <h2>Seleccione un sistemaAA</h2>
     }
     
     if (!searchtagdescriptors){
         return <p>No hay documentos para el sistema seleccionado</p>
-    }
-
+    }*/
+   
     const handlePageClick = (e) => {
         const selectedPage = e.selected;
         const offset = selectedPage * pag.perPage;
@@ -69,16 +68,22 @@ const TagDescriptorList = () => {
 
     return ( 
         <Fragment>
-            <h2>Tags descriptors del sistema: {systemSelected.name}</h2>
+            <h2>Buscar Tags descriptors </h2>
             <ul>
                 {(searchtagdescriptors.length===0)?
-                    (<li className="tarea"><p>No hay documentos para el sistema seleccionado</p></li>)
+                    (<li className="tarea"><p>No hay documentos para mostrar</p></li>)
                 :
-                    pag.data.slice(pag.offset,pag.offset+pag.perPage).map(tgd =>(
+                    pag.data.slice(pag.offset,pag.offset+pag.perPage).map((tgd)=>{
+                     
+                        return(
+                        
                         <TagDescriptor
                             tagdescriptor={tgd}
+                            
+                            key={tgd._id}
+                           
                         />
-                    ))
+                    )})
                 }
             </ul>
             <div>
@@ -95,8 +100,14 @@ const TagDescriptorList = () => {
                     subContainerClassName={"pages pagination"}
                     activeClassName={"active"}/>
             </div>
+            <Link 
+                to={'/menu'}
+                className="link-menu">
+                &#60;
+                Menu
+            </Link>
         </Fragment>
      );
 }
  
-export default TagDescriptorList;
+export default TagAllDescriptorList;

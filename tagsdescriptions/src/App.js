@@ -5,6 +5,7 @@ import Login from './components/auth/login'
 import Newuser from './components/users/newUser'
 import Users from './components/users/users'
 import Tagsdescriptors from './components/tagsdescriptors/tagsDescriptors'
+import TagsAlldescriptors from './components/tagsdescriptors/tagsAllDescriptors'
 import Network from './components/network/network'
 import NetworkStatus from './components/network/networkStatus'
 import ImportDevices from './components/files/importDevices'
@@ -22,6 +23,7 @@ import ConnectionState from './context/connection/connectionState';
 import UserState from './context/user/userState';
 import CabinetState from './context/cabinets/cabinetsState';
 import IOCardState from './context/iocards/iocardsState';
+import ConectionsC300 from './components/devices/ConnectionsC300'
 
 import Menu from './layout/menu';
 import Connections from './components/architecture/connections'
@@ -66,6 +68,7 @@ function App() {
                                 <Route exact path="/" component={Login} />
                                 <Route exact path="/newuser" component={Newuser} />
                                 <PrivateRoute exact path="/tagsdescriptors" component={Tagsdescriptors} />
+                                <PrivateRoute exact path="/tagsalldescriptors" component={TagsAlldescriptors} />
                                 <PrivateRoute exact path="/assets" component={Assets} />
                                 <PrivateRoute exact path="/menu" component={Menu} />
                                 <PrivateRoute exact path="/events" component={Eventlist} />
@@ -73,6 +76,7 @@ function App() {
                                 <PrivateRoute exact path="/networkstatus" component={NetworkStatus} />
                                 <PrivateRoute exact path="/devices" component={devices} />
                                 <PrivateRoute exact path="/devicestatus" component={deviceStatus} />
+                                <PrivateRoute exact path="/conections300/:idMongo" component={ConectionsC300} />
                                 <PrivateRoute exact path="/importDevices" component={ImportDevices} />
                                 <PrivateRoute exact path="/architecture" component={Diagram_Networking} />
                                 <PrivateRoute exact path="/architectureDevices" component={Diagram_Devices} />

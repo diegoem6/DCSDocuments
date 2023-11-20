@@ -32,7 +32,7 @@ const Diagram_Devices = () => {
 
   useEffect(() => {
 
-    console.log(architectureDevices)
+   // console.log(architectureDevices)
     if (architectureDevices.length !== 0) { //si el array no esta vacío, carga devices
       setElements(architecture(architectureDevices))
     }
@@ -67,10 +67,16 @@ const Diagram_Devices = () => {
 
   const onNodeDragStop = (event, node) => console.log('drag stop', node);
   const onElementClick = (event, element) => {
+    
     if ((element.data.idMongo  !== localStorage.getItem('devicestatusID')) && element.data.idMongo){ //si no agrego la comparacion con lo que habia antes, entra 24 veces! que onda el useEffect, hace lo que quiere...
-      localStorage.setItem('devicestatusID',element.data.idMongo)
-      window.open('/devicestatus', "_blank")
-      deselectDeviceId()
+     if(event.target.id==="btnConnections"){
+        console.log("CLICKK")
+        window.open("/conections300/"+ element.data.idMongo, "_blank")
+     }else{
+        localStorage.setItem('devicestatusID',element.data.idMongo)
+        window.open('/devicestatus', "_blank")
+        deselectDeviceId()
+    }
     }
   }
   const back = () => {

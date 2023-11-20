@@ -159,8 +159,6 @@ const NetworkStatus = () => {
                     activeClassName={"active"}/>
             </div>
         </Fragment>
-        
-
      );
 }
  

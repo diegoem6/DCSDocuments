@@ -454,7 +454,51 @@ exports.getIOCardTypesAll = async (req, res) =>{ //levanto todos los tipos de IO
         console.log(error);
     }
 }
+exports.getIOCardsControllerA = async (req,res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
 
+    try {
+        
+        const oldIOCards = await IOCard.find({controllerA:req.params.id}).sort({creado:-1})
+        let iocards = []
+        //Levanto todas las IOs existentes pero con el tipo de IO no con el id, para mostrar y listar todas las IOs por asset inicialmente
+        for (const io of oldIOCards){
+            const typeDesc = await this.igetIOCardType(io.type)
+            const cabinetDesc = await this.igetIOCardCabinet(io.cabinet)
+            let newIO = io.toObject();
+            newIO.typeDesc = typeDesc
+            newIO.cabinetDesc = cabinetDesc
+            iocards.push(newIO)
+        }
+        
+        res.json({iocards})
+
+    } catch ({error}) {
+        console.log(error);
+        res.status(500).send({msg:"No se pudo obtener los dispositivos para este Controlador"})
+        
+    }
+}
+exports.getIOCardsControllerB = async (req,res)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+
+    try {
+        
+        const iocards = await IOCard.find({controllerB:req.params.id}).sort({creado:-1})
+        res.json({iocards})
+        
+    } catch ({error}) {
+        console.log(error);
+        res.status(500).send({msg:"No se pudo obtener los dispositivos para este Controlador"})
+        
+    }
+}
 exports.getDevices = async (req,res)=>{
     const errors = validationResult(req);
     if (!errors.isEmpty()){
@@ -538,9 +582,6 @@ exports.getDeviceTypesByID = async(req, res) =>{
         
     }
 }
-
-
-
 
 exports.getDeviceTypes = async (req,res)=>{
     const errors = validationResult(req);

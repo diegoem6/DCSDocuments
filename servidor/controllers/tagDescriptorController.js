@@ -152,7 +152,19 @@ exports.getTagsDescriptors = async (req,res)=>{
         
     }
 }
+//obteniendo todos los tagsdescriptors quee xisten en la base de datos
+exports.getAllTagsDescriptors = async (req,res)=>{
+    try {
+       const tagsdescriptors = await TagDescriptor.find({}).sort({creado:-1})
+       
+        res.json({tagsdescriptors})
 
+    } catch (error) {
+        console.log(error); 
+        res.status(500).send("Error en obtener tagsdescriptors")
+        
+    }
+}
 // obteniendo los related
 
 exports.getTagsDescriptors_Related = async (req,res)=>{
