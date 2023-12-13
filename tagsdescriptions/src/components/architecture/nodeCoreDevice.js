@@ -15,7 +15,7 @@ export default memo(({ data, isConnectable }) => {
 
 
   useEffect(()=>{ //para mostrar el status:
-    console.log("AAAAAAAAAA")
+    //console.log("AAAAAAAAAA")
     if ((networkNodeID  !== localStorage.getItem('networkstatusID')) && networkNodeID){
       //si no agrego la comparacion con lo que habia antes, entra 24 veces! que onda el useEffect, hace lo que quiere...
       localStorage.setItem('networkstatusID',networkNodeID)
@@ -108,26 +108,28 @@ export default memo(({ data, isConnectable }) => {
       
       {((data.devicetype) === 'C300')?
         <div className="div_buttons_architecture_devices" //aca tengo que poner una clase para que un boton quede abajo del otro
-        > 
-         
-          {/* TODO: hacer las conexiones del c300 a las io
-          <input
+        >
+        {/* 
+        Cuando se termine de definir lod e las iocard este botón llama a las conecciones de los c300
+         <input
             className={data.cName}
             type="button"
             //style="background-color: black; color : white;"
             value="Connections"
+            id="btnConnections"
             defaultValue={data.color}
-            onClick={()=>
-              {   console.log("Hola loco")
-                  getNetworkNodeID(data.equipo)
-                  //getNodeID(data.equipo) //levanto el id del nodo
-                  //localStorage.setItem('devicestatusID',networkNodeID) //guardo en el localstorage una variable networkstatusID con el dato networkNode._id
-                  //window.open('/networkstatus') // /events esta definido en app.js
-              }
+           // onClick={()=> {
+            //No se necesita el onClick el diagrama ya captura el evento onClik
+              //handleConnectionStatus(data.equipo)
+              //console.log("btnConnections")
+            //}
+            }
+              
               /*<NetworkStatus />
-            />
-            */
-          }
+            //}
+          />
+          */}
+                    
           <input
             className={data.cName}
             type="button"

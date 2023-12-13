@@ -104,7 +104,45 @@ exports.getSystems = async (req,res)=>{
         
     }
 }
+exports.getSystemAndAssetById= async (req,res)=>{
+    const errors = validationResult(req);
 
+    if (!errors.isEmpty()){
+        return res.status(400).json({errors:errors.array()});
+    }
+
+    try {
+       
+        const {idSystem} = req.query;
+        const system = await System.findById(idSystem)
+       
+      
+        if(!system){
+            console.log("No existe el system");
+            return res.status(404).send({res:"No existe el system"})
+        }
+        
+        //existe el asset?
+        const asset = await Asset.findById(system.asset)
+       
+        if (!asset){
+            console.log("No existe el asset");
+            return res.status(404).send({res:"No existe el asset"})
+        }
+
+      const resp = {
+        systemName : system.name,
+        assetName : asset.name
+    }
+        res.json({resp})
+        
+
+    } catch ({error}) {
+        console.log(error);
+        res.status(500).send({msg:"No se pudo obtener los sistemas para este asset"})
+        
+    }
+}
 exports.deleteSystems = async (req,res)=>{
     const errors = validationResult(req);
 

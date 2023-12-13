@@ -15,15 +15,15 @@ export default memo(({ data, isConnectable }) => {
 
 
   useEffect(()=>{ //para mostrar el status:
-    console.log("network status useEffect "+networkNodeID)
+   
     if ((networkNodeID  !== localStorage.getItem('networkstatusID')) && networkNodeID){
       //si no agrego la comparacion con lo que habia antes, entra 24 veces! que onda el useEffect, hace lo que quiere...
       localStorage.setItem('networkstatusID',networkNodeID)
-      console.log("1")
+     
       deselectNetworkNodeId();
-      console.log("2")
+     
       window.open('/networkstatus', "_blank")
-      console.log("3")
+      
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[networkNodeID])

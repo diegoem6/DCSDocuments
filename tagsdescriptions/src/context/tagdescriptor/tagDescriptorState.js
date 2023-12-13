@@ -10,6 +10,7 @@ import {
     SELECT_TAGDESCRIPTOR,
     DESELECT_TAGDESCRIPTOR,
     GET_TAGSDESCRIPTORS,
+    GET_ALL_TAGDESCRIPTORS,
     DELETE_TAGDESCRIPTOR,
     SEARCH_TAGSDESCRIPTORS,
     RESET_MESSAGE,
@@ -97,7 +98,7 @@ const TagDescriptorState = props=>{
         try {
             
             const res = await axiosClient.get(`/api/showtag/${id}`);
-            console.log(res)
+           // console.log(res)
             dispatch({
                 type: GET_TAGDESCRIPTOR,
                 payload: res.data.tagdescriptor
@@ -114,7 +115,28 @@ const TagDescriptorState = props=>{
         }
         
     }
-
+    const getAllTagDescriptor = async ()=>{
+        try {
+          //  console.log("SEBA")
+            const res = await axiosClient.get('/api/tagsdescriptors/all');
+            //console.log(res.data.tagsdescriptors)
+            dispatch({
+                type: GET_ALL_TAGDESCRIPTORS,
+                payload: res.data.tagsdescriptors
+            })
+        } catch (error) {
+            const alert = {
+                msg:"hubo un error buscando los tagdescriptors",
+                category:"alerta-error"
+            }
+            dispatch({
+                type:SHOW_ERROR_TAGDESCRIPTOR,
+                payload: alert
+            })
+        }
+        
+    }
+    
     
     const resetMessage = ()=>{
         dispatch({
@@ -178,6 +200,7 @@ const TagDescriptorState = props=>{
     }
 
     const selectTagDescriptor = (id_tagdescriptor) =>{
+        console.log("Select",id_tagdescriptor)
         dispatch({
             type: SELECT_TAGDESCRIPTOR,
             payload:id_tagdescriptor
@@ -357,6 +380,7 @@ const TagDescriptorState = props=>{
                 selectOnlyDescriptor,
                 getInterlocks,
                 getAlarmayEventos,
+                getAllTagDescriptor,
                 getFotos
             }}
         >

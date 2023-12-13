@@ -6,7 +6,8 @@ import {
     DELETE_SYSTEM,
     DESELECT_SYSTEM,
     SHOW_ERROR,
-    RESET_MESSAGE
+    RESET_MESSAGE,
+    SELECT_SYSTEM_AND_ASSET
 } from '../../types/index'
 
 export default (state, action) =>{
@@ -36,6 +37,12 @@ export default (state, action) =>{
                 systemSelected:action.payload,
                 message:null
             })
+        case  SELECT_SYSTEM_AND_ASSET:
+                return ({
+                    ...state, 
+                    systemAndAssetSelected:action.payload,
+                    message:null
+                })
         case DESELECT_SYSTEM:
             return ({
                 ...state, 

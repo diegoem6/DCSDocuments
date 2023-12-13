@@ -9,6 +9,7 @@ import {
     DELETE_TAGDESCRIPTOR,
     UPDATE_TAGDESCRIPTOR,
     SEARCH_TAGSDESCRIPTORS,
+    GET_ALL_TAGDESCRIPTORS,
     RESET_MESSAGE,
     VALIDATE_TAGDESCRIPTOR,
     INVALIDATE_TAGDESCRIPTOR,
@@ -34,7 +35,8 @@ export default (state,action)=>{
                 tagdescriptor: action.payload,
                 error:false
             })
-        case GET_TAGSDESCRIPTORS:
+            case GET_TAGSDESCRIPTORS:
+            case GET_ALL_TAGDESCRIPTORS:
             return ({
                 ...state,
                 searchtagdescriptors: action.payload,

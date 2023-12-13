@@ -10,7 +10,8 @@ import {
     DELETE_SYSTEM,
     DESELECT_SYSTEM,
     SHOW_ERROR,
-    RESET_MESSAGE
+    RESET_MESSAGE,
+    SELECT_SYSTEM_AND_ASSET
 } from '../../types/index'
 import axiosClient from '../../config/axios';
 
@@ -19,6 +20,7 @@ const SystemState = (props) => {
     const initialState = {
         systems:[],
         systemSelected:null,
+        systemAndAssetSelected:null,
         message:null,
         active:false
     }
@@ -64,7 +66,28 @@ const SystemState = (props) => {
             })
         }
     }
-
+    const getSystemById = async (idSystem)=>{
+        try {
+           
+            
+           // const idSystem = system._id
+            const res = await axiosClient.get(`/api/systems/${idSystem}`, {params:{idSystem}})
+          
+            dispatch({
+                type:SELECT_SYSTEM_AND_ASSET,
+                payload: res.data.resp
+            })
+        } catch (error) {
+            const alert = {
+                msg: error.response.data.msg,
+                category: 'alerta-error'
+            }
+            dispatch({
+                type:SHOW_ERROR,
+                payload:alert
+            })
+        }
+    }
     const updateSystem = async (system) =>{
         try {
             const id = system._id
@@ -136,9 +159,11 @@ const SystemState = (props) => {
                 systemSelected: state.systemSelected,
                 active:state.active,
                 message:state.message,
+                systemAndAssetSelected:state.systemAndAssetSelected,
                 getSystems,
                 updateSystem,
                 addSystem,
+                getSystemById,
                 selectSystem,
                 deleteSystem,
                 deselectSystem,

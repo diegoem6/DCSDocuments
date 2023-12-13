@@ -16,7 +16,9 @@ import {
     GET_IOCARD_STATUS,
     SEARCH_IOCARD,
     GET_IOCARD_NODE_ID,
-    DESELECT_IOCARD_NODE_ID
+    DESELECT_IOCARD_NODE_ID,
+    GET_IOCARDS_CONTROLLER_A,
+    GET_IOCARDS_CONTROLLER_B
     } from '../../types/index'
 
 export default (state,action)=>{
@@ -87,6 +89,8 @@ export default (state,action)=>{
                 form:!state.form,
                 error:false
             })
+        case GET_IOCARDS_CONTROLLER_A:
+        case GET_IOCARDS_CONTROLLER_B:
         case GET_IOCARD_CONTROLLERS_SINB:
         case GET_IOCARD_CONTROLLERS: //levanta todos los C300
             return({

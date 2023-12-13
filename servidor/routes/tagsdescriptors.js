@@ -14,12 +14,13 @@ router.post('/',
 router.get('/',
     auth,
     tagDescriptorController.getTagsDescriptors) ;
+    router.get('/all',
+    auth,
+    tagDescriptorController.getAllTagsDescriptors) ;
 
 router.get('/related/:id',
     auth,
     tagDescriptorController.getTagsDescriptors_Related) ;
-
-
 router.put('/:id',
     auth,
     tagDescriptorController.updateTagDescriptor)

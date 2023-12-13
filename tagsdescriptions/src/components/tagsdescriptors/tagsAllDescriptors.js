@@ -1,10 +1,10 @@
 import React, {useContext, useEffect} from 'react';
 import authContext from '../../context/auth/authContext'
 import Header from '../../layout/header'
-import NewTagDescriptor from './newTagDescriptor';
-import TagDescriptorList from'./tagDescriptorList'
-import SearchTagDescriptor from './searchTagDescriptor';
-import SidebarDescriptors from '../../layout/sidebarDescriptorsSearch';
+import NewTagDescriptor from './newTagDescriptorSearch';
+import TagAllDescriptorList from'./tagAllDescriptorList'
+import SearchAllTagDescriptor from './searchAllTagDescriptor';
+import SidebarDescriptors from '../../layout/sidebarDescriptors';
 import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext';
 import systemContext from '../../context/system/systemContext';
 import alertContext from '../../context/alerts/alertContext';
@@ -31,26 +31,27 @@ const Tagsdescriptors = () => {
         // eslint-disable-next-line
     }, [])
     
+    
     return ( 
           <div className="contenedor-app">
               {alert? (<div className={`alerta ${alert.category}`}>{alert.msg} </div>)
                     :null}
-              <SidebarDescriptors/>
+              {/*form && <SidebarDescriptors/>*/}
               
               <div className="seccion-principal">
                   <Header/>
                   
                   <main>
-                      <SearchTagDescriptor/>
+                      <SearchAllTagDescriptor/>
                       
                       <div className="contenedor-tareas">
                           
-                            {form ?
+                      {form ?
                                 (<NewTagDescriptor/>)
                                 :
-                                (<TagDescriptorList/>)
+                                (<TagAllDescriptorList/>)
                             }
-
+                
                       </div>
                   </main>
               </div>

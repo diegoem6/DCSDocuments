@@ -77,6 +77,11 @@ router.get('/cabinet/:id',
 router.get('/prueba/:id',
     iocardController.getIOCardType);
 
+router.get('/iocardsA/:id',
+    iocardController.getIOCardsControllerA);
+
+router.get('/iocardsB/:id',
+    iocardController.getIOCardsControllerB);
 
 
 
