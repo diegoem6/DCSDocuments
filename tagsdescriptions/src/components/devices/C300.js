@@ -72,7 +72,7 @@ const C300 = ({deviceSelected}) => {
                                                         <img alt="icon_green" src = "/img/icon_green.svg.png" className="img_status_interface"/>
                                                         : (<img alt="icon_red" src = "/img/icon_red.svg.png" className="img_status_interface"/>))
                                                 :
-                                                    null
+                                                    null 
                                                 }
                                                 {(failure.type === "icon4") ?
                                                     renderSwitch(failure.value)
@@ -98,4 +98,4 @@ const C300 = ({deviceSelected}) => {
     );
 };
 
-export default C300;
+export default C300; 
