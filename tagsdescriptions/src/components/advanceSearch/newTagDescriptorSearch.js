@@ -6,7 +6,7 @@ import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 import alertContext from '../../context/alerts/alertContext';
 //import Files from 'react-files'
 
-const NewTagDescriptor = () => {
+const NewTagDescriptorSearch = () => {
     
     const tdContext = useContext(tagDescriptorContext)
     const {tagname_ok, message, createTagDescriptor, tagdescriptor, related, interlocks, resetMessage, updateTagDescriptor, validateTagname, getTagDescriptorsRelated, selectOnlyDescriptor, getInterlocks} = tdContext
@@ -340,4 +340,4 @@ const NewTagDescriptor = () => {
      );
 }
  
-export default NewTagDescriptor;
+export default NewTagDescriptorSearch;

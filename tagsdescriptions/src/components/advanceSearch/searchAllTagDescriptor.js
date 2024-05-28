@@ -4,7 +4,7 @@ import systemContext from '../../context/system/systemContext';
 //import { useHistory } from "react-router-dom";
 
 
-const SearchTagDescriptor = () => {
+const SearchTagDescriptorSearch = () => {
     
     const tdContext = useContext(tagDescriptorContext)
     const { searchTagsDescriptors,  urlDoc} = tdContext
@@ -47,4 +47,4 @@ const SearchTagDescriptor = () => {
     );
 }
  
-export default SearchTagDescriptor;
+export default SearchTagDescriptorSearch;

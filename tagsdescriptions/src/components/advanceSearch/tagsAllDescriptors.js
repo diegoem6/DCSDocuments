@@ -4,13 +4,12 @@ import Header from '../../layout/header'
 import NewTagDescriptor from './newTagDescriptorSearch';
 import TagAllDescriptorList from'./tagAllDescriptorList'
 import SearchAllTagDescriptor from './searchAllTagDescriptor';
-import SidebarDescriptors from '../../layout/sidebarDescriptors';
 import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext';
 import systemContext from '../../context/system/systemContext';
 import alertContext from '../../context/alerts/alertContext';
 
 
-const Tagsdescriptors = () => {
+const TagsAlldescriptors = () => {
 
     const auContext = useContext(authContext)
     const {getUser} = auContext;
@@ -59,4 +58,4 @@ const Tagsdescriptors = () => {
     );
 }
  
-export default Tagsdescriptors;
+export default TagsAlldescriptors;

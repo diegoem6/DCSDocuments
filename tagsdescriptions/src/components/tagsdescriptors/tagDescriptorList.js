@@ -1,6 +1,6 @@
 import React, {useEffect, useContext, Fragment, useState} from 'react';
 import systemContext from '../../context/system/systemContext'
-import TagDescriptor from './tagDescriptor_MAL'
+import TagDescriptor from './tagDescriptor'
 import tagDescriptorContext from '../../context/tagdescriptor/tagDescriptorContext';
 import ReactPaginate from 'react-paginate';
 
