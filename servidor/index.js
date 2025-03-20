@@ -1,6 +1,7 @@
 const express = require('express');
 const conectarDB = require('./config/db');
 const cors = require('cors');
+require('dotenv').config({path: 'variables.env'});
 
 //crear el server
 const app = express();
@@ -9,7 +10,7 @@ console.log(process.env.PORT);
 conectarDB()
 console.log("conectado a la base de datos")
 
-app.use(express.json({ extended: true }));
+app.use(express.json());
 app.use(cors());
 
 
@@ -42,9 +43,16 @@ app.use('/api/connections', require('./routes/connections'));
 app.use('/api/cabinets', require('./routes/cabinets'));
 app.use('/api/cabinetfiles', require('./routes/cabinetfiles'));
 app.use('/api/iocards', require('./routes/iocards'));
+app.use('/api/analytics', require('./routes/analytics'));
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: 'Algo salió mal!' });
+});
 
 app.listen(PORT, () => {
-    console.log(`El server esta levantando en el puerto ${PORT}`)
-})
+    console.log(`El servidor está corriendo en el puerto ${PORT}`);
+});
 
  

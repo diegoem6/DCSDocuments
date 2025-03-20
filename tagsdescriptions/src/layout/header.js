@@ -9,7 +9,7 @@ const Header = () => {
   
     
     useEffect(() => {
-        getUser()
+        //getUser()
         // eslint-disable-next-line
           //get current url 
         const url = window.location.href

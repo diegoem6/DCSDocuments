@@ -1,7 +1,6 @@
 /*Para switches, firewealls y routers*/ 
 import React, { memo, useContext, useEffect } from 'react';
-
-import { Handle } from 'react-flow-renderer';
+import { Handle } from 'reactflow';
 import networkContext from '../../context/network/networkContext'
 import deviceContext from '../../context/devices/devicesContext'
 
@@ -123,8 +122,6 @@ export default memo(({ data, isConnectable }) => {
               //handleConnectionStatus(data.equipo)
               //console.log("btnConnections")
             //}
-            }
-              
               /*<NetworkStatus />
             //}
           />

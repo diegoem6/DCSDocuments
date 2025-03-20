@@ -10,11 +10,13 @@ import deviceContext from '../../context/devices/devicesContext'
 //import architecture from './architectureDevices'
 import architecture from './architecturedevices'
 import ReactFlow, {
-  removeElements,
-  addEdge,
+  useNodesState,
+  useEdgesState,
   Controls,
   Background,
-} from 'react-flow-renderer';
+  addEdge,
+} from 'reactflow';
+import 'reactflow/dist/style.css';
 import Header from '../../layout/header';
 
 
@@ -22,7 +24,8 @@ const Diagram_Devices = () => {
 
   const tContext = useContext(networkContext)
   const { getArchitectureDevices, architectureDevices } = tContext
-  const [elements, setElements] = useState(architecture);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
 
   const dContext = useContext(deviceContext)
@@ -31,10 +34,12 @@ const Diagram_Devices = () => {
   const networkNodeName = localStorage.getItem('networkNodeName');
 
   useEffect(() => {
-
-   // console.log(architectureDevices)
-    if (architectureDevices.length !== 0) { //si el array no esta vacío, carga devices
-      setElements(architecture(architectureDevices))
+    if (architectureDevices.length !== 0) {
+      const elements = architecture(architectureDevices);
+      const nodes = elements.filter(el => el.type === 'Botones');
+      const edges = elements.filter(el => el.type === 'smoothstep');
+      setNodes(nodes);
+      setEdges(edges);
     }
   }, [architectureDevices])
 
@@ -60,10 +65,7 @@ const Diagram_Devices = () => {
     // reactFlowInstance.setCenter(0,0)
   };
 
-  const onElementsRemove = (elementsToRemove) =>
-    setElements((els) => removeElements(elementsToRemove, els));
-
-  const onConnect = (params) => setElements((els) => addEdge(params, els));
+  const onConnect = (params) => setEdges((eds) => addEdge(params, eds));
 
   const onNodeDragStop = (event, node) => console.log('drag stop', node);
   const onElementClick = (event, element) => {
@@ -89,10 +91,12 @@ const Diagram_Devices = () => {
       <Header />
       <h1>Conexiones del switch {(networkNodeName)}</h1>
       <div className='contenedor_networkDevices'>
-        {(elements) ? //si tengo algo en elements, muestro el diagrama
+        {(nodes.length > 0) ? //si tengo algo en nodes, muestro el diagrama
           <ReactFlow
-            elements={elements}
-            onElementsRemove={onElementsRemove}
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onLoad={onLoad}
 

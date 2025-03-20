@@ -1,8 +1,7 @@
 import React, {Fragment, useContext, useState, useEffect} from 'react';
 import tagDescriptorContext from "../../context/tagdescriptor/tagDescriptorContext";
 import systemContext from '../../context/system/systemContext';
-import { confirmAlert } from 'react-confirm-alert';
-
+import { useAnalytics } from '../../context/analytics/analyticsContext';
 
 //import 'react-confirm-alert/src/react-confirm-alert.css';
 
@@ -10,15 +9,38 @@ const TagDescriptorSearch = ({tagdescriptor}) => {
     //Estado para ver el modal con la descripción 
     const [modalOpen, setModalOpen] = useState(false);
     
+    const { trackUserAction, getUserUsabilityScore } = useAnalytics();
+    
     const sContext = useContext(systemContext)
     const{systemAndAssetSelected, getSystemById, selectSystem} = sContext;
     const tContext = useContext(tagDescriptorContext)
     const {deleteTagDescriptor, selectTagDescriptor, showForm} = tContext
     
-    const editTagDescriptor = (tagdescriptor,system)=>{
+    const editTagDescriptor = async (tagdescriptor, system) => {
+        // Track la acción de edición
+        await trackUserAction('edit_tag_descriptor', {
+            tagId: tagdescriptor._id,
+            systemId: system._id,
+            timestamp: new Date()
+        });
+
+        // Obtener score de usabilidad
+        const usabilityScore = await getUserUsabilityScore();
+        
+        // Adaptar la interfaz según el score
+        if (usabilityScore < 0.5) {
+            // Mostrar tooltips y ayuda adicional
+            showHelpTooltips();
+        }
+
         selectTagDescriptor(tagdescriptor._id);
-        selectSystem(system)
+        selectSystem(system);
         showForm();
+    }
+
+    // Mostrar ayuda contextual basada en el uso
+    const showHelpTooltips = () => {
+        // Implementar tooltips y guías contextuales
     }
    
     useEffect (()=>{
