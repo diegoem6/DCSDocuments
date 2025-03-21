@@ -31,6 +31,8 @@ const AuthState = (props) => {
                 type:CREATE_USER_SUCCESS,
                 payload:res.data
             })
+
+            //getUser()
         } catch (error) {
             console.log(error);
             const alert = {
@@ -41,7 +43,10 @@ const AuthState = (props) => {
                 type:CREATE_USER_ERROR,
                 payload:alert
             })
+            
         }
+        
+        
     }
 
     const getUser = async ()=>{
@@ -63,7 +68,6 @@ const AuthState = (props) => {
         }
     }
 
-
     const logOff = () =>{
         dispatch({
             type:LOG_OFF
@@ -71,44 +75,33 @@ const AuthState = (props) => {
     }
 
     const loginUser = async (user)=>{
-        console.log("Datos recibidos:", user);
         try {
-            // Primero verificamos la conexión con AD
-            const resAD = await axiosClient.post('/api/authAD/login', user)
-            //console.log("Respuesta AD:", resAD.data);
             
-            if (resAD.data.ok){
-                // Si la autenticación AD es exitosa, procedemos con el login normal
-                const res = await axiosClient.post('/api/auth', user)
-                //console.log("Respuesta login:", res.data);
-                
-                dispatch({
-                    type:LOGIN_SUCCESS,
-                    payload:res.data
-                })
-                
-                // Obtenemos la información del usuario
-                getUser()
-            } else {
-                throw new Error('Error en la autenticación con Active Directory')
-            }
+            const res = await axiosClient.post('/api/auth', user)
+            dispatch({
+                type:LOGIN_SUCCESS,
+                payload:res.data
+            })
+
+            getUser()
+            
         } catch (error) {
-           // console.log("Error al iniciar sesión", error);
             const alert = {
-                msg: error.response?.data?.msg || 'Error al iniciar sesión',
+                msg: error.response.data.msg,
                 category: 'alerta-error'
             }
             dispatch({
                 type:LOGIN_ERROR,
                 payload:alert
             })
+            
         }
     }
-
     const resetMessage = () =>{
         dispatch({
             type:RESET_MESSAGE
         })
+        
     }
 
     return (
@@ -129,7 +122,7 @@ const AuthState = (props) => {
             {props.children}
         </authContext.Provider>
     )
-}
 
+}
 export default AuthState;
 

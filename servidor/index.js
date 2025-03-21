@@ -4,10 +4,9 @@ const cors = require('cors');
 
 //crear el server
 const app = express();
-console.log(process.env.PORT);
+
 //me conecto a la base
 conectarDB()
-console.log("conectado a la base de datos")
 
 app.use(express.json({ extended: true }));
 app.use(cors());
@@ -15,12 +14,11 @@ app.use(cors());
 
 app.use(express.static('cabinetsFiles')); //la carpeta publica del servidor
 // seteo el puerto donde levanta el server != de 3000
-const PORT = process.env.PORT || 4001;
+const PORT = process.env.PORT || 4000;
 
 //importar rutas
 app.use('/api/users', require('./routes/users'));
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/authAD', require('./routes/authAD'));
 app.use('/api/assets', require('./routes/assets'));
 app.use('/api/tagsdescriptors', require('./routes/tagsdescriptors'));
 app.use('/api/systems', require('./routes/systems'));
@@ -47,4 +45,3 @@ app.listen(PORT, () => {
     console.log(`El server esta levantando en el puerto ${PORT}`)
 })
 
- 

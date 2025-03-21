@@ -8,7 +8,7 @@ const Login = (props) => {
     email: "",
     password: "",
   });
- 
+
   const {email, password} = user;
 
   const onChange = (e) => {

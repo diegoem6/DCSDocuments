@@ -5,17 +5,16 @@ const jwt = require('jsonwebtoken')
 
 exports.authUser = async (req, res) =>{
     //valido errores
-   // console.log("Datos recibidos authUser:", req.body);
     const errors = validationResult(req);
     
     if (!errors.isEmpty()){
         return res.status(400).json({errors:errors.array()});
     }
-    //console.log("Datos recibidos authUser:", req.body);
+
     const {email, password} = req.body;
 
     try {
-        let user = await User.findOne({email: email});
+        let user = await User.findOne({email});
 
         if (!user){
             return res.status(400).send({msg:'No existe el usuario registrado'})
@@ -48,8 +47,7 @@ exports.authUser = async (req, res) =>{
         })
 
     } catch (error) {
-        console.log(error);
-        res.status(500).send({msg:'Error en el servidor'});
+        
     }
 }
 
