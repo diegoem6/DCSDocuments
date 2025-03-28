@@ -1,62 +1,81 @@
+const ad = require('../config/activeDirectory');
 const User = require('../models/User');
-const bcryptjs = require('bcryptjs');
-const {validationResult} = require('express-validator');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
-exports.authUser = async (req, res) =>{
-    //valido errores
-    const errors = validationResult(req);
-    
-    if (!errors.isEmpty()){
-        return res.status(400).json({errors:errors.array()});
-    }
-
-    const {email, password} = req.body;
+exports.autenticarUsuario = async (req, res) => {
+    const { email, password } = req.body;
 
     try {
-        let user = await User.findOne({email});
+        // Primero autenticar contra AD
+        await new Promise((resolve, reject) => {
+            ad.authenticate(email, password, (err, auth) => {
+                if (err) {
+                    console.log('Error en AD:', err);
+                    reject(new Error('Error en la autenticación de AD'));
+                }
+                
+                if (auth) {
+                    resolve(true);
+                } else {
+                    reject(new Error('Credenciales AD incorrectas'));
+                }
+            });
+        });
+ 
+        // Si la autenticación AD es exitosa, buscar o crear usuario local
+        let usuario = await User.findOne({ email });
+        
+        if (!usuario) {
+            // Obtener información del usuario desde AD
+            const adUser = await new Promise((resolve, reject) => {
+                ad.findUser(email, (err, user) => {
+                    if (err) {
+                        reject(err);
+                    }
+                    if (!user) {
+                        reject(new Error('Usuario no encontrado en AD'));
+                    }
+                    resolve(user);
+                });
+            });
 
-        if (!user){
-            return res.status(400).send({msg:'No existe el usuario registrado'})
+            // Crear usuario local con datos de AD
+            usuario = await User.create({
+                email,
+                name: adUser.displayName || email,
+                password: 'AD_AUTH', // No almacenamos la contraseña real
+                rol: 'USER', // Rol por defecto
+                state: 'ACTIVE'
+            });
+        } else if (usuario.state === 'INACTIVE') {
+            throw new Error('Usuario inactivo');
         }
 
-        if (user.state === "INACTIVE"){
-            return res.status(400).send({msg:'El usuario no está activo'})
-        }
-        
-        const passwordOk = await bcryptjs.compare(password,user.password)
+        // Generar JWT
+        const token = jwt.sign({
+            id: usuario._id,
+            name: usuario.name,
+            email: usuario.email,
+            rol: usuario.rol
+        }, process.env.SECRETA, {
+            expiresIn: '8h'
+        });
 
-        if (!passwordOk){
-            return res.status(400).send({msg:'Contraseña incorrecta'})
-        }
+        res.json({ token });
 
-        // crear y formar el jwt
-        const payload = {
-            user:{
-                id: user.id
-            }
-        };
-        
-        // firmar el jwt
-        jwt.sign(payload,process.env.CERTIFICADO,{
-            expiresIn: 3600
-        },(error,token)=>{
-            if (error) throw error;
-
-            res.json({token});
-        })
-
-    } catch (error) {
-        
-    }
-}
-
-exports.getUser = async (req, res) =>{
-    try {
-        const user = await User.findById(req.user.id).select('-password')
-        res.json({user});
     } catch (error) {
         console.log(error);
-        res.status(500).send("Hubo un error en el servidor")
+        res.status(401).json({ msg: error.message || 'Error de autenticación' });
     }
-}
+};
+
+// Función para obtener usuario autenticado
+exports.usuarioAutenticado = async (req, res) => {
+    try {
+        const usuario = await User.findById(req.usuario.id).select('-password');
+        res.json({usuario});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({msg: 'Hubo un error'});
+    }
+};
