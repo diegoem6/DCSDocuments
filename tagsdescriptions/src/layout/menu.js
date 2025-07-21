@@ -99,10 +99,15 @@ const Menu = () => {
                             Tarjetas I/O
                         </Link>
                     </div>
+                    <div className="campo-form">
+                        <Link
+                            to={'/reports'}
+                            className="btn btn-block btn-primario"
+                        >
+                            Reportes
+                        </Link>
+                    </div>
                 </div>
-
-
-
             </div>
         </Fragment>
 

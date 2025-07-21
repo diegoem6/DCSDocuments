@@ -28,6 +28,7 @@ app.use('/api/showtags', require('./routes/showtags'));
 app.use('/api/documents', require('./routes/documents'));
 app.use('/api/interlocks', require('./routes/interlocks'));
 app.use('/api/alarmasyeventos', require('./routes/alarmasyeventos'));
+
 app.use('/api/network', require('./routes/network'));
 app.use('/api/networkmodels', require('./routes/networkmodels'));
 app.use('/api/networkShow', require('./routes/networkShow'));
@@ -40,6 +41,9 @@ app.use('/api/connections', require('./routes/connections'));
 app.use('/api/cabinets', require('./routes/cabinets'));
 app.use('/api/cabinetfiles', require('./routes/cabinetfiles'));
 app.use('/api/iocards', require('./routes/iocards'));
+app.use('/api/reports', require('./routes/reports'));
+
+
 
 app.listen(PORT, () => {
     console.log(`El server esta levantando en el puerto ${PORT}`)

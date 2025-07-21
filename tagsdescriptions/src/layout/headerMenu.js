@@ -12,9 +12,9 @@ const HeaderMenu = () => {
         const url = window.location.href
         if(url){
             const arrayURL = url.split('/')
-            setShowSearch(arrayURL[arrayURL.length-1]=='tagsalldescriptors')
+            setShowSearch(arrayURL[arrayURL.length-1]==='tagsalldescriptors')
         }
-    }, [])
+    }, [getUser])
     
     const changePassword = () => {
         window.open("/changePassword", "_self")

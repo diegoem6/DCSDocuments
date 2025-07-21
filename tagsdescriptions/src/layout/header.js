@@ -15,9 +15,9 @@ const Header = () => {
         const url = window.location.href
         if(url){
             const arrayURL = url.split('/')
-            setShowSearch(arrayURL[arrayURL.length-1]=='tagsalldescriptors')
+            setShowSearch(arrayURL[arrayURL.length-1]==='tagsalldescriptors')
         }
-    }, [])
+    }, [getUser])
     const search =()=>{
         window.open('/tagsalldescriptors', '_self') 
     }
